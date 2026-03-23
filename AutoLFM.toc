@@ -1,10 +1,10 @@
 ## Interface: 11200
 ## Title: Auto|cff0070ddL|r|cffffffffF|cffff0000M|r
-## Notes: Automated LFM Broadcaster
+## Notes: Automated LFM Broadcaster for Turtle WoW
 ## Author: Gondoleon, NSO73
 ## SavedVariables: V3_Settings, V3_Presets
 ## OptionalDeps: pfQuest, ShaguTweaks
-## Version: 3.13
+## Version: 3.14
 
 #=============================================================================
 # Github Repository: https://github.com/FSuhas/AutoLFM

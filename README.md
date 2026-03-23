@@ -1,15 +1,15 @@
-# AutoLFM - Automated LFM Broadcaster for WoW Vanilla 1.12 (TurtleWoW)
+# AutoLFM - Automated LFM Broadcaster for Turtle WoW
 <p align="center">
   <img src="_Docs/AutoLFM.gif" alt="AutoLFM Illustration"/>
 </p>
 
 ## 📜 Description
-AutoLFM is a powerful World of Warcraft 1.12 (Vanilla) addon that automates the process of broadcasting "Looking For More" (LFM) messages for dungeons, raids, quests and more. This addon helps group leaders efficiently recruit party members without manual spam.
+AutoLFM is a Turtle WoW addon that automates the process of broadcasting "Looking For More" (LFM) messages for dungeons, raids, quests and more. This addon helps group leaders efficiently recruit party members without manual spam.
 
-**🐢 Turtle WoW Specific**
-- Specifically designed for Turtle WoW with content from that server (custom dungeons, raids, and features)
+**🐢 Turtle WoW**
+- Developed for Turtle WoW: includes all custom dungeons and raids from the server
 - Interface design matches Turtle WoW's native LFG system
-- Works on any WoW 1.12 client
+- Should also work on any WoW 1.12 (Vanilla) client, but custom Turtle WoW instances will appear regardless
 
 ## 📖 Documentation
 - **Users**: [Installation & Usage Guide](_Docs/Installation-Usage.md) - How to install and use AutoLFM
@@ -17,7 +17,7 @@ AutoLFM is a powerful World of Warcraft 1.12 (Vanilla) addon that automates the 
 
 ## ✨ Features
 ### 🎯 Content Selection
-- Browse all Vanilla and Turtle WoW custom instances (dungeons and raids)
+- Browse all Turtle WoW instances: vanilla dungeons/raids + custom content
 - Multi-selection support with smart filtering by difficulty color (GRAY/GREEN/YELLOW/ORANGE/RED)
 - Quest log integration: add quest/item/chat links via Shift+Click
 - 5-tab navigation system with quick access via `/lfm` command or minimap button
@@ -103,7 +103,7 @@ Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
 </p>
 
 ## ℹ️ Information
-- **WoW Version**: 1.12 (Interface 11200)
+- **Server**: Turtle WoW (compatible WoW 1.12 / Interface 11200)
 - **Lua Version**: 5.0
 - **External Libraries**: None
 - **Quest Links Dependencies**: ShaguTweaks for links and pfQuest for information tooltip

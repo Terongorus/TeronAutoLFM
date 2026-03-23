@@ -1,3 +1,10 @@
+## [v3.14] 2026/03/23
+- Update for Turtle WoW patch 1.18.1 (Nightmares of Ursol)
+- Add new dungeons: Frostmane Hollow, Windhorn Canyon
+- Add new raids: Tower of Karazhan, Timbermaw Hold
+- Fix typo: Halteforge Quarry → Hateforge Quarry
+- Reframe addon presentation as Turtle WoW addon (README, .toc, docs)
+
 ## [v3.13] 2026/03/11
 - Fix stack overflow when right-clicking player names in chat with other addons (FuBar, Talented-turtle)
 - Add reentrancy guard to ChatFrame_OnHyperlinkShow hook to prevent recursive loops

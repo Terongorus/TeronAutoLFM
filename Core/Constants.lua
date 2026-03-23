@@ -166,12 +166,14 @@ AutoLFM.Core.Constants.COLORS = {
 -- DUNGEONS DATABASE
 --=============================================================================
 AutoLFM.Core.Constants.DUNGEONS = {
+  {name = "Frostmane Hollow", tag = "FH", levelMin = 13, levelMax = 16},
   {name = "Ragefire Chasm", tag = "RFC", levelMin = 13, levelMax = 19},
   {name = "Wailing Caverns", tag = "WC", levelMin = 16, levelMax = 25},
   {name = "The Deadmines", tag = "DM", levelMin = 16, levelMax = 24},
   {name = "Shadowfang Keep", tag = "SFK", levelMin = 20, levelMax = 28},
   {name = "Blackfathom Deeps", tag = "BFD", levelMin = 22, levelMax = 31},
   {name = "The Stockade", tag = "Stockade", levelMin = 23, levelMax = 32},
+  {name = "Windhorn Canyon", tag = "WHC", levelMin = 26, levelMax = 30},
   {name = "Dragonmaw Retreat", tag = "DR", levelMin = 26, levelMax = 35},
   {name = "Gnomeregan", tag = "Gnomeregan", levelMin = 28, levelMax = 37},
   {name = "Razorfen Kraul", tag = "RFK", levelMin = 29, levelMax = 36},
@@ -191,7 +193,7 @@ AutoLFM.Core.Constants.DUNGEONS = {
   {name = "Maraudon Princess", tag = "Maraudon Princess", levelMin = 46, levelMax = 54},
   {name = "The Sunken Temple", tag = "ST", levelMin = 49, levelMax = 58},
   {name = "Blackrock Depths Arena", tag = "BRD Arena", levelMin = 50, levelMax = 60},
-  {name = "Halteforge Quarry", tag = "HQ", levelMin = 51, levelMax = 60},
+  {name = "Hateforge Quarry", tag = "HQ", levelMin = 51, levelMax = 60},
   {name = "Blackrock Depths Emperor", tag = "BRD Emperor", levelMin = 54, levelMax = 60},
   {name = "Blackrock Depths", tag = "BRD", levelMin = 54, levelMax = 60},
   {name = "Lower Blackrock Spire", tag = "LBRS", levelMin = 55, levelMax = 60},
@@ -223,7 +225,9 @@ AutoLFM.Core.Constants.RAIDS = {
   {name = "Blackwing Lair", tag = "BWL", raidSizeMin = 20, raidSizeMax = 40},
   {name = "Emerald Sanctum", tag = "ES", raidSizeMin = 30, raidSizeMax = 40},
   {name = "Temple of Ahn'Qiraj", tag = "AQ40", raidSizeMin = 20, raidSizeMax = 40},
-  {name = "Naxxramas", tag = "Naxx", raidSizeMin = 30, raidSizeMax = 40}
+  {name = "Naxxramas", tag = "Naxx", raidSizeMin = 30, raidSizeMax = 40},
+  {name = "Tower of Karazhan", tag = "Kara40", raidSizeMin = 20, raidSizeMax = 40},
+  {name = "Timbermaw Hold", tag = "TH", raidSizeMin = 12, raidSizeMax = 20}
 }
 
 --=============================================================================

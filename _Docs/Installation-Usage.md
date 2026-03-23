@@ -11,7 +11,7 @@
 ## 📦 Installation
 
 ### Requirements
-- World of Warcraft Vanilla 1.12 (TurtleWoW)
+- Turtle WoW (ou tout client WoW Vanilla 1.12)
 - AddOn compatible folder
 
 ### Method 1: Manual Installation
