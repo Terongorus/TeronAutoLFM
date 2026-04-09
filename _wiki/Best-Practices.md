@@ -1,5 +1,30 @@
 # AutoLFM Development Best Practices
 
+## 🎨 Code Style Conventions
+
+### Section Separators
+Use equals-only separators (79 chars) with ALL CAPS titles:
+```lua
+--=============================================================================
+-- SECTION TITLE IN ALL CAPS
+--=============================================================================
+local function myFunction()
+```
+- No blank line between separator and first line of code
+- No blank line after file header comment block
+
+### Spacing Rules
+- **1 blank line** between functions
+- **No double blank lines** anywhere in the file
+- **No trailing blank lines** at end of file
+
+### LuaDoc Comments
+All functions (public **and** local) must have a `---` doc comment:
+```lua
+--- Validates the preset data structure
+local function validatePreset(data)
+```
+
 ## 📝 Documentation Standards
 
 ### LuaDoc Format
@@ -397,4 +422,4 @@ end, { id = "C11" })
 
 **Following these practices ensures maintainable, performant, and reliable code that integrates well with the Maestro architecture.**
 
-[← Back to Developer Guide](README.md)
+[← Back to Developer Guide](Developer-Guide.md)

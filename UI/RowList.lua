@@ -1,15 +1,12 @@
 --=============================================================================
 -- AutoLFM: RowList
---   Row hover and interaction helpers
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.RowList = {}
 
 --=============================================================================
 -- ROW CACHE
---   Caches row frames by prefix to avoid repeated getglobal() calls
 --=============================================================================
 local rowCache = {}  -- { [prefix] = { row1, row2, ... } }
 
@@ -41,9 +38,7 @@ end
 
 --=============================================================================
 -- HOVER HELPERS
---   Functions for creating hover effects on list rows
 --=============================================================================
-
 --- Configures the backdrop for a row to enable hover coloring
 --- @param row frame - The row frame to configure
 function AutoLFM.UI.RowList.SetupRowBackdrop(row)
@@ -145,9 +140,7 @@ end
   
 --=============================================================================
 -- CALCULATION HELPERS
---   Utility functions for scroll frame and row positioning
 --=============================================================================
-
 --- Calculates total height needed for a given number of rows
 --- @param numRows number - Number of rows to display
 --- @param rowHeight number - Optional height per row, defaults to ROW_HEIGHT
@@ -166,9 +159,7 @@ end
 
 --=============================================================================
 -- ROW FACTORY
---   Factory pattern for efficient row frame reuse
 --=============================================================================
-
 --- Retrieves an existing row frame or creates a new one from template
 --- Reuses existing frames to minimize CreateFrame calls for performance
 --- @param rowName string - Unique name for the row frame
@@ -205,9 +196,7 @@ end
 
 --=============================================================================
 -- FRAME HELPERS
---   Helper functions for navigating frame hierarchies
 --=============================================================================
-
 --- Retrieves the scroll child frame from a content frame
 --- @param frame frame - The content frame containing a scroll frame
 --- @return frame|nil - The scroll child frame, or nil if not found
@@ -237,9 +226,7 @@ end
 
 --=============================================================================
 -- INITIALIZATION HELPER
---   Generic OnShow handler for content frames with row lists
 --=============================================================================
-
 --- Iterates over all rows with a given prefix and applies a callback function
 --- Uses row cache for O(n) iteration, with fallback to getglobal if cache is empty
 --- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")

@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Broadcaster
---   Automated message broadcasting with statistics and dry run support
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -28,7 +27,6 @@ local retryState = {
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Gets the current broadcast interval from state
 --- @return number - Broadcast interval in seconds
 local function getBroadcastInterval()
@@ -38,7 +36,6 @@ end
 --=============================================================================
 -- STATISTICS MANAGEMENT
 --=============================================================================
-
 --- Resets broadcast statistics to zero
 local function resetStats()
   AutoLFM.Core.Maestro.SetState("Broadcaster.MessagesSent", 0)
@@ -60,7 +57,6 @@ end
 --=============================================================================
 -- GROUP CHANGE HANDLING
 --=============================================================================
-
 --- Handles group changes: convert to raid if needed, stop if full
 local function onGroupChange()
   -- Convert to raid if needed (regardless of broadcaster state)
@@ -88,7 +84,6 @@ end
 --=============================================================================
 -- MESSAGE BROADCASTING
 --=============================================================================
-
 --- Forward declaration for sendToChannel (needed for retry callback)
 local sendToChannel
 
@@ -141,6 +136,7 @@ end
 --- @param channelName string - The name of the channel
 --- @param message string - The message to send
 --- @param retries number - Number of retries remaining (optional, defaults to MAX_BROADCAST_RETRIES)
+--- @return boolean - True if message was sent successfully
 sendToChannel = function(channelName, message, retries)
   if retries == nil then
     retries = AutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
@@ -170,6 +166,7 @@ end
 --- Sends a message to the General channel (configurable index, default /1)
 --- Channel index is read from Storage (set via V3_Settings.generalChannelIndex)
 --- @param message string - The message to send
+--- @return boolean - True if message was sent successfully
 local function sendToGeneralChannel(message)
   local channelIndex = 1
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetGeneralChannelIndex then
@@ -193,6 +190,7 @@ end
 
 --- Sends a message to the Hardcore channel (special handling)
 --- @param message string - The message to send
+--- @return boolean - True if message was sent successfully
 local function sendToHardcoreChannel(message)
   local success, err = pcall(SendChatMessage, message, "Hardcore")
   if success then
@@ -247,7 +245,6 @@ end
 --=============================================================================
 -- TIMER MANAGEMENT
 --=============================================================================
-
 --- Timer tick handler - broadcasts message at regular intervals
 --- Called by the Ticker system every second
 --- @param elapsed number - Time elapsed since last tick (provided by Ticker)
@@ -286,7 +283,6 @@ end
 --=============================================================================
 -- START/STOP (PRIVATE)
 --=============================================================================
-
 --- Starts broadcasting
 local function start()
   local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
@@ -343,7 +339,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Toggles broadcasting on/off
 function AutoLFM.Logic.Broadcaster.Toggle()
   local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")

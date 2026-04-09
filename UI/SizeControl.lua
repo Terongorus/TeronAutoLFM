@@ -1,7 +1,5 @@
 --=============================================================================
 -- AutoLFM: Size Control
---   Reusable slider + editbox component for numeric input (1-40)
---   Used for raid sizes, custom group sizes, etc.
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
@@ -20,7 +18,6 @@ local SLIDER_RIGHT_OFFSET = -40
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Creates or retrieves a size slider with mousewheel support
 --- @param config table - Configuration: {id, parent, minSize, maxSize, currentSize, color}
 --- @return frame - The configured slider frame
@@ -118,7 +115,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Creates a complete size control (slider + editbox) with synchronized values
 --- @param config table - Configuration object
 ---   Required: {id, parent, minSize, maxSize, currentSize, onValueChanged}

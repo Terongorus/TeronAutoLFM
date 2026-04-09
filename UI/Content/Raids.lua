@@ -1,16 +1,13 @@
 --=============================================================================
 -- AutoLFM: Raids UI
---   UI handlers for raid selection with variable size controls (uses ContentPanel factory)
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.Content = AutoLFM.UI.Content or {}
 
 --=============================================================================
--- PRIVATE: Row creation logic
+-- ROW CREATION
 --=============================================================================
-
 local RAID_COLOR = AutoLFM.Core.Utils.GetColor("GOLD")
 
 --- Creates and updates raid rows with size sliders for variable-size raids
@@ -26,7 +23,7 @@ local function CreateRaidRows(scrollChild)
     return
   end
 
-  local rowHeight = AutoLFM.Core.Utils.ROW_HEIGHT
+  local rowHeight = AutoLFM.Core.Constants.ROW_HEIGHT
   local numRows = table.getn(raids)
 
   scrollChild:SetHeight(AutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
@@ -88,7 +85,7 @@ local function CreateRaidRows(scrollChild)
       })
 
       if not sizeControl then
-        AutoLFM.Core.Utils.LogError("Failed to create size control for raid %d", i)
+        AutoLFM.Core.Utils.LogError("Failed to create size control for raid " .. i)
         return
       end
 
@@ -159,7 +156,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
 AutoLFM.UI.Content.Raids = AutoLFM.UI.CreateContentPanel({

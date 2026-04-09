@@ -1,16 +1,13 @@
 --=============================================================================
 -- AutoLFM: Quests UI
---   UI handlers for quest selection (uses ContentPanel factory)
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.Content = AutoLFM.UI.Content or {}
 
 --=============================================================================
--- PRIVATE: Row creation logic
+-- ROW CREATION
 --=============================================================================
-
 --- Creates and updates quest rows in the scroll frame with zone tooltips
 --- @param scrollChild frame - The scroll child frame to populate
 local function CreateQuestRows(scrollChild)
@@ -92,7 +89,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
 AutoLFM.UI.Content.Quests = AutoLFM.UI.CreateContentPanel({

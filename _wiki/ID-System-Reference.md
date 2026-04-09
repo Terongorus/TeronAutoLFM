@@ -16,7 +16,9 @@ Listeners:      L01-L12 (12 total)
 States:         S01-S20 (20 total)
 Init Handlers:  I01-I27 (28 total: 25 explicit + 3 auto-assigned)
 
-TOTAL: 93 implemented IDs across 5 categories
+Ticker IDs:     4 total
+
+TOTAL: 93 implemented IDs across 5 categories + 4 Ticker IDs
 ```
 
 ### System Data Flow
@@ -217,6 +219,19 @@ Init Handlers run during addon initialization with dependency resolution. Static
 
 ---
 
+## Ticker IDs (4 Implemented)
+
+Ticker IDs are defined in `Core/Constants.lua` under `TICKER_IDS`. They identify periodic tasks managed by the centralized Ticker system (`Core/Ticker.lua`).
+
+| Ticker ID | Constant | Module | Purpose |
+|-----------|----------|--------|---------|
+| broadcaster | BROADCASTER | Logic.Broadcaster | Broadcast timer (1s interval) |
+| broadcaster_retry | BROADCASTER_RETRY | Logic.Broadcaster | Retry failed broadcasts (0.5s interval) |
+| invite_cleanup | INVITE_CLEANUP | Logic.Content.AutoInvite | Cleanup expired invite cooldowns (60s interval) |
+| messaging_stats | MESSAGING_STATS | UI.Content.Messaging | Update broadcasting stats display |
+
+---
+
 ## ID Organization by Domain
 
 ### 1. Selection System
@@ -367,4 +382,4 @@ AutoLFM.UI.Content.MyPanel = AutoLFM.UI.CreateContentPanel({
 - [Maestro-Architecture.md](Maestro-Architecture.md) - System architecture
 - [Best-Practices.md](Best-Practices.md) - Development standards
 - [API.md](API.md) - Public API for external addons
-- [README.md](README.md) - Developer guide and quick start
+- [Developer-Guide.md](Developer-Guide.md) - Developer guide and quick start

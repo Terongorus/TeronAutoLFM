@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Cache Manager
---   Generic cache system for computed data with automatic invalidation
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -14,7 +13,6 @@ local caches = {}
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Serializes arguments to a string key for cache lookup
 --- @param args table - Arguments table
 --- @return string - Serialized key
@@ -44,7 +42,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Registers a new cache with a builder function
 --- @param name string - Cache name (e.g., "Dungeons", "Quests")
 --- @param builder function - Function that builds the cached data

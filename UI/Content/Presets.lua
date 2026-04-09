@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Presets UI
---   UI handlers and rendering for presets panel
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
@@ -18,20 +17,26 @@ local isCondensed = false
 --=============================================================================
 -- HELPERS
 --=============================================================================
-
+local measureFrame, measureFontString
+--- Measures the rendered height of a text string at a given width
+--- @param text string - The text to measure
+--- @param width number - The available width for wrapping
+--- @return number - The computed text height in pixels
 local function measureTextHeight(text, width)
-  local tempFrame = CreateFrame("Frame", nil, scrollChild)
-  tempFrame:SetWidth(width)
-  local tempText = tempFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-  tempText:SetWidth(width)
-  tempText:SetJustifyH("LEFT")
-  tempText:SetText(text)
-  local height = tempText:GetHeight()
-  tempFrame:Hide()
-  tempFrame:SetParent(nil)
-  return height
+  if not measureFrame then
+    measureFrame = CreateFrame("Frame", nil, UIParent)
+    measureFrame:Hide()
+    measureFontString = measureFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+  end
+  measureFrame:SetWidth(width)
+  measureFontString:SetWidth(width)
+  measureFontString:SetJustifyH("LEFT")
+  measureFontString:SetText(text)
+  return measureFontString:GetHeight()
 end
 
+--- Captures the current selection state from Maestro into a snapshot table
+--- @return table - Snapshot containing dungeonNames, raidName, raidSize, roles, customMessage, detailsText, customGroupSize, mode
 local function saveSelectionState()
   return {
     dungeonNames = AutoLFM.Core.Maestro.GetState("Selection.DungeonNames"),
@@ -45,6 +50,8 @@ local function saveSelectionState()
   }
 end
 
+--- Restores a previously saved selection state snapshot back into Maestro
+--- @param state table - The snapshot table returned by saveSelectionState
 local function restoreSelectionState(state)
   AutoLFM.Core.Maestro.SetState("Selection.DungeonNames", state.dungeonNames)
   AutoLFM.Core.Maestro.SetState("Selection.RaidName", state.raidName)
@@ -56,6 +63,9 @@ local function restoreSelectionState(state)
   AutoLFM.Core.Maestro.SetState("Selection.Mode", state.mode)
 end
 
+--- Applies preset data fields to the current Maestro selection state and sets the mode
+--- @param presetData table - The preset's stored data (dungeonNames, raidName, roles, etc.)
+--- @param presetType string - The resolved preset type: "Custom", "Dungeons", or "Raid"
 local function applyPresetData(presetData, presetType)
   if presetData.dungeonNames then AutoLFM.Core.Maestro.SetState("Selection.DungeonNames", presetData.dungeonNames) end
   if presetData.raidName then 
@@ -79,7 +89,8 @@ end
 --=============================================================================
 -- FRAME LIFECYCLE
 --=============================================================================
-
+--- Initializes the presets content frame, resolves scroll child, and loads condensed preference
+--- @param frame frame - The presets content frame
 function AutoLFM.UI.Content.Presets.OnLoad(frame)
   contentFrame = frame
   local scrollFrame = getglobal(frame:GetName() .. "_ScrollFrame")
@@ -90,11 +101,15 @@ function AutoLFM.UI.Content.Presets.OnLoad(frame)
   isCondensed = AutoLFM.Core.Storage.GetPresetsCondensed()
 end
 
+--- Handles the presets frame becoming visible; refreshes condensed state and redraws rows
+--- @param frame frame - The presets content frame
 function AutoLFM.UI.Content.Presets.OnShow(frame)
   isCondensed = AutoLFM.Core.Storage.GetPresetsCondensed()
   AutoLFM.UI.Content.Presets.Refresh()
 end
 
+--- Handles the presets frame being hidden; clears all preset rows
+--- @param frame frame - The presets content frame
 function AutoLFM.UI.Content.Presets.OnHide(frame)
   AutoLFM.UI.Content.Presets.ClearRows()
 end
@@ -102,15 +117,22 @@ end
 --=============================================================================
 -- ROW MANAGEMENT
 --=============================================================================
-
+--- Hides and removes all preset row frames from the scroll child
 function AutoLFM.UI.Content.Presets.ClearRows()
   for i = 1, table.getn(presetRows) do
     presetRows[i]:Hide()
-    presetRows[i]:SetParent(nil)
   end
   presetRows = {}
 end
 
+--- Creates a clickable preset row with name, type tag, content preview, and action buttons
+--- @param index number - The 1-based index used for unique frame naming
+--- @param presetName string - The display name of the preset
+--- @param presetData table - The preset's stored configuration data
+--- @param isFirst boolean - Whether this is the first row (hides up button)
+--- @param isLast boolean - Whether this is the last row (hides down button)
+--- @param yOffset number - The vertical offset from the top of the scroll child
+--- @return frame - The created preset row button frame
 local function createPresetRow(index, presetName, presetData, isFirst, isLast, yOffset)
   -- Ensure lookup tables are built for dungeon/raid lookups
   if AutoLFM.Core.Utils then
@@ -337,6 +359,7 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
   return row
 end
 
+--- Rebuilds the entire preset list by clearing rows and recreating them from storage
 function AutoLFM.UI.Content.Presets.Refresh()
   AutoLFM.UI.Content.Presets.ClearRows()
   
@@ -364,7 +387,7 @@ end
 --=============================================================================
 -- SAVE POPUP
 --=============================================================================
-
+--- Opens the save preset popup, clears previous input and error state, and focuses the name field
 function AutoLFM.UI.Content.Presets.ShowSavePopup()
   local popup = getglobal("AutoLFM_SavePresetPopup")
   if not popup then return end
@@ -381,6 +404,7 @@ function AutoLFM.UI.Content.Presets.ShowSavePopup()
   popup:Show()
 end
 
+--- Validates the preset name input and dispatches a save action, or shows an error if the name already exists
 function AutoLFM.UI.Content.Presets.OnSaveConfirm()
   local input = getglobal("AutoLFM_SavePresetPopup_NameInput")
   if not input then return end
@@ -401,6 +425,7 @@ function AutoLFM.UI.Content.Presets.OnSaveConfirm()
   end
 end
 
+--- Closes the save preset popup without saving
 function AutoLFM.UI.Content.Presets.OnSaveCancel()
   local popup = getglobal("AutoLFM_SavePresetPopup")
   if popup then popup:Hide() end

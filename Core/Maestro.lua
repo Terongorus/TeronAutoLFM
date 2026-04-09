@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Maestro System
---   Event bus and initialization system with load-order independence
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -83,7 +82,6 @@ local stateRegistry = {}
 --=============================================================================
 -- COMMAND BUS
 --=============================================================================
-
 --- Registers a command with its handler function
 --- @param key string - Dot-separated command key (e.g., "MainFrame.Toggle")
 --- @param handler function - The function to execute when command is dispatched
@@ -201,7 +199,6 @@ end
 --=============================================================================
 -- EVENT SYSTEM
 --=============================================================================
-
 --- Registers an event that can be emitted via Dispatch()
 --- Events are notifications without direct handlers - listeners subscribe to them
 --- @param key string - Event key (e.g., "Selection.Changed")
@@ -328,7 +325,6 @@ end
 --=============================================================================
 -- INITIALIZATION SYSTEM
 --=============================================================================
-
 --- Registers an initialization handler with optional dependencies
 --- Handlers are executed in dependency order via topological sort
 --- @param id string - Unique identifier for this initialization handler
@@ -477,6 +473,7 @@ end
 --- @param inDegree table - Map of node ID to in-degree count
 --- @param adjacency table - Map of node ID to array of dependent nodes
 --- @param handlers table - Original handlers map (for ID sorting)
+--- @param allIds table - Set of all registered node IDs
 --- @return table|nil - Sorted array of node IDs, or nil if circular dependency detected
 local function processDependencyQueue(queue, inDegree, adjacency, handlers, allIds)
   local sorted = {}  -- Output: handlers in correct initialization order
@@ -623,7 +620,6 @@ end
 --=============================================================================
 -- STATE MANAGEMENT API
 --=============================================================================
-
 --- Registers a state namespace with an initial value
 --- @param namespace string - Unique identifier for this state (e.g., "Selection.Dungeons")
 --- @param initialValue any - Initial state value (can be table, number, boolean, etc.)
@@ -683,13 +679,13 @@ function AutoLFM.Core.Maestro.SetState(namespace, newValue)
   -- Run validator if one was registered
   local validator = stateRegistry[namespace].validator
   if validator then
-    local isValid, err = pcall(validator, newValue)
+    local isValid, result = pcall(validator, newValue)
     if not isValid then
-      AutoLFM.Core.Utils.LogError("SetState: validator error for '" .. namespace .. "': " .. tostring(err))
+      AutoLFM.Core.Utils.LogError("SetState: validator error for '" .. namespace .. "': " .. tostring(result))
       return false
     end
-    -- If validator returned false (not error), reject the value
-    if err == false then
+    -- If validator returned false/nil, reject the value
+    if not result then
       AutoLFM.Core.Utils.LogWarning("SetState: validation failed for '" .. namespace .. "'")
       return false
     end
@@ -798,7 +794,6 @@ end
 --=============================================================================
 -- REGISTRY DATA GETTER
 --=============================================================================
-
 --- Returns all registries for debugging
 --- Used by debug console to display registered commands, events, listeners, and handlers
 --- @return table, table, table, table - commandsRegistry, eventsRegistry, listenersRegistry, initRegistry

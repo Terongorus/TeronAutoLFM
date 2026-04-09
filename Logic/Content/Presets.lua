@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Presets Logic
---   Save, load, and manage preset configurations
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -10,7 +9,6 @@ AutoLFM.Logic.Content.Presets = {}
 --=============================================================================
 -- PRESET VALIDATION SCHEMA
 --=============================================================================
-
 --- Validation schema for preset fields
 --- Each field defines: type, optional validator function, and whether to use default on invalid
 local PRESET_SCHEMA = {
@@ -97,7 +95,6 @@ local PRESET_SCHEMA = {
 --=============================================================================
 -- PRESET VALIDATION
 --=============================================================================
-
 --- Validates a single field against its schema definition
 --- @param fieldName string - Name of the field being validated
 --- @param value any - Value to validate
@@ -227,7 +224,6 @@ end
 --=============================================================================
 -- PRESET STATE CAPTURE AND RESTORE
 --=============================================================================
-
 --- Captures current state from Maestro for saving as preset
 --- @return table - Current state data
 local function captureCurrentState()
@@ -333,7 +329,6 @@ end
 --=============================================================================
 -- COMMANDS
 --=============================================================================
-
 --- Saves current state as a preset
 AutoLFM.Core.Maestro.RegisterCommand("Presets.Save", function(presetName)
   if not presetName or presetName == "" then
@@ -343,7 +338,7 @@ AutoLFM.Core.Maestro.RegisterCommand("Presets.Save", function(presetName)
 
   -- Check if preset already exists
   if AutoLFM.Core.Storage.PresetExists(presetName) then
-    AutoLFM.Core.Utils.LogWarning("Presets.Save: Preset '%s' already exists, use Rename to overwrite", presetName)
+    AutoLFM.Core.Utils.LogWarning("Presets.Save: Preset '" .. presetName .. "' already exists, use Rename to overwrite")
     return
   end
 
@@ -357,7 +352,7 @@ AutoLFM.Core.Maestro.RegisterCommand("Presets.Save", function(presetName)
     AutoLFM.Core.Utils.LogAction("Preset saved: " .. presetName)
     AutoLFM.Core.Maestro.Dispatch("Presets.Changed")
   else
-    AutoLFM.Core.Utils.LogError("Presets.Save: Failed to save preset '%s' to storage", presetName)
+    AutoLFM.Core.Utils.LogError("Presets.Save: Failed to save preset '" .. presetName .. "' to storage")
   end
 end, { id = "C19" })
 
@@ -374,7 +369,7 @@ AutoLFM.Core.Maestro.RegisterCommand("Presets.Load", function(presetName)
   local presetData = presets.data[presetName]
 
   if not presetData then
-    AutoLFM.Core.Utils.LogError("Presets.Load: Preset '%s' not found (available: %d presets)", presetName, table.getn(presets.data))
+    AutoLFM.Core.Utils.LogError("Presets.Load: Preset '" .. presetName .. "' not found (available: " .. table.getn(presets.data) .. " presets)")
     return
   end
 
@@ -384,7 +379,7 @@ AutoLFM.Core.Maestro.RegisterCommand("Presets.Load", function(presetName)
   -- If validation fails, try to sanitize and recover
   local dataToLoad = presetData
   if not isValid then
-    AutoLFM.Core.Utils.LogWarning("Presets.Load: Preset '%s' has issues: %s - attempting recovery", presetName, validationError)
+    AutoLFM.Core.Utils.LogWarning("Presets.Load: Preset '" .. presetName .. "' has issues: " .. tostring(validationError) .. " - attempting recovery")
     AutoLFM.Core.Utils.PrintWarning("Preset '" .. presetName .. "' was partially corrupted, loading with defaults for invalid fields")
     dataToLoad = sanitizePresetData(presetData)
   end
@@ -408,7 +403,7 @@ AutoLFM.Core.Maestro.RegisterCommand("Presets.Delete", function(presetName)
     AutoLFM.Core.Utils.LogAction("Preset deleted: " .. presetName)
     AutoLFM.Core.Maestro.Dispatch("Presets.Changed")
   else
-    AutoLFM.Core.Utils.LogError("Presets.Delete: Failed to delete preset '%s' from storage", presetName)
+    AutoLFM.Core.Utils.LogError("Presets.Delete: Failed to delete preset '" .. presetName .. "' from storage")
   end
 end, { id = "C17" })
 

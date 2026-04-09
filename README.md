@@ -1,6 +1,6 @@
 # AutoLFM - Automated LFM Broadcaster for Turtle WoW
 <p align="center">
-  <img src="_Docs/AutoLFM.gif" alt="AutoLFM Illustration"/>
+  <img src="_assets/AutoLFM.gif" alt="AutoLFM Illustration"/>
 </p>
 
 ## 📜 Description
@@ -11,9 +11,10 @@ AutoLFM is a Turtle WoW addon that automates the process of broadcasting "Lookin
 - Interface design matches Turtle WoW's native LFG system
 - Should also work on any WoW 1.12 (Vanilla) client, but custom Turtle WoW instances will appear regardless
 
+<!-- TODO: When GitHub Wiki is activated, replace _wiki/*.md links with https://github.com/FSuhas/AutoLFM/wiki/* -->
 ## 📖 Documentation
-- **Users**: [Installation & Usage Guide](_Docs/Installation-Usage.md) - How to install and use AutoLFM
-- **Developers**: [Developer Guide](_Docs/Dev/README.md) - Architecture, best practices, and component registry
+- **Users**: [Installation & Usage Guide](_wiki/Installation-Usage.md) - How to install and use AutoLFM
+- **Developers**: [Developer Guide](_wiki/Developer-Guide.md) - Architecture, best practices, and component registry
 
 ## ✨ Features
 ### 🎯 Content Selection
@@ -67,7 +68,7 @@ AutoLFM is a Turtle WoW addon that automates the process of broadcasting "Lookin
 8. **Start Broadcasting**: Click the "Start" button
 9. **Enable Auto-Invite** (optional): Go to Settings tab to configure auto-response keywords
 
-For detailed instructions, see [Installation & Usage Guide](_Docs/Installation-Usage.md).
+For detailed instructions, see [Installation & Usage Guide](_wiki/Installation-Usage.md).
 
 ## 🏗️ Architecture
 AutoLFM uses the **Maestro CQRS command bus system** for clean architecture:
@@ -76,7 +77,7 @@ AutoLFM uses the **Maestro CQRS command bus system** for clean architecture:
 - **Logic/**: Business logic (Broadcaster, Content, Selection, State management)
 - **UI/**: User interface (Templates, Content panels, Controls)
 
-For detailed architecture, see [Developer Guide](_Docs/Dev/README.md).
+For detailed architecture, see [Developer Guide](_wiki/Developer-Guide.md).
 
 ## 💾 Configuration
 Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
@@ -90,16 +91,16 @@ Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
 
 ## 📸 Screenshots
 <p align="center" width="100%">
-  <a href="_Docs/Screenshots/01-Dungeons.png"><img width="24%" src="_Docs/Screenshots/01-Dungeons.png"></a>
-  <a href="_Docs/Screenshots/02-Raids.png"><img width="24%" src="_Docs/Screenshots/02-Raids.png"></a>
-  <a href="_Docs/Screenshots/03-Quests.png"><img width="24%" src="_Docs/Screenshots/03-Quests.png"></a>
-  <a href="_Docs/Screenshots/04-Details.png"><img width="24%" src="_Docs/Screenshots/04-Details.png"></a>
+  <a href="_assets/Screenshots/01-Dungeons.png"><img width="24%" src="_assets/Screenshots/01-Dungeons.png"></a>
+  <a href="_assets/Screenshots/02-Raids.png"><img width="24%" src="_assets/Screenshots/02-Raids.png"></a>
+  <a href="_assets/Screenshots/03-Quests.png"><img width="24%" src="_assets/Screenshots/03-Quests.png"></a>
+  <a href="_assets/Screenshots/04-Details.png"><img width="24%" src="_assets/Screenshots/04-Details.png"></a>
 </p>
 <p align="center" width="100%">
-  <a href="_Docs/Screenshots/05-Custom.png"><img width="24%" src="_Docs/Screenshots/05-Custom.png"></a>
-  <a href="_Docs/Screenshots/06-Presets.png"><img width="24%" src="_Docs/Screenshots/06-Presets.png"></a>
-  <a href="_Docs/Screenshots/07-Autoinv.png"><img width="24%" src="_Docs/Screenshots/07-Autoinv.png"></a>
-  <a href="_Docs/Screenshots/08-Settings.png"><img width="24%" src="_Docs/Screenshots/08-Settings.png"></a>
+  <a href="_assets/Screenshots/05-Custom.png"><img width="24%" src="_assets/Screenshots/05-Custom.png"></a>
+  <a href="_assets/Screenshots/06-Presets.png"><img width="24%" src="_assets/Screenshots/06-Presets.png"></a>
+  <a href="_assets/Screenshots/07-Autoinv.png"><img width="24%" src="_assets/Screenshots/07-Autoinv.png"></a>
+  <a href="_assets/Screenshots/08-Settings.png"><img width="24%" src="_assets/Screenshots/08-Settings.png"></a>
 </p>
 
 ## ℹ️ Information
@@ -108,4 +109,6 @@ Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
 - **External Libraries**: None
 - **Quest Links Dependencies**: ShaguTweaks for links and pfQuest for information tooltip
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+## 📋 Project Status
+
+The main contributor has moved on to other projects. The community is welcome to submit pull requests, report issues, or take over maintenance of the project.

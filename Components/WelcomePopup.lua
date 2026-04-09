@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Welcome Popup
---   Animated welcome message shown on first use
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Components = AutoLFM.Components or {}
@@ -46,8 +45,6 @@ local state = {
 --=============================================================================
 -- DATA
 --=============================================================================
-
-
 local titleBlocks = {
   {text = "Thank you for using ", color = "WHITE"},
   {text = "Auto", color = "WHITE"},
@@ -94,7 +91,6 @@ local messages = {
 --=============================================================================
 -- HELPERS
 --=============================================================================
-
 --- Generates partial title text with color codes for typing animation
 --- @param blockIndex number - Current block being typed
 --- @param letterIndex number - Current letter position in block
@@ -171,7 +167,6 @@ end
 --=============================================================================
 -- CREATE POPUP
 --=============================================================================
-
 --- Creates the welcome popup frame with all UI elements
 --- @return frame - Created popup frame
 local function createPopup()
@@ -220,7 +215,6 @@ end
 --=============================================================================
 -- UPDATE
 --=============================================================================
-
 --- OnUpdate handler for typing animation and fade effects
 local function onUpdate()
   local now = GetTime()
@@ -322,7 +316,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Shows the welcome popup with typing animation
 function AutoLFM.Components.WelcomePopup.Show()
   state.popupFrame = state.popupFrame or createPopup()
@@ -346,7 +339,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 --- Initializes WelcomePopup and shows it on first launch
 AutoLFM.Core.SafeRegisterInit("Components.WelcomePopup", function()
   if not AutoLFM.Core.Storage.GetWelcomeShown() then

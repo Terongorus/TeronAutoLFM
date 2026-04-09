@@ -3,7 +3,7 @@
 ## Quick Links
 
 - **Getting Started**: [Installation](#-installation) | [Basic Usage](#-basic-usage)
-- **Developers**: [Dev Guide](Dev/README.md)
+- **Developers**: [Dev Guide](Developer-Guide.md)
 - **Support**: [Troubleshooting](#-troubleshooting) | [GitHub Issues](https://github.com/FSuhas/AutoLFM/issues)
 
 ---
@@ -37,7 +37,7 @@ World of Warcraft/Interface/AddOns/
 │   ├── Components/
 │   ├── Logic/
 │   ├── UI/
-│   └── _Docs/
+│   └── _wiki/
 ```
 
 ---
@@ -124,24 +124,24 @@ Start here: This guide covers installation, basic usage, configuration, and trou
 ### For Developers
 
 **Quick Start:**
-1. [Dev/README.md](Dev/README.md) - Developer overview and quick reference
-2. [Dev/Maestro-Architecture.md](Dev/Maestro-Architecture.md) - Understand the CQRS command bus system
-3. [Dev/Best-Practices.md](Dev/Best-Practices.md) - Lua 5.0 compatibility and coding standards
-4. [Dev/ID-System-Reference.md](Dev/ID-System-Reference.md) - Registry, IDs, state management, and component patterns
-5. [Dev/API.md](Dev/API.md) - Public API documentation for external addons
+1. [Developer-Guide.md](Developer-Guide.md) - Developer overview and quick reference
+2. [Maestro-Architecture.md](Maestro-Architecture.md) - Understand the CQRS command bus system
+3. [Best-Practices.md](Best-Practices.md) - Lua 5.0 compatibility and coding standards
+4. [ID-System-Reference.md](ID-System-Reference.md) - Registry, IDs, state management, and component patterns
+5. [API.md](API.md) - Public API documentation for external addons
 
 **Project Structure:**
 ```
 AutoLFM/
 ├── README.md                          (Project overview)
-├── _Docs/
+├── _wiki/
+│   ├── Home.md                        (Documentation hub)
 │   ├── Installation-Usage.md          (This file - user guide)
-│   └── Dev/                           (Developer documentation)
-│       ├── README.md                  (Developer entry point)
-│       ├── Maestro-Architecture.md
-│       ├── Best-Practices.md
-│       ├── ID-System-Reference.md     (Registry, IDs, state management)
-│       └── API.md
+│   ├── Developer-Guide.md             (Developer entry point)
+│   ├── Maestro-Architecture.md
+│   ├── Best-Practices.md
+│   ├── ID-System-Reference.md         (Registry, IDs, state management)
+│   └── API.md
 ├── Core/                              (Framework)
 ├── Components/                        (Reusable components)
 ├── Logic/                             (Business logic)
@@ -155,4 +155,4 @@ AutoLFM/
 Found a bug or have suggestions? Please report at:
 [GitHub Issues - AutoLFM](https://github.com/FSuhas/AutoLFM/issues)
 
-For development questions, see [Dev/README.md](Dev/README.md)
+For development questions, see [Developer-Guide.md](Developer-Guide.md)

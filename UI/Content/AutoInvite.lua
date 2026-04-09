@@ -1,29 +1,28 @@
 --=============================================================================
 -- AutoLFM: AutoInvite UI
---   Visual handlers for the AutoInvite panel
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.Content = AutoLFM.UI.Content or {}
 AutoLFM.UI.Content.AutoInvite = {}
 
------------------------------------------------------------------------------
--- Private State
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE STATE
+--=============================================================================
 local panel = nil
 local isRestoringState = false  -- Flag to prevent OnClick during restoration
 local MAX_KEYWORDS = 4  -- Maximum keyword slots in UI
 
------------------------------------------------------------------------------
--- Helper: Apply Colors to Leader Status Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- HELPERS
+--=============================================================================
 --- Colors the "Leader/Assist" radio button green and "No leadership" radio button red
 local function ApplyLeaderColors()
   if not panel then return end
-  
+
   local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
-  
+
   -- Color "Leader/Assist" radio button green
   local leaderRadio = getglobal(scrollChild:GetName().."_LeaderYesRadio")
   if leaderRadio then
@@ -55,91 +54,6 @@ local function ApplyLeaderColors()
   end
 end
 
------------------------------------------------------------------------------
--- OnLoad: Initialize the panel
------------------------------------------------------------------------------
---- XML OnLoad callback - initializes the AutoInvite panel UI
---- @param frame frame - The AutoInvite panel frame
-function AutoLFM.UI.Content.AutoInvite.OnLoad(frame)
-  panel = frame
-  -- Apply colors to leader status labels
-  ApplyLeaderColors()
-  -- Setup keyword EditBox handlers
-  AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
-end
-
------------------------------------------------------------------------------
--- OnShow: Refresh the panel when shown
------------------------------------------------------------------------------
---- XML OnShow callback - restores saved option states when panel is shown
---- @param frame frame - The AutoInvite panel frame
-function AutoLFM.UI.Content.AutoInvite.OnShow(frame)
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
-end
-
------------------------------------------------------------------------------
--- EditBox Handlers
------------------------------------------------------------------------------
---- Called when keyword text changes
-function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(keywordIndex, text)
-  -- This is called by the EditBox onTextChanged
-  -- Add any real-time validation or filtering here if needed
-end
-
---- Called when keyword EditBox loses focus or Escape is pressed
-function AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
-  -- This is called when user presses Escape or loses focus
-  -- Add any save/validation logic here
-end
-
---- Setup EditBox handlers in Lua to connect XML-free EditBoxes to functions
-function AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
-  if not panel then return end
-  
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
-  if not scrollChild then return end
-  
-  for i = 1, 3 do
-    local kw = getglobal(scrollChild:GetName().."_Keyword"..i.."_Input")
-    if kw then
-      local index = i
-      
-      -- Apply gold border and dark background
-      if kw.SetBackdropBorderColor then
-        kw:SetBackdropBorderColor(1, 0.82, 0, 1)
-      end
-      if kw.SetBackdropColor then
-        kw:SetBackdropColor(0, 0, 0, 0.8)
-      end
-      
-      kw:SetScript("OnTextChanged", function()
-        AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, kw:GetText())
-      end)
-      
-      kw:SetScript("OnEscapePressed", function()
-        kw:ClearFocus()
-        AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
-      end)
-      
-      kw:SetScript("OnEditFocusGained", function()
-        kw:HighlightText()
-      end)
-      
-      kw:SetScript("OnMouseDown", function()
-        kw:SetFocus()
-        kw:HighlightText()
-      end)
-      
-      kw:SetScript("OnEnterPressed", function()
-        kw:ClearFocus()
-      end)
-    end
-  end
-end
-
------------------------------------------------------------------------------
--- Helper: Check if player can lead (leader, raid leader, or raid officer)
------------------------------------------------------------------------------
 --- Checks if player has leadership permissions (leader, raid leader, or assistant)
 --- @return boolean - True if player can lead
 local function canPlayerLead()
@@ -162,9 +76,6 @@ local function canPlayerLead()
   return false
 end
 
------------------------------------------------------------------------------
--- Helper: Update Leader Status Display
------------------------------------------------------------------------------
 --- Updates the leader status radio buttons based on current group status
 local function UpdateLeaderStatus()
   if not panel then return end
@@ -188,9 +99,90 @@ local function UpdateLeaderStatus()
   end
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Enable Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- INITIALIZATION
+--=============================================================================
+--- XML OnLoad callback - initializes the AutoInvite panel UI
+--- @param frame frame - The AutoInvite panel frame
+function AutoLFM.UI.Content.AutoInvite.OnLoad(frame)
+  panel = frame
+  -- Apply colors to leader status labels
+  ApplyLeaderColors()
+  -- Setup keyword EditBox handlers
+  AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
+end
+
+--- XML OnShow callback - restores saved option states when panel is shown
+--- @param frame frame - The AutoInvite panel frame
+function AutoLFM.UI.Content.AutoInvite.OnShow(frame)
+  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+end
+
+--=============================================================================
+-- EDITBOX HANDLERS
+--=============================================================================
+--- Called when keyword text changes
+--- @param keywordIndex number - The keyword slot index (1-based)
+--- @param text string - The new text content
+function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(keywordIndex, text)
+  -- This is called by the EditBox onTextChanged
+  -- Add any real-time validation or filtering here if needed
+end
+
+--- Called when keyword EditBox loses focus or Escape is pressed
+function AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
+  -- This is called when user presses Escape or loses focus
+  -- Add any save/validation logic here
+end
+
+--- Setup EditBox handlers in Lua to connect XML-free EditBoxes to functions
+function AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
+  if not panel then return end
+
+  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  if not scrollChild then return end
+
+  for i = 1, 3 do
+    local kw = getglobal(scrollChild:GetName().."_Keyword"..i.."_Input")
+    if kw then
+      local index = i
+
+      -- Apply gold border and dark background
+      if kw.SetBackdropBorderColor then
+        kw:SetBackdropBorderColor(1, 0.82, 0, 1)
+      end
+      if kw.SetBackdropColor then
+        kw:SetBackdropColor(0, 0, 0, 0.8)
+      end
+
+      kw:SetScript("OnTextChanged", function()
+        AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, kw:GetText())
+      end)
+
+      kw:SetScript("OnEscapePressed", function()
+        kw:ClearFocus()
+        AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
+      end)
+
+      kw:SetScript("OnEditFocusGained", function()
+        kw:HighlightText()
+      end)
+
+      kw:SetScript("OnMouseDown", function()
+        kw:SetFocus()
+        kw:HighlightText()
+      end)
+
+      kw:SetScript("OnEnterPressed", function()
+        kw:ClearFocus()
+      end)
+    end
+  end
+end
+
+--=============================================================================
+-- EVENT HANDLERS - ENABLE RADIO BUTTONS
+--=============================================================================
 --- Handles AutoInvite enable/disable radio button clicks (On/Off)
 --- @param isEnabled boolean - True to enable AutoInvite, false to disable
 function AutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(isEnabled)
@@ -305,9 +297,9 @@ function AutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(isEnabled)
   end
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Keyword Management
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - KEYWORD MANAGEMENT
+--=============================================================================
 --- Handles keyword editbox escape key
 --- Properly clears focus from the editbox
 function AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
@@ -323,20 +315,20 @@ function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, text)
 
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
-  
+
   -- Ensure table is large enough
   while table.getn(keywords) < index do
     table.insert(keywords, "")
   end
-  
+
   -- Update the keyword at this index
   keywords[index] = text
-  
+
   -- Remove trailing empty keywords
   while table.getn(keywords) > 0 and keywords[table.getn(keywords)] == "" do
     table.remove(keywords)
   end
-  
+
   -- Save updated keywords
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
     AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
@@ -351,17 +343,17 @@ function AutoLFM.UI.Content.AutoInvite.OnRemoveKeywordClick(index)
 
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
-  
+
   -- Remove keyword at index
   if index <= table.getn(keywords) then
     table.remove(keywords, index)
   end
-  
+
   -- Save updated keywords
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
     AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
-  
+
   -- Refresh UI to reflect changes
   AutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
@@ -373,48 +365,48 @@ function AutoLFM.UI.Content.AutoInvite.OnAddKeywordClick()
 
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
-  
+
   -- Don't add if we've reached max keywords
   if table.getn(keywords) >= MAX_KEYWORDS then
-    AutoLFM.Core.Utils.LogWarn("Maximum keywords (" .. MAX_KEYWORDS .. ") reached")
+    AutoLFM.Core.Utils.LogWarning("Maximum keywords (" .. MAX_KEYWORDS .. ") reached")
     return
   end
-  
+
   -- Add empty keyword
   table.insert(keywords, "")
-  
+
   -- Save updated keywords
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
     AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
-  
+
   -- Refresh UI to show new field
   AutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
---- Handles clear keyword button click (✕ on first line)
---- Clears the first keyword entry
+--- Handles clear keyword button click (x on first line)
+--- @param index number - The keyword slot index to clear
 function AutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(index)
   if isRestoringState then return end
 
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
-  
+
   -- Clear the keyword at this index
   if index <= table.getn(keywords) then
     keywords[index] = ""
   end
-  
+
   -- Remove trailing empty keywords
   while table.getn(keywords) > 0 and keywords[table.getn(keywords)] == "" do
     table.remove(keywords)
   end
-  
+
   -- Save updated keywords
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
     AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
-  
+
   -- Refresh UI
   AutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
@@ -430,24 +422,23 @@ function AutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
   local numKeywords = table.getn(keywords)
-  
+
   -- Add an empty keyword to make room for the next line
   if numKeywords < 3 then
     table.insert(keywords, "")
-    
+
     -- Save updated keywords
     if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
       AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
     end
-    
+
     -- Refresh UI to show next line
     AutoLFM.UI.Content.AutoInvite.RefreshPanel()
   end
 end
 
---- Handles delete keyword line button click (✕ on additional lines)
---- Hides the keyword input line and shows the appropriate add button
---- If a middle line is deleted, lines below move up
+--- Handles delete keyword line button click (x on additional lines)
+--- @param index number - The keyword line index to remove
 function AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(index)
   if isRestoringState then return end
 
@@ -456,24 +447,24 @@ function AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(index)
 
   -- Get current keywords from persistent storage
   local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
-  
+
   -- Remove keyword at index
   if index <= table.getn(keywords) then
     table.remove(keywords, index)
   end
-  
+
   -- Save updated keywords
   if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
     AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
-  
+
   -- Refresh UI to reflect changes (keywords will move up)
   AutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
------------------------------------------------------------------------------
--- Public API - Refresh Panel
------------------------------------------------------------------------------
+--=============================================================================
+-- PUBLIC API
+--=============================================================================
 --- Refreshes all UI elements from persistent storage
 --- Called when panel is shown or after keyword changes
 function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
@@ -548,12 +539,12 @@ function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
     -- Update keyword inputs, delete buttons, and add buttons
     -- Based on number of keywords stored, show/hide the appropriate lines
     local numKeywords = table.getn(keywords)
-    
+
     -- Keyword 1 - ALWAYS visible
     local kw1Input = getglobal(scrollChild:GetName().."_Keyword1_Input")
     local kw1Clear = getglobal(scrollChild:GetName().."_Keyword1_Clear")
     local addBtn = getglobal(scrollChild:GetName().."_AddKeywordButton")
-    
+
     if kw1Input then
       if numKeywords >= 1 then
         kw1Input:SetText(keywords[1])
@@ -563,12 +554,12 @@ function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
       kw1Input:Show()
       if kw1Clear then kw1Clear:Show() end
     end
-    
+
     -- Keyword 2 - shown if we have 2 or more keywords
     local kw2Input = getglobal(scrollChild:GetName().."_Keyword2_Input")
     local kw2Delete = getglobal(scrollChild:GetName().."_Keyword2_Delete")
     local addBtn2 = getglobal(scrollChild:GetName().."_AddKeywordButton2")
-    
+
     if kw2Input then
       if numKeywords >= 2 then
         kw2Input:SetText(keywords[2])
@@ -582,11 +573,11 @@ function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
         if addBtn2 then addBtn2:Hide() end
       end
     end
-    
+
     -- Keyword 3 - shown if we have 3 or more keywords
     local kw3Input = getglobal(scrollChild:GetName().."_Keyword3_Input")
     local kw3Delete = getglobal(scrollChild:GetName().."_Keyword3_Delete")
-    
+
     if kw3Input then
       if numKeywords >= 3 then
         kw3Input:SetText(keywords[3])
@@ -599,7 +590,7 @@ function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
         if kw3Delete then kw3Delete:Hide() end
       end
     end
-    
+
     -- Add button visibility:
     -- - Shows on Keyword1 line if numKeywords == 0 or numKeywords == 1
     -- - Shows on Keyword2 line if numKeywords == 2
@@ -610,7 +601,7 @@ function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
         addBtn:Hide()
       end
     end
-    
+
     if addBtn2 then
       if numKeywords == 2 then
         addBtn2:Show()

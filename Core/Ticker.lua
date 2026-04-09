@@ -1,7 +1,5 @@
 --=============================================================================
 -- AutoLFM: Ticker
---   Centralized tick management system to consolidate OnUpdate frames
---   Provides efficient timer callbacks without creating multiple frames
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -22,7 +20,6 @@ local TICK_RESOLUTION = 0.1
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Main OnUpdate handler - processes all registered tickers
 local function onUpdate()
   local now = GetTime()
@@ -73,7 +70,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Registers a new ticker callback
 --- @param id string - Unique identifier for this ticker
 --- @param interval number - Interval in seconds between callbacks

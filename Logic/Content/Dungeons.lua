@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Dungeons Logic
---   Dungeon color calculation, sorting and data management
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -10,7 +9,6 @@ AutoLFM.Logic.Content.Dungeons = {}
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Calculates the difficulty color for a dungeon based on player level
 --- @param dungeon table - Dungeon data with levelMin and levelMax fields
 --- @param playerLevel number - Current player level
@@ -83,7 +81,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Returns dungeons sorted by difficulty color and level (uses cache)
 --- @return table - Array of {index, dungeon, color} sorted by priority and level
 function AutoLFM.Logic.Content.Dungeons.GetSortedDungeons()

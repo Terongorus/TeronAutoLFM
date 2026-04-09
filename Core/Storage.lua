@@ -1,20 +1,18 @@
 --=============================================================================
 -- AutoLFM: Persistent Storage
---   Centralized access to V3_Settings and V3_Presets SavedVariables
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
 AutoLFM.Core.Storage = {}
 
------------------------------------------------------------------------------
--- Private State
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE STATE
+--=============================================================================
 local characterID
 
------------------------------------------------------------------------------
--- Utility Functions
------------------------------------------------------------------------------
-
+--=============================================================================
+-- UTILITY FUNCTIONS
+--=============================================================================
 --- Maximum depth for deepCopy to prevent stack overflow on circular/deeply nested tables
 local MAX_DEEP_COPY_DEPTH = 10
 
@@ -41,9 +39,9 @@ local function deepCopy(obj, depth)
   return copy
 end
 
------------------------------------------------------------------------------
--- Settings Registry
------------------------------------------------------------------------------
+--=============================================================================
+-- SETTINGS REGISTRY
+--=============================================================================
 local SETTINGS_REGISTRY = {
   {key = "dungeonFilters", type = "table", default = {GRAY = true, GREEN = true, YELLOW = true, ORANGE = true, RED = true}},
   {key = "broadcastInterval", type = "number", default = 60},
@@ -66,10 +64,9 @@ local SETTINGS_REGISTRY = {
   {key = "generalChannelIndex", type = "number", default = 1}
 }
 
------------------------------------------------------------------------------
--- Helper Functions
------------------------------------------------------------------------------
-
+--=============================================================================
+-- HELPER FUNCTIONS
+--=============================================================================
 --- Retrieves character-specific persistent data, optionally creating it
 --- @param ensure boolean - If true, creates character data if it doesn't exist
 --- @return table|nil - Character data table, or nil if not available
@@ -97,11 +94,9 @@ local function getCharData(ensure)
   return V3_Settings[characterID]
 end
 
------------------------------------------------------------------------------
--- Generic Get/Set
---   Direct access to character-specific persistent storage
------------------------------------------------------------------------------
-
+--=============================================================================
+-- GENERIC GET/SET
+--=============================================================================
 --- Gets a value from character-specific persistent storage
 --- @param key string - The setting key to retrieve
 --- @param defaultValue any - Value to return if key is not found or nil
@@ -129,11 +124,9 @@ function AutoLFM.Core.Storage.Set(key, value)
   charData[key] = value
 end
 
------------------------------------------------------------------------------
--- Auto-generated accessors
---   Dynamically creates Get*/Set* functions for each registered setting
---   Example: GetDarkMode(), SetDarkMode(value), GetMinimapVisible(), etc.
------------------------------------------------------------------------------
+--=============================================================================
+-- AUTO-GENERATED ACCESSORS
+--=============================================================================
 for i = 1, table.getn(SETTINGS_REGISTRY) do
   local setting = SETTINGS_REGISTRY[i]
   local capitalizedKey = string.upper(string.sub(setting.key, 1, 1)) .. string.sub(setting.key, 2)
@@ -153,11 +146,9 @@ for i = 1, table.getn(SETTINGS_REGISTRY) do
   end
 end
 
------------------------------------------------------------------------------
--- Specialized accessors
---   Custom accessors with special logic beyond simple get/set
------------------------------------------------------------------------------
-
+--=============================================================================
+-- SPECIALIZED ACCESSORS
+--=============================================================================
 --- Sets minimap button position or clears it if nil
 --- @param x number - X coordinate (optional, pass nil to clear position)
 --- @param y number - Y coordinate (optional, pass nil to clear position)
@@ -183,10 +174,9 @@ end
 --- @return table - A new table with all nested tables copied
 AutoLFM.Core.Storage.DeepCopy = deepCopy
 
------------------------------------------------------------------------------
--- Additional Specialized Accessors
------------------------------------------------------------------------------
-
+--=============================================================================
+-- ADDITIONAL SPECIALIZED ACCESSORS
+--=============================================================================
 --- Sets the broadcast interval with validation
 --- @param interval number - Interval in seconds (30-7200)
 function AutoLFM.Core.Storage.SetBroadcastInterval(interval)
@@ -195,10 +185,9 @@ function AutoLFM.Core.Storage.SetBroadcastInterval(interval)
   AutoLFM.Core.Storage.Set("broadcastInterval", clamped)
 end
 
------------------------------------------------------------------------------
--- Hardcore Detection
------------------------------------------------------------------------------
-
+--=============================================================================
+-- HARDCORE DETECTION
+--=============================================================================
 --- Detects if character is in hardcore mode by scanning spellbook
 --- @return boolean - True if "hardcore" spell found in spellbook
 local function detectHardcoreCharacter()
@@ -214,11 +203,9 @@ local function detectHardcoreCharacter()
   return false
 end
 
------------------------------------------------------------------------------
--- Initialization
---   Sets up character ID and initializes storage on first load
------------------------------------------------------------------------------
-
+--=============================================================================
+-- INITIALIZATION
+--=============================================================================
 --- Adds missing settings from SETTINGS_REGISTRY to existing character data
 --- This ensures new settings are available after addon updates
 local function migrateSettings()
@@ -272,10 +259,9 @@ function AutoLFM.Core.Storage.Init()
   return true
 end
 
------------------------------------------------------------------------------
--- Presets Management
------------------------------------------------------------------------------
-
+--=============================================================================
+-- PRESETS MANAGEMENT
+--=============================================================================
 --- Gets all presets for the current character
 --- @return table - Table with 'data' (preset name -> preset data) and 'order' (array of preset names)
 function AutoLFM.Core.Storage.GetPresets()
@@ -391,11 +377,9 @@ function AutoLFM.Core.Storage.MovePresetDown(presetName)
   return true
 end
 
------------------------------------------------------------------------------
--- Deferred Hardcore Detection
---   Called from SPELLS_CHANGED when spellbook is guaranteed to be loaded
------------------------------------------------------------------------------
-
+--=============================================================================
+-- DEFERRED HARDCORE DETECTION
+--=============================================================================
 --- Detects and persists hardcore status by scanning the spellbook.
 --- Must be called when the spellbook is guaranteed to be loaded (SPELLS_CHANGED).
 --- Only runs once: skips if isHardcore is already set.
@@ -409,9 +393,9 @@ function AutoLFM.Core.Storage.DetectAndPersistHardcore()
   return isHardcore
 end
 
------------------------------------------------------------------------------
--- Registration
------------------------------------------------------------------------------
+--=============================================================================
+-- REGISTRATION
+--=============================================================================
 AutoLFM.Core.SafeRegisterInit("Core.Storage", function()
   AutoLFM.Core.Storage.Init()
 end, { id = "I02" })

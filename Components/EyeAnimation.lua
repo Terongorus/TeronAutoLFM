@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Eye Animation Component
---   Manages eye animation on main icon and minimap button during broadcast
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Components = AutoLFM.Components or {}
@@ -28,7 +27,6 @@ local isAnimating = false
 --=============================================================================
 -- HELPER FUNCTIONS
 --=============================================================================
-
 --- Updates the texture of an icon to display the current animation frame
 --- @param textureName string - The global name of the texture (e.g., "AutoLFM_MainFrame_Icon")
 --- @param frameName string - The name of the frame (e.g., "Eye01")
@@ -40,48 +38,43 @@ local function updateIconTexture(textureName, frameName)
   texture:SetTexture(path)
 end
 
---- Starts the animation loop
-local function startAnimation()
+--- Ensures the animation frame exists (created once, reused)
+local function ensureAnimationFrame()
   if animationTimer then return end
-  
-  isAnimating = true
-  currentFrameIndex = 0  -- Start at 0 so first frame is Eye01
-  lastFrameTime = GetTime()
-  
   animationTimer = CreateFrame("Frame", "AutoLFM_EyeAnimationTimer")
-  
+  animationTimer:Hide()
   animationTimer:SetScript("OnUpdate", function()
     local currentTime = GetTime()
     if currentTime - lastFrameTime >= ANIMATION_SPEED then
       lastFrameTime = currentTime
-      
-      -- Update frame index with looping
       currentFrameIndex = currentFrameIndex + 1
       if currentFrameIndex > table.getn(ANIMATION_FRAMES) then
         currentFrameIndex = 1
       end
-      
-      -- Get the current frame name
       local frameName = ANIMATION_FRAMES[currentFrameIndex]
-      
-      -- Update both icons
       updateIconTexture("AutoLFM_MainFrame_Icon", frameName)
       updateIconTexture("AutoLFM_MinimapButton_Icon", frameName)
     end
   end)
 end
 
+--- Starts the animation loop
+local function startAnimation()
+  if isAnimating then return end
+  isAnimating = true
+  currentFrameIndex = 0
+  lastFrameTime = GetTime()
+  ensureAnimationFrame()
+  animationTimer:Show()
+end
+
 --- Stops the animation loop
 local function stopAnimation()
-  if animationTimer then
-    animationTimer:SetScript("OnUpdate", nil)
-    animationTimer = nil
-  end
-  
   isAnimating = false
   currentFrameIndex = 1
-  
-  -- Reset icons to default frame
+  if animationTimer then
+    animationTimer:Hide()
+  end
   updateIconTexture("AutoLFM_MainFrame_Icon", "Eye00")
   updateIconTexture("AutoLFM_MinimapButton_Icon", "Eye00")
 end
@@ -89,7 +82,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Starts the eye animation
 function AutoLFM.Components.EyeAnimation.Start()
   if not isAnimating then
@@ -113,7 +105,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 AutoLFM.Core.SafeRegisterInit("Components.EyeAnimation", function()
   --- Listen to Broadcaster.IsRunning state changes
   AutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)

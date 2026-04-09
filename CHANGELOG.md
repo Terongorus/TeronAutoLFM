@@ -1,3 +1,15 @@
+## [v3.15] 2026/04/09
+- Fix `Utils.ROW_HEIGHT` → `Constants.ROW_HEIGHT` in Raids UI (scroll height was nil)
+- Fix `LogWarn` → `LogWarning` in AutoInvite UI, remove duplicate `OnShow` in Settings UI
+- Fix 8 format string placeholders (`%s`, `%d`) appearing literally in log calls
+- Fix 3 frame memory leaks: reuse measurement frame in Presets, stop orphaning rows, create EyeAnimation timer once
+- Migrate messaging stats timer to centralized Ticker system (`MESSAGING_STATS`)
+- Optimize Debug color lookup (hash table) and `iterativeFit` text truncation (binary search)
+- Fix Maestro `SetState` validator to correctly reject truthy error strings
+- Normalize code style across all 36 .lua files (separators, spacing, LuaDoc)
+- Migrate documentation from `_Docs/` to `_wiki/` (flat structure, GitHub Wiki ready)
+- Move screenshots and assets to `_assets/`
+
 ## [v3.14] 2026/03/23
 - Update for Turtle WoW patch 1.18.1 (Nightmares of Ursol)
 - Add new dungeons: Frostmane Hollow, Windhorn Canyon

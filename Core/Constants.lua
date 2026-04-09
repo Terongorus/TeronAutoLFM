@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Constants
---   Shared constants, data tables, and configuration values
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -95,7 +94,6 @@ AutoLFM.Core.Constants.CHAT_PREFIX = "|cff808080[|r|cffffffffAuto|r|cff0070ddL|r
 --=============================================================================
 -- LEVEL COLOR THRESHOLDS
 --=============================================================================
-
 -- DIFFICULTY COLOR SYSTEM:
 -- Colors represent how difficult a dungeon is for a player of a given level
 -- RED:    Too hard (5+ levels above) - High wipe risk
@@ -255,14 +253,14 @@ AutoLFM.Core.Constants.BROADCASTER_TIMER_INTERVAL = 1
 AutoLFM.Core.Constants.SCROLL_PADDING = 10
 
 --=============================================================================
--- UI CONSTANTS (Additional)
+-- UI CONSTANTS
 --=============================================================================
 -- SOUND_PATH: File path to broadcast notification sounds
 -- Used when playing sound effects on broadcast start/stop/full
 AutoLFM.Core.Constants.SOUND_PATH = "Interface\\AddOns\\AutoLFM\\UI\\Sounds\\"
 
 --=============================================================================
--- LOOKUP TABLES (built on-demand by Core/Utils.lua lazy loading)
+-- LOOKUP TABLES
 --=============================================================================
 -- DUNGEONS_BY_NAME: O(1) name-to-dungeon lookup table
 -- Built on first use by GetDungeonByName() for performance
@@ -324,7 +322,8 @@ AutoLFM.Core.Constants.TICKER_RESOLUTION = 0.1
 AutoLFM.Core.Constants.TICKER_IDS = {
   BROADCASTER = "broadcaster",
   BROADCASTER_RETRY = "broadcaster_retry",
-  INVITE_CLEANUP = "invite_cleanup"
+  INVITE_CLEANUP = "invite_cleanup",
+  MESSAGING_STATS = "messaging_stats"
 }
 
 --=============================================================================

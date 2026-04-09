@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Event Handling
---   Centralized WoW event management for auto-refresh and reactivity
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -15,7 +14,6 @@ local lastGroupSize = 0
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Gets current group size and type
 --- @return number, string - Current size and type ("solo", "party", "raid")
 local function getGroupInfo()
@@ -34,7 +32,6 @@ end
 --=============================================================================
 -- EVENT HANDLERS
 --=============================================================================
-
 --- Handles QUEST_LOG_UPDATE event - clears cache and refreshes quest UI
 local function onQuestLogUpdate()
   if AutoLFM.Logic.Content.Quests then
@@ -161,7 +158,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Initializes the WoW event system and registers all required event listeners
 function AutoLFM.Core.Events.Init()
   if not eventFrame then
@@ -199,7 +195,6 @@ end
 --=============================================================================
 -- SLASH COMMANDS
 --=============================================================================
-
 --- Handles slash command input and routes to appropriate actions
 --- @param msg string - Command arguments (empty for toggle, "debug" for debug window)
 local function handleSlashCommand(msg)

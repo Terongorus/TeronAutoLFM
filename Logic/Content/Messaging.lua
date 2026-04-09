@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Messaging Logic
---   Message configuration and link integration
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -16,10 +15,6 @@ local Original_ChatFrame_OnHyperlinkShow = nil
 --=============================================================================
 -- LINK INTEGRATION
 --=============================================================================
------------------------------------------------------------------------------
--- Get the custom message editbox
------------------------------------------------------------------------------
-
 --- Retrieves the custom message editbox from the Messaging UI
 --- @return frame|nil - The editbox frame, or nil if UI not initialized
 local function getCustomMessageEditBox()
@@ -30,19 +25,11 @@ local function getCustomMessageEditBox()
   return nil
 end
 
------------------------------------------------------------------------------
--- Check if AutoLFM is visible and ready for links
------------------------------------------------------------------------------
-
 --- Checks if AutoLFM main window is visible and ready to receive links
 --- @return boolean - True if main window is visible
 local function isAutoLFMReady()
   return AutoLFM_MainFrame and AutoLFM_MainFrame:IsVisible()
 end
-
------------------------------------------------------------------------------
--- Insert link into editbox
------------------------------------------------------------------------------
 
 --- Inserts an item/quest link into the custom message editbox
 --- @param link string - The hyperlink text to insert (e.g., item link, quest link)
@@ -77,10 +64,6 @@ local function insertLinkIntoEditBox(link)
   return true
 end
 
------------------------------------------------------------------------------
--- Bag Item Clicks
------------------------------------------------------------------------------
-
 --- Hooks bag item button clicks to enable Shift+Click link insertion
 --- Overrides ContainerFrameItemButton_OnClick to intercept Shift+Click
 local function hookBagClicks()
@@ -110,14 +93,11 @@ local function hookBagClicks()
   end
 end
 
------------------------------------------------------------------------------
--- Chat Hyperlinks
------------------------------------------------------------------------------
-
 --- Hooks chat hyperlink clicks to enable Shift+Click link insertion and right-click player menus
 --- Overrides ChatFrame_OnHyperlinkShow to intercept Shift+Click and right-click events
 local isHandlingHyperlink = false
 
+--- Hooks ChatFrame_OnHyperlinkShow for Shift+Click link insertion and right-click menus
 local function hookChatLinks()
   if not ChatFrame_OnHyperlinkShow then return end
   Original_ChatFrame_OnHyperlinkShow = ChatFrame_OnHyperlinkShow
@@ -176,9 +156,6 @@ end
 --=============================================================================
 -- CHANNEL MANAGEMENT
 --=============================================================================
------------------------------------------------------------------------------
--- Join Channel if not already joined
------------------------------------------------------------------------------
 --- Joins a chat channel if the player is not already in it
 --- @param channelName string - The name of the channel to join (e.g., "LookingForGroup")
 --- @return boolean - True if in channel (already or newly joined), false if invalid channel name
@@ -243,10 +220,6 @@ end
 --=============================================================================
 -- CHANNEL SELECTION MANAGEMENT
 --=============================================================================
-
------------------------------------------------------------------------------
--- Toggle Channel Selection
------------------------------------------------------------------------------
 --- Toggles a channel in the selection and joins it if selected
 --- @param channelName string - The name of the channel to toggle
 function AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
@@ -299,19 +272,9 @@ function AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
   AutoLFM.Core.Maestro.Dispatch("Channels.Changed")
 end
 
------------------------------------------------------------------------------
--- PUBLIC API - REMOVED
------------------------------------------------------------------------------
--- All public getters removed - use Maestro States directly:
---   GetState("Channels.ActiveChannels") → S18
--- To check if channel selected: iterate State and check presence
-
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
------------------------------------------------------------------------------
--- Initialize Link Integration
------------------------------------------------------------------------------
 --- Initializes link integration for item and quest links
 --- Hooks bag item clicks and chat hyperlinks to enable Shift+Click link insertion
 --- into the custom message editbox in the Messaging UI
@@ -339,9 +302,6 @@ AutoLFM.Core.Maestro.RegisterEvent("Channels.Changed", { id = "E04" })
 --- State: Active channels list
 AutoLFM.Core.SafeRegisterState("Channels.ActiveChannels", {}, { id = "S18" })
 
------------------------------------------------------------------------------
--- Load Saved Channels
------------------------------------------------------------------------------
 --- Loads selected channels from persistent storage and restores selection state
 local function loadSavedChannels()
   if not AutoLFM.Core or not AutoLFM.Core.Storage then return end
@@ -362,9 +322,6 @@ local function loadSavedChannels()
   AutoLFM.Core.Maestro.SetState("Channels.ActiveChannels", savedChannels)
 end
 
------------------------------------------------------------------------------
--- Auto-register initialization
------------------------------------------------------------------------------
 AutoLFM.Core.SafeRegisterInit("Logic.Content.Messaging", function()
   AutoLFM.Logic.Content.Messaging.InitLinkIntegration()
   loadSavedChannels()

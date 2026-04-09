@@ -1,16 +1,13 @@
 --=============================================================================
 -- AutoLFM: MainFrame UI
---   UI handlers and event callbacks
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.MainFrame = {}
 
 --=============================================================================
--- UI HANDLERS (for XML callbacks)
+-- UI HANDLERS
 --=============================================================================
-
 --- XML OnLoad callback - initializes main frame as UIPanel and registers for dark theme
 --- @param frame frame - The main frame being loaded
 function AutoLFM.UI.MainFrame.OnLoad(frame)
@@ -85,9 +82,8 @@ function AutoLFM.UI.MainFrame.OnBottomTabLeave(tabIndex)
 end
 
 --=============================================================================
--- UTILITY HANDLERS (for repeated XML behaviors)
+-- UTILITY HANDLERS
 --=============================================================================
-
 --- Shows a tooltip for a button with custom positioning
 --- @param button frame - The button to attach the tooltip to
 --- @param text string - The text to display in the tooltip
@@ -282,7 +278,6 @@ end
 --=============================================================================
 -- MESSAGE PREVIEW UPDATE
 --=============================================================================
-
 --- Updates the message preview text in the main frame
 --- Truncates the message if it's too long and shows a preview button
 --- @param message string - The message to display in the preview
@@ -384,7 +379,6 @@ end
 --=============================================================================
 -- TAB VISUAL UPDATES
 --=============================================================================
-
 --- Updates the visual appearance of a single bottom tab
 --- @param tabIndex number - The tab index to update (1-4)
 --- @param isActive boolean - True if this tab is currently active
@@ -434,7 +428,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 AutoLFM.Core.SafeRegisterInit("UI.MainFrame", function()
   -- Subscribe to state changes that affect the main button
   AutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)

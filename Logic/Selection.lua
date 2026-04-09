@@ -1,14 +1,12 @@
 --=============================================================================
 -- AutoLFM: Selection Logic
---   Manages content selection with business rules (FIFO, exclusivity, etc.)
---   ARCHITECTURE: States are the ONLY source of truth (no private variables)
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
 AutoLFM.Logic.Selection = {}
 
 --=============================================================================
--- CONSTANTS (local references for performance)
+-- CONSTANTS
 --=============================================================================
 local MAX_DUNGEONS = AutoLFM.Core.Constants.MAX_DUNGEONS or 3
 local MODES = AutoLFM.Core.Constants.SELECTION_MODES
@@ -29,7 +27,6 @@ AutoLFM.Core.SafeRegisterState("Selection.CustomGroupSize", 5, { id = "S01" })
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Checks if a dungeon is visible (not filtered by color)
 --- @param index number - Dungeon index to check
 --- @return boolean - True if dungeon appears in sorted (filtered) list
@@ -73,7 +70,6 @@ end
 --=============================================================================
 -- COMMANDS - DUNGEONS
 --=============================================================================
-
 --- Toggles dungeon selection with FIFO limit
 AutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleDungeon", function(index)
   if not index or type(index) ~= "number" then
@@ -160,7 +156,6 @@ end, { id = "C05" })
 --=============================================================================
 -- COMMANDS - RAIDS
 --=============================================================================
-
 --- Toggles raid selection (exclusive with dungeons)
 AutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRaid", function(index)
   if not index or type(index) ~= "number" then
@@ -271,7 +266,6 @@ end, { id = "C06" })
 --=============================================================================
 -- COMMANDS - ROLES
 --=============================================================================
-
 --- Toggles role selection
 AutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
   if not role or type(role) ~= "string" then
@@ -323,7 +317,6 @@ end, { id = "C07" })
 --=============================================================================
 -- COMMANDS - CUSTOM MESSAGE
 --=============================================================================
-
 --- Sets custom message (clears dungeons/raids)
 AutoLFM.Core.Maestro.RegisterCommand("Selection.SetCustomMessage", function(text)
   if not text then
@@ -405,7 +398,6 @@ end, { id = "C10" })
 --=============================================================================
 -- COMMANDS - GLOBAL
 --=============================================================================
-
 --- Checks if there are any selections to clear
 --- @return boolean - True if there are any active selections
 function AutoLFM.Logic.Selection.HasSelections()

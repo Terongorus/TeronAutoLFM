@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Message Builder
---   Constructs broadcast message from selection state
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -9,7 +8,6 @@ AutoLFM.Logic.Message = {}
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Checks if group is full and returns missing count
 --- @param targetSize number - Target group size
 --- @return number, boolean - Missing count and whether group is full
@@ -239,7 +237,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Gets the current broadcast message
 --- @return string - The message to broadcast
 function AutoLFM.Logic.Message.GetMessage()
@@ -304,7 +301,6 @@ AutoLFM.Core.SafeRegisterState("Message.ToBroadcast", "", { id = "S19" })
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 AutoLFM.Core.SafeRegisterInit("Logic.Message", function()
   -- Register event listeners (wait for Selection.Changed and Group.SizeChanged to be registered)
 

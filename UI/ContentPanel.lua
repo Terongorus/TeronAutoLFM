@@ -1,25 +1,17 @@
 --=============================================================================
 -- AutoLFM: ContentPanel Factory
---   Reusable factory for creating and managing content panel UI handlers
---   Reduces code duplication across Dungeons, Raids, Quests panels
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 
 --=============================================================================
 -- PRIVATE: Content Panel ID Registry
---   Auto-assigns Init Handler IDs to content panels (I25+)
---   Note: I01-I23 are explicit static IDs, I24 is reserved, I25+ are auto-assigned
 --=============================================================================
-
 local nextContentPanelId = 25  -- Next available ID for content panels (I25+)
 
 --=============================================================================
 -- ContentPanel Factory
---   Creates a content panel with standard lifecycle hooks and event listeners
 --=============================================================================
-
 --- Creates a new content panel with automatic lifecycle and event management
 --- Provides: OnLoad, OnShow, Refresh, and Maestro event listener registration
 ---

@@ -1,8 +1,6 @@
 --=============================================================================
 -- AutoLFM: Debug Window Component
---   Real-time debug console with action logging
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.Components = AutoLFM.Components or {}
 AutoLFM.Components.Debug = {}
@@ -10,7 +8,6 @@ AutoLFM.Components.Debug = {}
 --=============================================================================
 -- CONSTANTS
 --=============================================================================
-
 local DEBUG_WINDOW_WIDTH = 600
 local DEBUG_WINDOW_HEIGHT = 400
 local DEBUG_LINE_HEIGHT = 14
@@ -30,7 +27,6 @@ local stateBtn, registryBtn
 --=============================================================================
 -- HELPER FUNCTIONS
 --=============================================================================
-
 --- Returns current time as HH:MM:SS timestamp
 --- @return string - Formatted time string
 local function getTimestamp()
@@ -40,14 +36,18 @@ end
 --- Retrieves color object for a debug category
 --- @param category string - Debug category (e.g., "ACTION", "INFO", "WARNING", "ERROR")
 --- @return table - Color object with r, g, b, hex fields
+local colorsByDebugCategory = nil
 local function getColorByDebugCategory(category)
-  for i = 1, table.getn(AutoLFM.Core.Constants.COLORS) do
-      if AutoLFM.Core.Constants.COLORS[i].debugCategory == category then
-          return AutoLFM.Core.Constants.COLORS[i]
+  if not colorsByDebugCategory then
+    colorsByDebugCategory = {}
+    for i = 1, table.getn(AutoLFM.Core.Constants.COLORS) do
+      local c = AutoLFM.Core.Constants.COLORS[i]
+      if c.debugCategory then
+        colorsByDebugCategory[c.debugCategory] = c
       end
+    end
   end
-  -- Default to WHITE for unknown categories
-  return AutoLFM.Core.Utils.GetColor("WHITE")
+  return colorsByDebugCategory[category] or AutoLFM.Core.Utils.GetColor("WHITE")
 end
 
 --- Formats a log line with colored timestamp and category
@@ -145,7 +145,6 @@ end
 --=============================================================================
 -- GENERIC LOGGING FUNCTION
 --=============================================================================
-
 --- Generic logging function that formats and adds messages to the debug buffer
 --- Supports variable arguments that are appended to message in parentheses
 --- @param category string - Debug category (e.g., "ACTION", "INFO", "WARNING", "ERROR", "EVENT")
@@ -174,7 +173,6 @@ end
 --=============================================================================
 -- PUBLIC LOGGING API
 --=============================================================================
-
 --- Logs an event message to the debug window (green)
 --- @param eventName string - The event name to log
 --- @param id string - Optional ID (e.g., "E01")
@@ -262,7 +260,6 @@ end
 --=============================================================================
 -- WINDOW MANAGEMENT
 --=============================================================================
-
 --- Hides the debug window
 function AutoLFM.Components.Debug.Hide()
   if debugFrame then
@@ -513,7 +510,6 @@ end
 --=============================================================================
 -- FRAME CREATION (PURE LUA)
 --=============================================================================
-
 --- Creates the debug window frame entirely in Lua (no XML)
 function AutoLFM.Components.Debug.CreateFrame()
   if debugFrame then
@@ -655,7 +651,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 AutoLFM.Core.SafeRegisterInit("Debug", function()
   AutoLFM.Core.Maestro.RegisterCommand("Debug.Toggle", AutoLFM.Components.Debug.Toggle, { id = "C02" })
 end, { id = "I21" })

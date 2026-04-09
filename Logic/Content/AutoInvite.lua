@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: AutoInvite Logic
---   Handles automatic group invitations based on whisper keywords
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -9,7 +8,6 @@ AutoLFM.Logic.AutoInvite = {}
 --=============================================================================
 -- PRIVATE STATE
 --=============================================================================
-
 -- Cooldown tracking: stores last invite time per player to prevent spam
 -- Key: player name (lowercase), Value: GetTime() timestamp of last invite
 local lastInviteTime = {}
@@ -45,7 +43,6 @@ end
 --=============================================================================
 -- HELPERS
 --=============================================================================
-
 --- Checks if a player is on cooldown (recently invited)
 --- Prevents spam if someone sends multiple whispers quickly
 --- @param sender string - Player name to check
@@ -145,7 +142,6 @@ end
 --=============================================================================
 -- INVITE LOGIC
 --=============================================================================
-
 --- Handles incoming whisper messages and auto-invites if keyword matches
 --- @param data table - Whisper data with message and sender fields
 local function handleWhisper(data)
@@ -195,7 +191,6 @@ end
 --=============================================================================
 -- COMMANDS
 --=============================================================================
-
 --- Command: Enable AutoInvite
 --- Activates automatic group invitations based on whisper keywords
 AutoLFM.Core.Maestro.RegisterCommand("AutoInvite.Enable", function()
@@ -227,7 +222,6 @@ end, { id = "C24" })
 --=============================================================================
 -- EVENTS
 --=============================================================================
-
 --- Event: AutoInvite.Changed
 --- Dispatched when AutoInvite settings change (enabled, keyword, confirmation)
 AutoLFM.Core.Maestro.RegisterEvent("AutoInvite.Changed", { id = "E09" })
@@ -235,7 +229,6 @@ AutoLFM.Core.Maestro.RegisterEvent("AutoInvite.Changed", { id = "E09" })
 --=============================================================================
 -- EVENT HANDLERS
 --=============================================================================
-
 --- Handles group leader/assist changes
 --- No longer disables AutoInvite; it simply won't work until player becomes leader or assist again
 --- @param data table - Leader change data with isLeader field
@@ -252,7 +245,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 --- Initializes AutoInvite module
 --- Registers listeners for whisper and leader change events
 AutoLFM.Core.SafeRegisterInit("Logic.AutoInvite", function()

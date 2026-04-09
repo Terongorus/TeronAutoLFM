@@ -1,17 +1,13 @@
 --=============================================================================
 -- AutoLFM: Minimap Button
---   Minimap button management
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.Components = AutoLFM.Components or {}
 AutoLFM.Components.MinimapButton = {}
 
 --=============================================================================
 -- PUBLIC API
---   Functions for controlling minimap button visibility and position
 --=============================================================================
-
 --- Shows the minimap button and saves visibility state
 function AutoLFM.Components.MinimapButton.Show()
   local button = getglobal("AutoLFM_MinimapButton")
@@ -53,9 +49,7 @@ end
 
 --=============================================================================
 -- EVENT HANDLERS
---   XML callback functions for minimap button interactions
 --=============================================================================
-
 --- Handles minimap button click events
 --- Left-click: Toggle main frame
 --- Ctrl+Right-click: Reset position
@@ -102,9 +96,7 @@ end
 
 --=============================================================================
 -- INITIALIZATION
---   Loads saved position and visibility state from persistent storage
 --=============================================================================
-
 --- Initializes minimap button from persistent settings
 --- Restores saved position and visibility state
 function AutoLFM.Components.MinimapButton.Init()

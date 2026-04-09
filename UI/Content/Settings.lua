@@ -1,23 +1,21 @@
 --=============================================================================
 -- AutoLFM: Settings UI
---   Visual handlers for the Settings panel
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.Content = AutoLFM.UI.Content or {}
 AutoLFM.UI.Content.Settings = {}
 
------------------------------------------------------------------------------
--- Private State
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE STATE
+--=============================================================================
 local panel = nil
 local defaultPanelDropdown = nil
 local isRestoringState = false  -- Flag to prevent OnClick during restoration
 
------------------------------------------------------------------------------
--- Private Helpers - UI Coloring
------------------------------------------------------------------------------
-
+--=============================================================================
+-- HELPERS - UI COLORING
+--=============================================================================
 --- Applies colors to filter checkboxes and labels
 --- @param scrollChild frame - The scroll child container frame
 local function applyColors(scrollChild)
@@ -38,10 +36,9 @@ local function applyColors(scrollChild)
   AutoLFM.Core.Utils.SetTextColorByName(getglobal(scrollChild:GetName().."_Debug_Label"), "ORANGE")
 end
 
------------------------------------------------------------------------------
--- Private Helpers - UI State Restoration
------------------------------------------------------------------------------
-
+--=============================================================================
+-- HELPERS - UI STATE RESTORATION
+--=============================================================================
 --- Restores a set of checkboxes from persistent data
 --- @param scrollChild frame - The scroll child container frame
 --- @param basePath string - The base path for checkbox widget names (e.g., "_FiltersContainer_Filter")
@@ -86,9 +83,29 @@ local function restoreRadioPair(scrollChild, onPath, offPath, getValue)
   end
 end
 
------------------------------------------------------------------------------
--- OnLoad: Initialize the panel
------------------------------------------------------------------------------
+--- Generic radio button pair click handler (on/off, show/hide, etc.)
+--- @param radioButtons table - Table with { on = frame, off = frame }
+--- @param isOn boolean - True to check 'on' radio, false to check 'off' radio
+--- @param callback function|nil - Optional callback function to call with the boolean value
+local function handleRadioClick(radioButtons, isOn, callback)
+  if not radioButtons or not radioButtons.on or not radioButtons.off then return end
+
+  if isOn then
+  radioButtons.on:SetChecked(1)
+  radioButtons.off:SetChecked(nil)
+  else
+  radioButtons.on:SetChecked(nil)
+  radioButtons.off:SetChecked(1)
+  end
+
+  if callback then
+  callback(isOn)
+  end
+end
+
+--=============================================================================
+-- INITIALIZATION
+--=============================================================================
 --- XML OnLoad callback - initializes the Settings panel UI
 --- @param frame frame - The Settings panel frame
 function AutoLFM.UI.Content.Settings.OnLoad(frame)
@@ -97,9 +114,6 @@ function AutoLFM.UI.Content.Settings.OnLoad(frame)
   AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
 end
 
------------------------------------------------------------------------------
--- OnShow: Refresh the panel when shown
------------------------------------------------------------------------------
 --- XML OnShow callback - restores saved option states when panel is shown
 --- @param frame frame - The Settings panel frame
 function AutoLFM.UI.Content.Settings.OnShow(frame)
@@ -107,19 +121,6 @@ function AutoLFM.UI.Content.Settings.OnShow(frame)
   AutoLFM.UI.Content.Settings.RestoreState()
 end
 
------------------------------------------------------------------------------
--- OnShow: Refresh the panel when shown
------------------------------------------------------------------------------
---- XML OnShow callback - restores saved option states when panel is shown
---- @param frame frame - The Settings panel frame
-function AutoLFM.UI.Content.Settings.OnShow(frame)
-  applyColors(AutoLFM.UI.RowList.GetScrollChild(panel))
-  AutoLFM.UI.Content.Settings.RestoreState()
-end
-
------------------------------------------------------------------------------
--- Create Default Panel Dropdown
------------------------------------------------------------------------------
 --- Creates the default panel dropdown menu using WoW's native dropdown system
 --- Allows user to select which panel (Dungeons, Raids, Quests, Messaging, Presets) opens by default
 function AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
@@ -167,9 +168,9 @@ function AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
   UIDropDownMenu_SetText(displayName, defaultPanelDropdown)
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Dungeon Filters
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - DUNGEON FILTERS
+--=============================================================================
 --- Handles dungeon filter checkbox toggle events
 --- Saves to persistent storage and refreshes dungeon list UI
 --- @param filterId string - Color filter ID (e.g., "GRAY", "GREEN", "YELLOW", "ORANGE", "RED")
@@ -198,34 +199,9 @@ function AutoLFM.UI.Content.Settings.OnFilterToggle(filterId, isEnabled)
   end
 end
 
------------------------------------------------------------------------------
--- Generic Radio Handler
---   Handles radio button pairs (on/off, show/hide, etc.)
------------------------------------------------------------------------------
-
---- Handles radio button pair clicks (generic on/off handler)
---- @param radioButtons table - Table with { on = frame, off = frame }
---- @param isOn boolean - True to check 'on' radio, false to check 'off' radio
---- @param callback function|nil - Optional callback function to call with the boolean value
-local function handleRadioClick(radioButtons, isOn, callback)
-  if not radioButtons or not radioButtons.on or not radioButtons.off then return end
-
-  if isOn then
-  radioButtons.on:SetChecked(1)
-  radioButtons.off:SetChecked(nil)
-  else
-  radioButtons.on:SetChecked(nil)
-  radioButtons.off:SetChecked(1)
-  end
-
-  if callback then
-  callback(isOn)
-  end
-end
-
------------------------------------------------------------------------------
--- Event Handlers - Minimap Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - MINIMAP RADIO BUTTONS
+--=============================================================================
 --- Handles minimap visibility radio button clicks (Show/Hide)
 --- @param isShow boolean - True to show minimap button, false to hide
 function AutoLFM.UI.Content.Settings.OnMinimapRadioClick(isShow)
@@ -254,9 +230,9 @@ function AutoLFM.UI.Content.Settings.OnMinimapResetClick()
   end
 end
 
------------------------------------------------------------------------------
--- Event Handlers - DarkUI Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - DARKUI RADIO BUTTONS
+--=============================================================================
 --- Handles dark mode radio button clicks (On/Off)
 --- @param isEnabled boolean - True to enable dark mode, false to disable
 function AutoLFM.UI.Content.Settings.OnDarkUIRadioClick(isEnabled)
@@ -282,9 +258,9 @@ function AutoLFM.UI.Content.Settings.OnDarkUIReloadClick()
   ReloadUI()
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Message Mode Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - MESSAGE MODE RADIO BUTTONS
+--=============================================================================
 --- Handles message mode radio button clicks (Details/Custom)
 --- @param mode string - "details" for details mode, "custom" for custom mode
 function AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick(mode)
@@ -308,9 +284,9 @@ function AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick(mode)
   end)
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Preview Lines Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - PREVIEW LINES RADIO BUTTONS
+--=============================================================================
 --- Handles preview message lines radio button clicks (1 line / 2 lines)
 --- @param lines number - 1 for single line, 2 for two lines
 function AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(lines)
@@ -340,9 +316,9 @@ function AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(lines)
   end)
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Presets Radio Buttons
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - PRESETS RADIO BUTTONS
+--=============================================================================
 --- Handles presets view mode radio button clicks (Condensed/Full)
 --- @param isCondensed boolean - True for condensed view, false for full view
 function AutoLFM.UI.Content.Settings.OnPresetsRadioClick(isCondensed)
@@ -363,9 +339,9 @@ function AutoLFM.UI.Content.Settings.OnPresetsRadioClick(isCondensed)
   end)
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Broadcast Interval Slider
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - BROADCAST INTERVAL SLIDER
+--=============================================================================
 --- Handles broadcast interval slider value changes
 --- Updates both the display label and saves the value to Broadcaster
 --- @param slider frame - The broadcast interval slider
@@ -399,9 +375,9 @@ function AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderMouseWheel(slider,
   slider:SetValue(newValue)
 end
 
------------------------------------------------------------------------------
--- Event Handlers - Bottom Checkboxes
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT HANDLERS - BOTTOM CHECKBOXES
+--=============================================================================
 --- Handles dry run checkbox toggle - enables/disables message simulation mode
 --- @param isEnabled boolean - True to enable dry run mode, false to disable
 function AutoLFM.UI.Content.Settings.OnDryRunToggle(isEnabled)
@@ -448,9 +424,9 @@ function AutoLFM.UI.Content.Settings.SyncDebugCheckbox()
   end
 end
 
------------------------------------------------------------------------------
--- Public API - Update Filter Checkbox (called directly by Logic layer)
------------------------------------------------------------------------------
+--=============================================================================
+-- PUBLIC API
+--=============================================================================
 --- Updates a dungeon filter checkbox state (called by Logic layer)
 --- @param colorId string - Color filter ID to update
 --- @param isEnabled boolean - New state of the filter
@@ -466,9 +442,6 @@ function AutoLFM.UI.Content.Settings.UpdateFilterCheckbox(colorId, isEnabled)
   end
 end
 
------------------------------------------------------------------------------
--- Public API - Restore State (called by Logic layer)
------------------------------------------------------------------------------
 --- Restores all option states from persistent storage
 --- Called when Settings panel is shown to sync UI with saved settings
 function AutoLFM.UI.Content.Settings.RestoreState()

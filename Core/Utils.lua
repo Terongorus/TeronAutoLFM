@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Utils
---   Shared utility functions for the addon
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Core = AutoLFM.Core or {}
@@ -33,7 +32,6 @@ end
 --=============================================================================
 -- COLOR HELPER FUNCTIONS
 --=============================================================================
-
 --- Helper function to apply color to an element using a custom application function
 --- @param element frame - The UI element to colorize
 --- @param colorName string - The name of the color to apply
@@ -103,7 +101,6 @@ end
 --=============================================================================
 -- LEVEL-BASED COLOR CALCULATION
 --=============================================================================
-
 --- Determines difficulty color for content based on player level and content level range
 --- Uses WoW-like color coding: RED (too hard), ORANGE (hard), YELLOW (appropriate),
 --- GREEN (easy), GRAY (trivial). Thresholds scale with player level.
@@ -137,7 +134,6 @@ end
 --=============================================================================
 -- CHAT FUNCTIONS
 --=============================================================================
-
 --- Prints a message to the default chat frame with addon prefix
 --- @param message string - The message to print
 --- @param colorHex string|nil - Optional hex color code (without |cff prefix)
@@ -194,7 +190,6 @@ AutoLFM.Core.Utils.PrintWarning = CreatePrintFunction("ORANGE")
 --=============================================================================
 -- DEBUG WINDOW LOGGING FUNCTIONS
 --=============================================================================
-
 --- Factory function that creates a debug log function for a specific method
 --- @param methodName string - Name of the Components.Debug method to call
 --- @return function - Function that logs messages to the debug window
@@ -241,7 +236,6 @@ AutoLFM.Core.Utils.LogInit = CreateLogFunction("LogInit")
 --=============================================================================
 -- STRING UTILITIES
 --=============================================================================
-
 --- Trims whitespace from both ends of a string
 --- @param text string - Text to trim
 --- @return string - Trimmed text
@@ -263,7 +257,6 @@ end
 --=============================================================================
 -- TABLE UTILITIES
 --=============================================================================
-
 --- Checks if a table is nil or empty
 --- @param tbl table - The table to check
 --- @return boolean - True if the table is nil or empty
@@ -315,7 +308,6 @@ end
 --=============================================================================
 -- GROUP TYPE UTILITIES
 --=============================================================================
-
 --- Determines group type based on group size
 --- @param size number - The group size (1-40)
 --- @return string - "solo" (size 1), "party" (2-5), or "raid" (6+)
@@ -328,7 +320,6 @@ end
 --=============================================================================
 -- DUNGEON/RAID LOOKUP FUNCTIONS
 --=============================================================================
-
 --- Finds a dungeon's index by its name using O(1) lookup table
 --- @param name string - The dungeon name to search for
 --- @return number|nil - The dungeon index (1-based), or nil if not found
@@ -370,7 +361,6 @@ end
 --=============================================================================
 -- TEXT UTILITIES
 --=============================================================================
-
 --- Finds the best position to break text at a word boundary
 --- @param text string - The text to break
 --- @param targetPos number - Target position to break at
@@ -397,14 +387,26 @@ end
 --- @return string - Longest substring that fits
 local function iterativeFit(text, maxWidth, fontString)
   local len = string.len(text)
-  local result = text
-  
-  -- Start from full text and reduce until it fits
-  fontString:SetText(result)
-  while fontString:GetStringWidth() > maxWidth and string.len(result) > 0 do
-    result = string.sub(result, 1, string.len(result) - 1)
-    fontString:SetText(result)
+
+  -- Quick check: full text already fits
+  fontString:SetText(text)
+  if fontString:GetStringWidth() <= maxWidth then
+    return text
   end
+
+  -- Binary search for the longest substring that fits
+  local lo, hi = 0, len
+  while lo < hi do
+    local mid = math.floor((lo + hi + 1) / 2)
+    fontString:SetText(string.sub(text, 1, mid))
+    if fontString:GetStringWidth() <= maxWidth then
+      lo = mid
+    else
+      hi = mid - 1
+    end
+  end
+
+  local result = string.sub(text, 1, lo)
 
   -- Try to break at word boundary if reasonable (uses WORD_BREAK_THRESHOLD)
   local breakPos = FindWordBreak(result, string.len(result))
@@ -558,7 +560,6 @@ end
 --=============================================================================
 -- INITIALIZATION VALIDATION
 --=============================================================================
-
 --- Validates that all critical states and events are registered
 --- Called after initialization to ensure system integrity
 --- @return boolean, string - true if valid, false + error message if not
@@ -606,7 +607,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 -- Build color lookup table immediately (before any other module loads)
 BuildColorLookupTable()
 

@@ -1,8 +1,6 @@
 --=============================================================================
 -- AutoLFM: MainFrame Logic
---   Main window state management, tab logic and content switching
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
 AutoLFM.Logic.MainFrame = {}
@@ -10,7 +8,6 @@ AutoLFM.Logic.MainFrame = {}
 --=============================================================================
 -- PRIVATE STATE
 --=============================================================================
-
 local currentBottomTab = 1  -- 1=Dungeons, 2=Raids, 3=Quests, 4=Messaging
 local currentSideTab = nil  -- nil or 2=Presets, 4=AutoInvite, 5=Settings
 
@@ -30,7 +27,6 @@ local SIDE_TABS = {
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Toggles the main frame visibility (show/hide)
 --- Uses WoW UI panel system for proper strata management
 function AutoLFM.Logic.MainFrame.Toggle()
@@ -50,10 +46,7 @@ end
 
 --=============================================================================
 -- TAB MANAGEMENT
---   Bottom tabs: 1=Dungeons, 2=Raids, 3=Quests, 4=Messaging
---   Side tabs: 2=Presets, 4=AutoInvite, 5=Settings
 --=============================================================================
-
 --- Selects a bottom tab and switches to its content
 --- @param tabIndex number - Tab index (1-4: Dungeons, Raids, Quests, Messaging)
 --- @param tabName string - Optional display name for logging
@@ -152,9 +145,7 @@ end
 
 --=============================================================================
 -- CONTENT FRAME MANAGEMENT
---   Content frames are defined in XML, logic manages their visibility
 --=============================================================================
-
 --- Initializes content frames and applies default panel from settings
 --- Content frames are defined in XML, this just sets up the initial state
 function AutoLFM.Logic.MainFrame.InitializeContentFrames()
@@ -200,7 +191,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 AutoLFM.Core.SafeRegisterInit("MainFrame", function()
   AutoLFM.Core.Maestro.RegisterCommand("MainFrame.Toggle", AutoLFM.Logic.MainFrame.Toggle, { id = "C01" })
 

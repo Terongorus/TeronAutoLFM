@@ -1,7 +1,5 @@
 --=============================================================================
 -- AutoLFM: Public API
---   Exposes broadcast and addon state for external addons
---   Usage: local api = AutoLFM.API
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.API = {}
@@ -9,7 +7,6 @@ AutoLFM.API = {}
 --=============================================================================
 -- PRIVATE SUBSCRIPTION TRACKING
 --=============================================================================
-
 --- Tracks subscription groups for unsubscribe functionality
 --- Maps listenerId → {stateNames: array, callbacks: array}
 local subscriptionGroups = {}
@@ -17,7 +14,6 @@ local subscriptionGroups = {}
 --=============================================================================
 -- BROADCAST STATE API
 --=============================================================================
-
 --- Gets the current broadcast message
 --- @return string - The broadcast message, or empty string if none
 function AutoLFM.API.GetBroadcastMessage()
@@ -45,7 +41,6 @@ end
 --=============================================================================
 -- SELECTION STATE API
 --=============================================================================
-
 --- Gets all selected dungeon names
 --- @return table - Array of dungeon names (empty if none selected)
 function AutoLFM.API.GetSelectedDungeons()
@@ -73,7 +68,6 @@ end
 --=============================================================================
 -- GROUP STATE API
 --=============================================================================
-
 --- Gets current group size
 --- @return number - Group size (1-40)
 function AutoLFM.API.GetGroupSize()
@@ -95,7 +89,6 @@ end
 --=============================================================================
 -- SETTINGS API
 --=============================================================================
-
 --- Checks if dark mode is enabled
 --- @return boolean - True if dark mode enabled
 function AutoLFM.API.IsDarkModeEnabled()
@@ -132,7 +125,6 @@ end
 --=============================================================================
 -- EVENT SUBSCRIPTION API
 --=============================================================================
-
 --- Subscribes to state changes for broadcast-related states
 --- Callback receives (newValue, oldValue) when state changes
 --- Use Unsubscribe(listenerId) to stop listening
@@ -266,7 +258,6 @@ end
 --=============================================================================
 -- UTILITY FUNCTIONS
 --=============================================================================
-
 --- Gets complete snapshot of all broadcast-related state
 --- @return table - All broadcast and selection state
 function AutoLFM.API.GetSnapshot()

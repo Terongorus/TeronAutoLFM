@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Messaging UI
---   UI handlers for messaging configuration
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
@@ -54,7 +53,6 @@ local isRestoringFromState = false
 --=============================================================================
 -- HELPER FUNCTIONS
 --=============================================================================
-
 --- Clamps a value between min and max bounds
 --- @param value number - Value to clamp
 --- @param min number - Minimum bound
@@ -147,9 +145,6 @@ end
 --=============================================================================
 -- EVENT HANDLERS
 --=============================================================================
------------------------------------------------------------------------------
--- Group Size Slider Load Handler
------------------------------------------------------------------------------
 --- XML OnLoad callback for group size slider - initializes slider properties
 --- @param slider frame - The group size slider frame
 function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(slider)
@@ -163,9 +158,6 @@ function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(slider)
   hideSliderLabels(slider)
 end
 
------------------------------------------------------------------------------
--- Group Size Slider Enter Handler
------------------------------------------------------------------------------
 --- XML OnEnter callback for group size slider - focuses and highlights the editbox
 --- Allows user to directly type a value when hovering over the slider
 function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
@@ -175,9 +167,6 @@ function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
   end
 end
 
------------------------------------------------------------------------------
--- Group Size Slider Mouse Wheel Handler
------------------------------------------------------------------------------
 --- XML OnMouseWheel callback for group size slider - adjusts value by mouse wheel
 --- @param slider frame - The group size slider frame
 --- @param delta number - Mouse wheel direction (positive = scroll up, negative = scroll down)
@@ -188,9 +177,6 @@ function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderMouseWheel(slider, delta)
   slider:SetValue(clamp(value + step, GROUP_SIZE_MIN, GROUP_SIZE_MAX))
 end
 
------------------------------------------------------------------------------
--- Group Size EditBox Commit Handler
------------------------------------------------------------------------------
 --- XML OnEnterPressed/OnEditFocusLost callback for group size editbox - validates and commits value
 --- Ensures value stays within GROUP_SIZE_MIN to GROUP_SIZE_MAX range and syncs with slider
 --- @param editBox frame - The group size editbox frame
@@ -220,7 +206,6 @@ end
 --=============================================================================
 -- EDITBOX FUNCTIONS
 --=============================================================================
-
 --- Updates editbox placeholder visibility based on text content and mode
 local function updatePlaceholder()
   if not customMessageEditBox then return end
@@ -295,7 +280,6 @@ local function setupGroupSizeControls()
     groupSizeControl:SetPoint("TOPLEFT", customMessageContainer, "BOTTOMLEFT", 0, -3)
   end
 end
-
 
 --- Updates ScrollChild height based on content
 local function updateScrollChildHeight()
@@ -435,7 +419,6 @@ local function updateModeUI(isCustomMode, clearOnModeSwitch)
   updateScrollChildHeight()
 end
 
-
 --- Updates Hardcore checkbox state and label color based on player's hardcore status
 --- If player is hardcore: enables checkbox and shows white label
 --- If player is not hardcore: disables checkbox, unchecks it, and shows gray label
@@ -465,7 +448,6 @@ end
 --=============================================================================
 -- LIFECYCLE
 --=============================================================================
-
 --- XML OnLoad callback - initializes the Messaging panel UI
 --- Creates editbox, initializes sliders, sets up controls and applies styling
 --- @param frame frame - The Messaging panel frame
@@ -517,9 +499,8 @@ function AutoLFM.UI.Content.Messaging.OnShow(frame)
 end
 
 --=============================================================================
--- UI EVENT HANDLERS (called from XML)
+-- UI EVENT HANDLERS
 --=============================================================================
-
 --- Handles editbox text changes from XML
 --- @param editBox frame - The editbox frame
 function AutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(editBox)
@@ -720,7 +701,6 @@ end
 --=============================================================================
 -- CHANNEL CHECKBOX HANDLERS
 --=============================================================================
-
 --- Handles channel checkbox clicks - dispatches Maestro command
 --- @param channelName string - The name of the channel
 function AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick(channelName)
@@ -768,10 +748,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
------------------------------------------------------------------------------
--- Get Custom Message EditBox (for link integration)
------------------------------------------------------------------------------
 --- Returns the custom message editbox for external link integration
 --- @return frame - The custom message editbox frame
 function AutoLFM.UI.Content.Messaging.GetCustomMessageEditBox()
@@ -793,7 +769,6 @@ end
 --=============================================================================
 -- STATISTICS UPDATE
 --=============================================================================
-
 --- Updates the broadcast statistics display
 --- Called every second while broadcaster is running
 function AutoLFM.UI.Content.Messaging.UpdateStats()
@@ -860,34 +835,24 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
+local STATS_TICKER_ID = AutoLFM.Core.Constants.TICKER_IDS.MESSAGING_STATS
+local statsTickerRegistered = false
 
--- Timer for updating stats every second
-local statsUpdateTimer = nil
-
---- Starts the stats update timer
+--- Starts the stats update timer via centralized Ticker
 local function startStatsUpdateTimer()
-  if statsUpdateTimer then
-    return -- Already running
-  end
-
-  statsUpdateTimer = CreateFrame("Frame", "AutoLFM_UI_Messaging_StatsTimer")
-  -- NOTE: Using explicit frame reference instead of 'this' to avoid closure context issues
-  local timerFrame = statsUpdateTimer
-  timerFrame.lastUpdate = 0
-  statsUpdateTimer:SetScript("OnUpdate", function()
-    local now = GetTime()
-    if now - timerFrame.lastUpdate >= 1 then
-      timerFrame.lastUpdate = now
+  if not statsTickerRegistered then
+    AutoLFM.Core.Ticker.Register(STATS_TICKER_ID, 1, function()
       AutoLFM.UI.Content.Messaging.UpdateStats()
-    end
-  end)
+    end)
+    statsTickerRegistered = true
+  end
+  AutoLFM.Core.Ticker.Start(STATS_TICKER_ID)
 end
 
 --- Stops the stats update timer
 local function stopStatsUpdateTimer()
-  if statsUpdateTimer then
-    statsUpdateTimer:SetScript("OnUpdate", nil)
-    statsUpdateTimer = nil
+  if statsTickerRegistered then
+    AutoLFM.Core.Ticker.Stop(STATS_TICKER_ID)
   end
 end
 

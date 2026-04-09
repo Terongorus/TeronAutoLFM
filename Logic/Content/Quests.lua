@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Quests Logic
---   Quest color calculation, sorting and data management
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -10,7 +9,6 @@ AutoLFM.Logic.Content.Quests = {}
 --=============================================================================
 -- PRIVATE HELPERS
 --=============================================================================
-
 --- Calculates the difficulty color for a quest based on player level
 --- @param questLevel number - Quest level from quest log
 --- @param playerLevel number - Current player level
@@ -76,7 +74,6 @@ end
 --=============================================================================
 -- QUEST LINK CREATION
 --=============================================================================
-
 --- Creates a quest hyperlink for chat messages
 --- @param questIndex number - Quest log index
 --- @return string|nil - Formatted quest link, or nil if quest not found
@@ -103,7 +100,6 @@ end
 --=============================================================================
 -- CUSTOM MESSAGE MANIPULATION
 --=============================================================================
-
 --- Checks if a quest link is present in either details or custom message
 --- @param link string - The quest link to check
 --- @return boolean - True if link is in any message
@@ -183,18 +179,17 @@ end
 --=============================================================================
 -- COMMANDS
 --=============================================================================
-
 --- Toggles quest selection and adds/removes its link from the current message
 AutoLFM.Core.Maestro.RegisterCommand("Quests.Toggle", function(questIndex)
   if not questIndex or type(questIndex) ~= "number" then
-    AutoLFM.Core.Utils.LogError("Quests.Toggle: Invalid index type %s (expected number)", type(questIndex))
+    AutoLFM.Core.Utils.LogError("Quests.Toggle: Invalid index type " .. type(questIndex) .. " (expected number)")
     return
   end
 
   -- Create quest link
   local link = AutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
   if not link then
-    AutoLFM.Core.Utils.LogError("Quests.Toggle: Failed to create link for quest at index %d (quest may not exist)", questIndex)
+    AutoLFM.Core.Utils.LogError("Quests.Toggle: Failed to create link for quest at index " .. questIndex .. " (quest may not exist)")
     return
   end
 
@@ -211,7 +206,6 @@ end, { id = "C20" })
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Returns quests from quest log sorted by level (uses cache)
 --- @return table - Array of {index, name, level, tag, zone, color} sorted by level
 function AutoLFM.Logic.Content.Quests.GetSortedQuests()
@@ -236,7 +230,6 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-
 --- Register cache builder for quests
 if AutoLFM.Core.Cache then
   AutoLFM.Core.Cache.Register("Quests", buildSortedQuests)

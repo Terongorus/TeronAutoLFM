@@ -1,15 +1,14 @@
 --=============================================================================
 -- AutoLFM: Settings Logic
---   Business logic for settings management
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
 AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
 AutoLFM.Logic.Content.Settings = {}
 
------------------------------------------------------------------------------
--- Private State
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE STATE
+--=============================================================================
 -- Initialize with default values (all filters enabled)
 local dungeonFilters = {
   GRAY = true,
@@ -19,9 +18,9 @@ local dungeonFilters = {
   RED = true
 }
 
------------------------------------------------------------------------------
--- Load Settings from Persistent Storage
------------------------------------------------------------------------------
+--=============================================================================
+-- INITIALIZATION
+--=============================================================================
 --- Loads all setting values from persistent storage into local state
 --- Called during initialization to restore saved settings (dungeon filters, etc.)
 function AutoLFM.Logic.Content.Settings.LoadSettings()
@@ -38,30 +37,28 @@ function AutoLFM.Logic.Content.Settings.LoadSettings()
   end
 end
 
------------------------------------------------------------------------------
--- Initialize Commands
------------------------------------------------------------------------------
 --- Initializes settings logic (currently no commands to register)
 function AutoLFM.Logic.Content.Settings.Init()
   -- No commands to register anymore
   -- Filter toggles are now handled directly by UI layer
 end
 
------------------------------------------------------------------------------
--- Public Getters
------------------------------------------------------------------------------
+--=============================================================================
+-- PUBLIC GETTERS
+--=============================================================================
 --- Returns the current dungeon filter states for all difficulty colors
 --- @return table - Table with color names as keys (GRAY, GREEN, YELLOW, ORANGE, RED) and boolean values
 function AutoLFM.Logic.Content.Settings.GetDungeonFilters()
   return dungeonFilters
 end
 
------------------------------------------------------------------------------
--- Public Setters
------------------------------------------------------------------------------
+--=============================================================================
+-- PUBLIC SETTERS
+--=============================================================================
 --- Updates a single dungeon filter state in local memory
 --- @param colorId string - Color filter ID (e.g., "GRAY", "GREEN", "YELLOW", "ORANGE", "RED")
 --- @param isEnabled boolean - New state of the filter (true = enabled, false = disabled)
+--- @return boolean - True if filter was set, false on validation error
 function AutoLFM.Logic.Content.Settings.SetDungeonFilter(colorId, isEnabled)
   -- Validate colorId parameter
   if type(colorId) ~= "string" then
@@ -84,11 +81,12 @@ function AutoLFM.Logic.Content.Settings.SetDungeonFilter(colorId, isEnabled)
   return true
 end
 
------------------------------------------------------------------------------
--- Minimap Management
------------------------------------------------------------------------------
+--=============================================================================
+-- MINIMAP MANAGEMENT
+--=============================================================================
 --- Toggles minimap button visibility and saves the setting
 --- @param isShow boolean - True to show the minimap button, false to hide it
+--- @return boolean|nil - False on validation error
 function AutoLFM.Logic.Content.Settings.ToggleMinimapVisibility(isShow)
   -- Validate isShow parameter
   if type(isShow) ~= "boolean" then
@@ -126,12 +124,13 @@ function AutoLFM.Logic.Content.Settings.ResetMinimapPosition()
   end
 end
 
------------------------------------------------------------------------------
--- DarkUI Management
------------------------------------------------------------------------------
+--=============================================================================
+-- DARKUI MANAGEMENT
+--=============================================================================
 --- Toggles dark mode theme and prompts user to reload UI
 --- Changes require UI reload to take effect on all frames
 --- @param isEnabled boolean - True to enable dark mode, false to disable
+--- @return boolean|nil - False on validation error
 function AutoLFM.Logic.Content.Settings.ToggleDarkMode(isEnabled)
   -- Validate isEnabled parameter
   if type(isEnabled) ~= "boolean" then
@@ -155,12 +154,13 @@ function AutoLFM.Logic.Content.Settings.ToggleDarkMode(isEnabled)
   end
 end
 
------------------------------------------------------------------------------
--- Presets Management
------------------------------------------------------------------------------
+--=============================================================================
+-- PRESETS MANAGEMENT
+--=============================================================================
 --- Toggles between condensed and full presets view mode
 --- Condensed mode shows compact preset list, full mode shows expanded details
 --- @param isCondensed boolean - True for condensed view, false for full view
+--- @return boolean|nil - False on validation error
 function AutoLFM.Logic.Content.Settings.TogglePresetsCondensed(isCondensed)
   -- Validate isCondensed parameter
   if type(isCondensed) ~= "boolean" then
@@ -176,12 +176,13 @@ function AutoLFM.Logic.Content.Settings.TogglePresetsCondensed(isCondensed)
   AutoLFM.Core.Utils.LogAction("Set presets view to " .. mode)
 end
 
------------------------------------------------------------------------------
--- Dry Run Management
------------------------------------------------------------------------------
+--=============================================================================
+-- DRY RUN MANAGEMENT
+--=============================================================================
 --- Toggles dry run mode for testing without actually sending messages
 --- When enabled, addon simulates actions but doesn't perform actual chat/whisper operations
 --- @param isEnabled boolean - True to enable dry run mode, false to disable
+--- @return boolean|nil - False on validation error
 function AutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
   -- Validate isEnabled parameter
   if type(isEnabled) ~= "boolean" then
@@ -202,21 +203,18 @@ function AutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
   AutoLFM.Core.Utils.LogInfo(action .. " dry run mode")
 end
 
------------------------------------------------------------------------------
--- Event Declarations
------------------------------------------------------------------------------
+--=============================================================================
+-- EVENT AND STATE DECLARATIONS
+--=============================================================================
 --- Event: Settings changed
 AutoLFM.Core.Maestro.RegisterEvent("Settings.Changed", { id = "E07" })
 
------------------------------------------------------------------------------
--- State Declarations
------------------------------------------------------------------------------
 --- State: Dry run mode enabled/disabled
 AutoLFM.Core.SafeRegisterState("Settings.DryRun", false, { id = "S20" })
 
------------------------------------------------------------------------------
--- Auto-register initialization
------------------------------------------------------------------------------
+--=============================================================================
+-- AUTO-REGISTER INITIALIZATION
+--=============================================================================
 AutoLFM.Core.SafeRegisterInit("Logic.Content.Settings", function()
   AutoLFM.Logic.Content.Settings.LoadSettings()
   AutoLFM.Logic.Content.Settings.Init()

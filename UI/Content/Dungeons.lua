@@ -1,16 +1,13 @@
 --=============================================================================
 -- AutoLFM: Dungeons UI
---   UI handlers for dungeon selection (uses ContentPanel factory)
 --=============================================================================
-
 AutoLFM = AutoLFM or {}
 AutoLFM.UI = AutoLFM.UI or {}
 AutoLFM.UI.Content = AutoLFM.UI.Content or {}
 
 --=============================================================================
--- PRIVATE: Row creation logic
+-- ROW CREATION
 --=============================================================================
-
 --- Creates and updates dungeon rows in the scroll frame
 --- Reuses existing row frames for performance
 --- @param scrollChild frame - The scroll child frame to populate
@@ -89,7 +86,6 @@ end
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
 AutoLFM.UI.Content.Dungeons = AutoLFM.UI.CreateContentPanel({

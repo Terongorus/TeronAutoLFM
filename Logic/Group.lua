@@ -1,6 +1,5 @@
 --=============================================================================
 -- AutoLFM: Group Management
---   Centralized group size, type, and leadership tracking
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Logic = AutoLFM.Logic or {}
@@ -20,7 +19,6 @@ local conversionAttempts = 0
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
-
 --- Gets current group size (1 for solo, 2-5 for party, 6-40 for raid)
 --- @return number - Current group size
 function AutoLFM.Logic.Group.GetSize()

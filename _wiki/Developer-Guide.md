@@ -10,7 +10,7 @@ This guide provides entry points to AutoLFM's development documentation:
 | [**Best-Practices.md**](Best-Practices.md) | Lua 5.0 compatibility and development standards |
 | [**ID-System-Reference.md**](ID-System-Reference.md) | **Registry & IDs** - All 92 IDs, state management, and component organization |
 | [**API.md**](API.md) | Public API for external addon integration |
-| [**README.md**](../README.md) | Main documentation hub |
+| [**Home.md**](Home.md) | Main documentation hub |
 
 ## 🚀 Quick Start
 
@@ -64,14 +64,14 @@ AutoLFM/
 ├── Components/     # Reusable components (Debug, MinimapButton)
 ├── Logic/          # Business logic and state management
 ├── UI/             # User interface handlers and templates
-└── _Docs/          # Documentation
+└── _wiki/          # Documentation
+    ├── Home.md                # Documentation hub
     ├── Installation-Usage.md  # User guide and troubleshooting
-    └── Dev/                   # Developer documentation
-        ├── README.md
-        ├── Maestro-Architecture.md
-        ├── Best-Practices.md
-        ├── ID-System-Reference.md
-        └── API.md
+    ├── Developer-Guide.md     # Developer guide & quick start
+    ├── Maestro-Architecture.md
+    ├── Best-Practices.md
+    ├── ID-System-Reference.md
+    └── API.md
 ```
 
 ---

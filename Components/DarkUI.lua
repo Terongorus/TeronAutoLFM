@@ -1,14 +1,13 @@
 --=============================================================================
 -- AutoLFM: Dark UI Theme
---   Provides dark theme functionality for AutoLFM UI elements
 --=============================================================================
 AutoLFM = AutoLFM or {}
 AutoLFM.Components = AutoLFM.Components or {}
 AutoLFM.Components.DarkUI = {}
 
------------------------------------------------------------------------------
--- Private Constants
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE CONSTANTS
+--=============================================================================
 local DARK_COLOR = {r = 0.3, g = 0.3, b = 0.3, a = 0.9}
 
 local DARKUI_BLACKLIST = {
@@ -43,16 +42,15 @@ local DARKUI_WHITELIST = {
   ["White"] = true
 }
 
------------------------------------------------------------------------------
--- Private State
------------------------------------------------------------------------------
+--=============================================================================
+-- PRIVATE STATE
+--=============================================================================
 local enabled = false
 local darkenedFrames = {}
 
------------------------------------------------------------------------------
--- Texture Filtering
------------------------------------------------------------------------------
-
+--=============================================================================
+-- TEXTURE FILTERING
+--=============================================================================
 --- Checks if a texture path is whitelisted for dark theme application
 --- @param texturePath string - Path to the texture file
 --- @return boolean - True if texture matches whitelist patterns
@@ -105,10 +103,9 @@ local function isBlacklisted(texture)
   return false
 end
 
------------------------------------------------------------------------------
--- Frame Processing
------------------------------------------------------------------------------
-
+--=============================================================================
+-- FRAME PROCESSING
+--=============================================================================
 --- Applies dark color to frame backdrop if conditions are met
 --- @param frame frame - The frame to process
 local function processBackdropColor(frame)
@@ -163,11 +160,9 @@ local function processChildren(frame, processFunc)
   end
 end
 
------------------------------------------------------------------------------
--- Core Darkening
---   Recursively applies dark theme to frame and children
------------------------------------------------------------------------------
-
+--=============================================================================
+-- CORE DARKENING
+--=============================================================================
 --- Recursively darkens a frame and all its children
 --- Applies dark theme to backdrop, borders, and text regions
 --- @param frame frame - The frame to darken
@@ -184,10 +179,9 @@ function AutoLFM.Components.DarkUI.DarkenFrame(frame)
   end
 end
 
------------------------------------------------------------------------------
--- Theme Management
------------------------------------------------------------------------------
-
+--=============================================================================
+-- THEME MANAGEMENT
+--=============================================================================
 --- Applies dark theme to all registered frames
 local function applyDarkTheme()
   if not enabled then return end
@@ -199,11 +193,9 @@ local function applyDarkTheme()
   end
 end
 
------------------------------------------------------------------------------
--- Public API
---   Functions for managing dark theme state
------------------------------------------------------------------------------
-
+--=============================================================================
+-- PUBLIC API
+--=============================================================================
 --- Registers a frame for dark theme application
 --- Frame will be darkened immediately if dark mode is enabled
 --- @param frame frame - The frame to register for dark theme
@@ -223,11 +215,9 @@ function AutoLFM.Components.DarkUI.IsEnabled()
   return enabled
 end
 
------------------------------------------------------------------------------
--- Initialization
---   Loads dark mode setting and applies theme to registered frames
------------------------------------------------------------------------------
-
+--=============================================================================
+-- INITIALIZATION
+--=============================================================================
 --- Initializes dark mode from persistent settings
 --- Applies dark theme to all registered frames if enabled
 function AutoLFM.Components.DarkUI.Init()
@@ -239,9 +229,9 @@ function AutoLFM.Components.DarkUI.Init()
   end
 end
 
------------------------------------------------------------------------------
--- Auto-register initialization
------------------------------------------------------------------------------
+--=============================================================================
+-- AUTO-REGISTER INITIALIZATION
+--=============================================================================
 AutoLFM.Core.SafeRegisterInit("Components.DarkUI", function()
   AutoLFM.Components.DarkUI.Init()
 end, {
