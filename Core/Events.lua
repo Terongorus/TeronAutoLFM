@@ -238,3 +238,11 @@ end, { id = "I01" })
 --=============================================================================
 SLASH_TERONAUTOLFM1 = "/lfm"
 SlashCmdList["TERONAUTOLFM"] = handleSlashCommand
+
+--=============================================================================
+-- KEYBINDING REGISTRATION
+--=============================================================================
+-- Localization strings read by Bindings.xml (must exist before the Key Bindings
+-- UI is opened; not order-sensitive relative to the binding action itself)
+BINDING_HEADER_TERONAUTOLFM = "TeronAutoLFM"
+BINDING_NAME_TERONAUTOLFM_TOGGLE = "Toggle main window"

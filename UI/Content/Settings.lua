@@ -387,6 +387,18 @@ function TeronAutoLFM.UI.Content.Settings.OnDryRunToggle(isEnabled)
   end
 end
 
+--- Handles the "show custom instances" checkbox toggle - shows/hides Turtle WoW
+--- custom dungeons/raids in the Dungeons and Raids lists (vanilla always shown)
+--- @param isEnabled boolean - True to show custom instances, false to hide them
+function TeronAutoLFM.UI.Content.Settings.OnShowCustomInstancesToggle(isEnabled)
+  if isRestoringState then return end
+
+  -- Delegate to Logic layer
+  if TeronAutoLFM.Logic.Content.Settings then
+      TeronAutoLFM.Logic.Content.Settings.ToggleShowCustomInstances(isEnabled)
+  end
+end
+
 --- Handles debug window checkbox toggle - shows/hides the debug console
 --- @param isEnabled boolean - True to show debug window, false to hide
 function TeronAutoLFM.UI.Content.Settings.OnDebugToggle(isEnabled)
@@ -508,6 +520,11 @@ function TeronAutoLFM.UI.Content.Settings.RestoreState()
       local dryRun = TeronAutoLFM.Core.Storage.GetDryRun()
       local dryRunCheckbox = getglobal(scrollChild:GetName().."_DryRun")
       if dryRunCheckbox then dryRunCheckbox:SetChecked(dryRun and 1 or nil) end
+
+      -- Restore show custom instances
+      local showCustom = TeronAutoLFM.Core.Storage.GetShowCustomInstances()
+      local showCustomCheckbox = getglobal(scrollChild:GetName().."_ShowCustomInstances")
+      if showCustomCheckbox then showCustomCheckbox:SetChecked(showCustom and 1 or nil) end
 
       -- Restore debug checkbox to reflect actual window state
       TeronAutoLFM.UI.Content.Settings.SyncDebugCheckbox()

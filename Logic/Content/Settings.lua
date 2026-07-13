@@ -204,6 +204,38 @@ function TeronAutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
 end
 
 --=============================================================================
+-- CUSTOM INSTANCE VISIBILITY MANAGEMENT
+--=============================================================================
+--- Toggles visibility of Turtle WoW custom dungeons/raids (vs vanilla-only)
+--- @param isEnabled boolean - True to show custom instances, false to hide them
+--- @return boolean|nil - False on validation error
+function TeronAutoLFM.Logic.Content.Settings.ToggleShowCustomInstances(isEnabled)
+  -- Validate isEnabled parameter
+  if type(isEnabled) ~= "boolean" then
+    TeronAutoLFM.Core.Utils.LogError("ToggleShowCustomInstances: isEnabled must be boolean, got " .. type(isEnabled))
+    return false
+  end
+
+  -- Save to persistent storage
+  TeronAutoLFM.Core.Storage.SetShowCustomInstances(isEnabled)
+
+  -- Log the change
+  local action = isEnabled and "Show" or "Hide"
+  TeronAutoLFM.Core.Utils.LogInfo(action .. " Turtle WoW custom instances")
+
+  -- Clear dungeon cache and refresh both lists (raids have no cache to clear)
+  if TeronAutoLFM.Logic.Content.Dungeons and TeronAutoLFM.Logic.Content.Dungeons.ClearCache then
+    TeronAutoLFM.Logic.Content.Dungeons.ClearCache()
+  end
+  if TeronAutoLFM.UI.Content.Dungeons and TeronAutoLFM.UI.Content.Dungeons.Refresh then
+    TeronAutoLFM.UI.Content.Dungeons.Refresh()
+  end
+  if TeronAutoLFM.UI.Content.Raids and TeronAutoLFM.UI.Content.Raids.Refresh then
+    TeronAutoLFM.UI.Content.Raids.Refresh()
+  end
+end
+
+--=============================================================================
 -- EVENT AND STATE DECLARATIONS
 --=============================================================================
 --- Event: Settings changed

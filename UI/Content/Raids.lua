@@ -29,7 +29,8 @@ local function CreateRaidRows(scrollChild)
   scrollChild:SetHeight(TeronAutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
 
   for i = 1, numRows do
-    local raid = raids[i]
+    local entry = raids[i]
+    local raid = entry.raid
     local rowName = "TeronAutoLFM_RaidRow" .. i
 
     -- Get or create row using factory
@@ -37,7 +38,7 @@ local function CreateRaidRows(scrollChild)
     if not row then
       return
     end
-    row.raidIndex = i
+    row.raidIndex = entry.index
 
     local checkbox = getglobal(rowName .. "_CheckButton")
     local label = getglobal(rowName .. "_Label")

@@ -1,3 +1,19 @@
+## [v4.2.2] 2026/07/14
+- Fix quest links breaking broadcast messages on pure vanilla 1.12.1 clients (Turtle WoW's own client supports them, but stock 1.12.1 doesn't parse quest hyperlinks in chat) — quest links added via Shift+Click are now converted to plain "[Quest Name]" text right before the message is broadcast or previewed, while still using the real clickable link internally so adding/removing a quest from the message still works normally
+
+## [v4.2.1] 2026/07/14
+- Rename the 5-man dungeon entries "Stratholme Live 5" / "Stratholme UD 5" / "Scholomance 5" to "Stratholme Live" / "Stratholme UD" / "Scholomance" (dropping the redundant "5"), to distinguish them from the 10-man raid versions which keep their "10" suffix
+- Note: saved presets that selected one of these three dungeons under its old name will no longer re-select it when loaded (the rest of the preset still applies); re-save affected presets after this update
+
+## [v4.2.0] 2026/07/14
+- Variable-size raids now default to their maximum group size when first selected, instead of the minimum
+- The group size chosen for a raid (via slider or edit box) is now remembered per-instance and restored automatically the next time that raid is selected, so it doesn't need to be reconfigured every time
+
+## [v4.1.0] 2026/07/13
+- Add keybinding to toggle the main window (Key Bindings > TeronAutoLFM), in addition to `/lfm`
+- Add "Show Turtle WoW custom instances" setting (Settings tab) — vanilla dungeons/raids always show; TWoW custom content is hidden by default and only appears when enabled
+- Classification is automatic: content is checked against a fixed list of authentic vanilla instance names, so newly added custom content requires no manual tagging to stay hidden by default
+
 ## [v4.0.0] 2026/07/13
 - Rebrand: AutoLFM → TeronAutoLFM, now maintained independently as part of the Teron* addon family
 - Rename addon folder and `.toc` to `TeronAutoLFM`

@@ -183,8 +183,17 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRaid", function(index
   else
     -- Select: clear other modes and set raid
     setSelectionMode(MODES.RAID)
-    -- Use minimum raid size as default (will be adjusted by SetRaidSize if needed)
-    local raidSize = raid.raidSizeMin or 40
+
+    -- Prefer the size the user last configured for this raid; otherwise
+    -- default to the maximum group size (clamped in case min/max changed
+    -- since it was saved)
+    local raidSize = TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetRaidInstanceSize and TeronAutoLFM.Core.Storage.GetRaidInstanceSize(raidName)
+    if raidSize then
+      if raidSize < raid.raidSizeMin then raidSize = raid.raidSizeMin end
+      if raidSize > raid.raidSizeMax then raidSize = raid.raidSizeMax end
+    else
+      raidSize = raid.raidSizeMax or raid.raidSizeMin or 40
+    end
 
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", raidName)
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", raidSize)
@@ -230,9 +239,14 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.SetRaidSize", function(size
 
   local oldSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
   TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", newSize)
-  
+
   if oldSize ~= newSize then
     TeronAutoLFM.Core.Utils.LogAction("Set raid size to " .. newSize)
+  end
+
+  -- Remember this size so it's restored next time this raid is selected
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetRaidInstanceSize then
+    TeronAutoLFM.Core.Storage.SetRaidInstanceSize(selectedRaidName, newSize)
   end
 
   -- Emit event only if not silent

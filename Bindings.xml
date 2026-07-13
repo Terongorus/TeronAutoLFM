@@ -1,0 +1,5 @@
+<Bindings>
+  <Binding name="TERONAUTOLFM_TOGGLE" header="TERONAUTOLFM">
+    TeronAutoLFM.Core.Maestro.Dispatch("MainFrame.Toggle")
+  </Binding>
+</Bindings>

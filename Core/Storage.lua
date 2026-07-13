@@ -61,7 +61,9 @@ local SETTINGS_REGISTRY = {
   {key = "autoInviteRespondWhenNotLeader", type = "boolean", default = false},
   {key = "isHardcore", type = "boolean", default = nil},
   {key = "welcomeShown", type = "boolean", default = false},
-  {key = "generalChannelIndex", type = "number", default = 1}
+  {key = "generalChannelIndex", type = "number", default = 1},
+  {key = "showCustomInstances", type = "boolean", default = false},
+  {key = "raidSizes", type = "table", default = {}}
 }
 
 --=============================================================================
@@ -167,6 +169,23 @@ function TeronAutoLFM.Core.Storage.SetDungeonFilter(filterId, enabled)
   local filters = TeronAutoLFM.Core.Storage.GetDungeonFilters()
   filters[filterId] = enabled
   TeronAutoLFM.Core.Storage.SetDungeonFilters(filters)
+end
+
+--- Remembers the last-configured group size for a specific raid instance
+--- @param raidName string - Name of the raid
+--- @param size number - Group size to remember for this raid
+function TeronAutoLFM.Core.Storage.SetRaidInstanceSize(raidName, size)
+  local sizes = TeronAutoLFM.Core.Storage.GetRaidSizes()
+  sizes[raidName] = size
+  TeronAutoLFM.Core.Storage.SetRaidSizes(sizes)
+end
+
+--- Retrieves the last-configured group size for a specific raid instance
+--- @param raidName string - Name of the raid
+--- @return number|nil - Previously saved size, or nil if never configured
+function TeronAutoLFM.Core.Storage.GetRaidInstanceSize(raidName)
+  local sizes = TeronAutoLFM.Core.Storage.GetRaidSizes()
+  return sizes[raidName]
 end
 
 --- Deep copy utility for cloning tables recursively

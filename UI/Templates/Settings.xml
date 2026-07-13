@@ -24,7 +24,7 @@
         <ScrollChild>
           <Frame name="$parent_ScrollChild">
             <Size>
-              <AbsDimension x="298" y="252"/>
+              <AbsDimension x="298" y="282"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT"/>
@@ -840,6 +840,39 @@
           </Frame>
         </Frames>
       </Frame>
+      <!--==================================================================
+        Show Custom (Turtle WoW) Instances
+        ==================================================================-->
+      <CheckButton name="$parent_ShowCustomInstances" inherits="UICheckButtonTemplate">
+        <Size>
+          <AbsDimension x="20" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="5" y="-222"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="$parent_Label" inherits="GameFontNormalSmall" text="Show Turtle WoW custom instances">
+              <Anchors>
+                <Anchor point="LEFT" relativePoint="RIGHT">
+                  <Offset>
+                    <AbsDimension x="0" y="0"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.UI.Content.Settings.OnShowCustomInstancesToggle(this:GetChecked() == 1)
+          </OnClick>
+        </Scripts>
+      </CheckButton>
       <!--==================================================================
         Bottom Section: Separator + Dry Run + Debug
         ==================================================================-->

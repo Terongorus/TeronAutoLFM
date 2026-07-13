@@ -199,9 +199,9 @@ TeronAutoLFM.Core.Constants.DUNGEONS = {
   {name = "Dire Maul North", tag = "DM N", levelMin = 57, levelMax = 60},
   {name = "Dire Maul Tribute", tag = "DM Tribute", levelMin = 57, levelMax = 60},
   {name = "Dire Maul West", tag = "DM W", levelMin = 57, levelMax = 60},
-  {name = "Stratholme Live 5", tag = "Strat Live 5", levelMin = 58, levelMax = 60},
-  {name = "Scholomance 5", tag = "Scholo 5", levelMin = 58, levelMax = 60},
-  {name = "Stratholme UD 5", tag = "Strat UD 5", levelMin = 58, levelMax = 60},
+  {name = "Stratholme Live", tag = "Strat Live", levelMin = 58, levelMax = 60},
+  {name = "Scholomance", tag = "Scholo", levelMin = 58, levelMax = 60},
+  {name = "Stratholme UD", tag = "Strat UD", levelMin = 58, levelMax = 60},
   {name = "Stormwind Vault", tag = "SWV", levelMin = 60, levelMax = 60},
   {name = "Karazhan Crypt", tag = "Kara Crypt", levelMin = 60, levelMax = 60},
   {name = "Caverns of Time. Black Morass", tag = "Black Morass", levelMin = 60, levelMax = 60}
@@ -226,6 +226,69 @@ TeronAutoLFM.Core.Constants.RAIDS = {
   {name = "Naxxramas", tag = "Naxx", raidSizeMin = 30, raidSizeMax = 40},
   {name = "Tower of Karazhan", tag = "Kara40", raidSizeMin = 20, raidSizeMax = 40},
   {name = "Timbermaw Hold", tag = "TH", raidSizeMin = 12, raidSizeMax = 20}
+}
+
+--=============================================================================
+-- VANILLA INSTANCE CLASSIFICATION
+--=============================================================================
+-- VANILLA_INSTANCE_NAMES: Fixed allowlist of authentic Blizzard vanilla (1.12)
+-- dungeon/raid names. This list is permanently frozen (vanilla content never
+-- changes), so it never needs updating. Any DUNGEONS/RAIDS entry whose "name"
+-- is NOT in this set is treated as Turtle WoW custom content and hidden by
+-- default (see Storage "showCustomInstances" setting). This means new custom
+-- content added to DUNGEONS/RAIDS in the future is auto-classified as custom
+-- with no extra tagging required - only genuinely new *vanilla* content (which
+-- does not happen) would need an addition here.
+--
+-- Confirmed against the user-provided list of Turtle WoW custom content
+-- (2026/07/14). Entries below that fall outside that list default to vanilla.
+TeronAutoLFM.Core.Constants.VANILLA_INSTANCE_NAMES = {
+  -- Dungeons
+  ["Ragefire Chasm"] = true,
+  ["Wailing Caverns"] = true,
+  ["The Deadmines"] = true,
+  ["Shadowfang Keep"] = true,
+  ["Blackfathom Deeps"] = true,
+  ["The Stockade"] = true,
+  ["Gnomeregan"] = true,
+  ["Razorfen Kraul"] = true,
+  ["Scarlet Monastery Graveyard"] = true,
+  ["Scarlet Monastery Library"] = true,
+  ["Scarlet Monastery Armory"] = true,
+  ["Scarlet Monastery Cathedral"] = true,
+  ["Razorfen Downs"] = true,
+  ["Uldaman"] = true,
+  ["Zul'Farrak"] = true,
+  ["Maraudon Orange"] = true,
+  ["Maraudon Purple"] = true,
+  ["Maraudon Princess"] = true,
+  ["The Sunken Temple"] = true,
+  ["Blackrock Depths"] = true,
+  ["Lower Blackrock Spire"] = true,
+  ["Dire Maul East"] = true,
+  ["Dire Maul North"] = true,
+  ["Dire Maul Tribute"] = true,
+  ["Dire Maul West"] = true,
+  ["Stratholme Live"] = true,
+  ["Scholomance"] = true,
+  ["Stratholme UD"] = true,
+
+  -- Raids
+  ["Upper Blackrock Spire"] = true,
+  ["Zul'Gurub"] = true,
+  ["Ruins of Ahn'Qiraj"] = true,
+  ["Molten Core"] = true,
+  ["Onyxia's Lair"] = true,
+  ["Blackwing Lair"] = true,
+  ["Temple of Ahn'Qiraj"] = true,
+  ["Naxxramas"] = true,
+
+  -- Not on the confirmed Turtle WoW custom-content list, so classified vanilla:
+  ["Blackrock Depths Arena"] = true,
+  ["Blackrock Depths Emperor"] = true,
+  ["Scholomance 10"] = true,
+  ["Stratholme Live 10"] = true,
+  ["Stratholme UD 10"] = true
 }
 
 --=============================================================================

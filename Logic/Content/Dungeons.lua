@@ -25,12 +25,15 @@ end
 local function buildSortedDungeons()
   local playerLevel = UnitLevel("player") or 1
   local dungeons = TeronAutoLFM.Core.Constants.DUNGEONS
+  local vanillaNames = TeronAutoLFM.Core.Constants.VANILLA_INSTANCE_NAMES
   local sorted = {}
 
   local activeFilters = {}
   if TeronAutoLFM.Logic.Content.Settings and TeronAutoLFM.Logic.Content.Settings.GetDungeonFilters then
     activeFilters = TeronAutoLFM.Logic.Content.Settings.GetDungeonFilters()
   end
+
+  local showCustom = TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetShowCustomInstances and TeronAutoLFM.Core.Storage.GetShowCustomInstances()
 
   for i = 1, table.getn(dungeons) do
     local dungeon = dungeons[i]
@@ -39,6 +42,11 @@ local function buildSortedDungeons()
     local colorId = color.name
     local isEnabled = activeFilters[colorId]
     if isEnabled == nil then isEnabled = true end
+
+    local isCustom = not (vanillaNames and vanillaNames[dungeon.name])
+    if isCustom and not showCustom then
+      isEnabled = false
+    end
 
     if isEnabled then
       table.insert(sorted, {

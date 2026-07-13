@@ -138,7 +138,8 @@ local function buildRaidMessage()
   local raid = raidInfo.data
 
   -- Get target size and calculate missing
-  -- Selection.RaidSize is already set to raid.raidSizeMin on selection
+  -- Selection.RaidSize defaults to the raid's saved size, or its max group
+  -- size if never configured before (see Selection.ToggleRaid)
   local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
   local missing, isFull = calculateMissing(targetSize)
   
@@ -200,6 +201,22 @@ local function buildCustomMessage()
   return message
 end
 
+--- Converts embedded quest hyperlinks (as produced by Quests.CreateQuestLink)
+--- into plain "[Title]" text. Pure vanilla 1.12.1 clients don't support quest
+--- links in chat, so the colored |Hquest:id:level|h[Title]|h|r escape sequence
+--- must be stripped down to a plain literal before the message is sent, even
+--- though the addon itself still uses the real link for its own preview/edit
+--- workflow (see Quests.lua's isQuestLinkInMessage/removeQuestLinkFromMessage,
+--- which operate on the raw Selection.DetailsText/CustomMessage state, not on
+--- this already-stripped broadcast string)
+--- @param text string - Message text potentially containing quest links
+--- @return string - Message text with quest links replaced by "[Title]"
+local function stripQuestLinks(text)
+  if not text or text == "" then return text end
+  local result = string.gsub(text, "|c%x%x%x%x%x%x%x%x|Hquest:%d+:%d+|h(%[.-%])|h|r", "%1")
+  return result
+end
+
 --- Builds the complete broadcast message based on current selection
 --- @return string - The message to broadcast
 local function buildMessage()
@@ -246,6 +263,7 @@ end
 --- Manually rebuilds the message (usually triggered by Selection.Changed)
 function TeronAutoLFM.Logic.Message.RebuildMessage()
   local message = buildMessage()
+  message = stripQuestLinks(message)
   TeronAutoLFM.Core.Maestro.SetState("Message.ToBroadcast", message)
 end
 
