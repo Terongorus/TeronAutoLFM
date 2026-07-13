@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: AutoInvite UI
+-- TeronAutoLFM: AutoInvite UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
-AutoLFM.UI.Content.AutoInvite = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
+TeronAutoLFM.UI.Content.AutoInvite = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -20,18 +20,18 @@ local MAX_KEYWORDS = 4  -- Maximum keyword slots in UI
 local function ApplyLeaderColors()
   if not panel then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   -- Color "Leader/Assist" radio button green
   local leaderRadio = getglobal(scrollChild:GetName().."_LeaderYesRadio")
   if leaderRadio then
-    leaderRadio:SetCheckedTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\RadioButton")
+    leaderRadio:SetCheckedTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\RadioButton")
     local texture = leaderRadio:GetCheckedTexture()
     if texture then
       texture:SetVertexColor(0, 1, 0)  -- Green
     end
-    leaderRadio:SetHighlightTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\RadioButton")
+    leaderRadio:SetHighlightTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\RadioButton")
     local highlight = leaderRadio:GetHighlightTexture()
     if highlight then
       highlight:SetVertexColor(0, 1, 0)  -- Green
@@ -41,12 +41,12 @@ local function ApplyLeaderColors()
   -- Color "No leadership" radio button red
   local noLeaderRadio = getglobal(scrollChild:GetName().."_LeaderNoRadio")
   if noLeaderRadio then
-    noLeaderRadio:SetCheckedTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\RadioButton")
+    noLeaderRadio:SetCheckedTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\RadioButton")
     local texture = noLeaderRadio:GetCheckedTexture()
     if texture then
       texture:SetVertexColor(1, 0, 0)  -- Red
     end
-    noLeaderRadio:SetHighlightTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\RadioButton")
+    noLeaderRadio:SetHighlightTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\RadioButton")
     local highlight = noLeaderRadio:GetHighlightTexture()
     if highlight then
       highlight:SetVertexColor(1, 0, 0)  -- Red
@@ -80,7 +80,7 @@ end
 local function UpdateLeaderStatus()
   if not panel then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local isLeader = canPlayerLead()
@@ -104,18 +104,18 @@ end
 --=============================================================================
 --- XML OnLoad callback - initializes the AutoInvite panel UI
 --- @param frame frame - The AutoInvite panel frame
-function AutoLFM.UI.Content.AutoInvite.OnLoad(frame)
+function TeronAutoLFM.UI.Content.AutoInvite.OnLoad(frame)
   panel = frame
   -- Apply colors to leader status labels
   ApplyLeaderColors()
   -- Setup keyword EditBox handlers
-  AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
+  TeronAutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
 end
 
 --- XML OnShow callback - restores saved option states when panel is shown
 --- @param frame frame - The AutoInvite panel frame
-function AutoLFM.UI.Content.AutoInvite.OnShow(frame)
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+function TeronAutoLFM.UI.Content.AutoInvite.OnShow(frame)
+  TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
 --=============================================================================
@@ -124,22 +124,22 @@ end
 --- Called when keyword text changes
 --- @param keywordIndex number - The keyword slot index (1-based)
 --- @param text string - The new text content
-function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(keywordIndex, text)
+function TeronAutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(keywordIndex, text)
   -- This is called by the EditBox onTextChanged
   -- Add any real-time validation or filtering here if needed
 end
 
 --- Called when keyword EditBox loses focus or Escape is pressed
-function AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
+function TeronAutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
   -- This is called when user presses Escape or loses focus
   -- Add any save/validation logic here
 end
 
 --- Setup EditBox handlers in Lua to connect XML-free EditBoxes to functions
-function AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
+function TeronAutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
   if not panel then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   for i = 1, 3 do
@@ -156,12 +156,12 @@ function AutoLFM.UI.Content.AutoInvite.SetupKeywordEditBoxes()
       end
 
       kw:SetScript("OnTextChanged", function()
-        AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, kw:GetText())
+        TeronAutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, kw:GetText())
       end)
 
       kw:SetScript("OnEscapePressed", function()
         kw:ClearFocus()
-        AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
+        TeronAutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
       end)
 
       kw:SetScript("OnEditFocusGained", function()
@@ -185,10 +185,10 @@ end
 --=============================================================================
 --- Handles AutoInvite enable/disable radio button clicks (On/Off)
 --- @param isEnabled boolean - True to enable AutoInvite, false to disable
-function AutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(isEnabled)
+function TeronAutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(isEnabled)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local onRadio = getglobal(scrollChild:GetName().."_StatusContainer_OnRadio")
@@ -205,18 +205,18 @@ function AutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(isEnabled)
   end
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteEnabled then
-    AutoLFM.Core.Storage.SetAutoInviteEnabled(isEnabled)
-    AutoLFM.Core.Utils.LogInfo("AutoInvite " .. (isEnabled and "enabled" or "disabled"))
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteEnabled then
+    TeronAutoLFM.Core.Storage.SetAutoInviteEnabled(isEnabled)
+    TeronAutoLFM.Core.Utils.LogInfo("AutoInvite " .. (isEnabled and "enabled" or "disabled"))
   end
 end
 
 --- Handles confirmation message radio button clicks (On/Off)
 --- @param isEnabled boolean - True to enable confirmation messages, false to disable
-function AutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(isEnabled)
+function TeronAutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(isEnabled)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local onRadio = getglobal(scrollChild:GetName().."_ConfirmContainer_OnRadio")
@@ -233,19 +233,19 @@ function AutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(isEnabled)
   end
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteConfirm then
-    AutoLFM.Core.Storage.SetAutoInviteConfirm(isEnabled)
-    AutoLFM.Core.Utils.LogInfo("Confirmation messages " .. (isEnabled and "enabled" or "disabled"))
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteConfirm then
+    TeronAutoLFM.Core.Storage.SetAutoInviteConfirm(isEnabled)
+    TeronAutoLFM.Core.Utils.LogInfo("Confirmation messages " .. (isEnabled and "enabled" or "disabled"))
   end
 end
 
 --- Handles random messages radio button clicks (On/Off)
 --- Toggles use of random invite messages vs simple confirmation
 --- @param isEnabled boolean - True to use random messages, false for simple "Invitation sent"
-function AutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(isEnabled)
+function TeronAutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(isEnabled)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local onRadio = getglobal(scrollChild:GetName().."_RandomMessagesContainer_OnRadio")
@@ -262,19 +262,19 @@ function AutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(isEnabled)
   end
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteRandomMessages then
-    AutoLFM.Core.Storage.SetAutoInviteRandomMessages(isEnabled)
-    AutoLFM.Core.Utils.LogInfo("Random messages " .. (isEnabled and "enabled" or "disabled"))
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteRandomMessages then
+    TeronAutoLFM.Core.Storage.SetAutoInviteRandomMessages(isEnabled)
+    TeronAutoLFM.Core.Utils.LogInfo("Random messages " .. (isEnabled and "enabled" or "disabled"))
   end
 end
 
 --- Handles respond when not leader radio button clicks (On/Off)
 --- Toggles whether to respond to whispers when player is not leader or assist
 --- @param isEnabled boolean - True to respond when not leader, false to stay silent
-function AutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(isEnabled)
+function TeronAutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(isEnabled)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local onRadio = getglobal(scrollChild:GetName().."_RespondNotLeaderContainer_OnRadio")
@@ -291,9 +291,9 @@ function AutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(isEnabled)
   end
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteRespondWhenNotLeader then
-    AutoLFM.Core.Storage.SetAutoInviteRespondWhenNotLeader(isEnabled)
-    AutoLFM.Core.Utils.LogInfo("Respond when not leader " .. (isEnabled and "enabled" or "disabled"))
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteRespondWhenNotLeader then
+    TeronAutoLFM.Core.Storage.SetAutoInviteRespondWhenNotLeader(isEnabled)
+    TeronAutoLFM.Core.Utils.LogInfo("Respond when not leader " .. (isEnabled and "enabled" or "disabled"))
   end
 end
 
@@ -302,7 +302,7 @@ end
 --=============================================================================
 --- Handles keyword editbox escape key
 --- Properly clears focus from the editbox
-function AutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
+function TeronAutoLFM.UI.Content.AutoInvite.OnKeywordEscapePressed()
   -- Simply do nothing - WoW will handle the focus blur naturally
 end
 
@@ -310,11 +310,11 @@ end
 --- Updates keyword at specified index in persistent storage
 --- @param index number - Keyword index (1-4)
 --- @param text string - New keyword text
-function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, text)
+function TeronAutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, text)
   if isRestoringState then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
   -- Ensure table is large enough
   while table.getn(keywords) < index do
@@ -330,19 +330,19 @@ function AutoLFM.UI.Content.AutoInvite.OnKeywordTextChanged(index, text)
   end
 
   -- Save updated keywords
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-    AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+    TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
 end
 
 --- Handles remove keyword button click
 --- Removes keyword at specified index and refreshes UI
 --- @param index number - Keyword index to remove (1-4)
-function AutoLFM.UI.Content.AutoInvite.OnRemoveKeywordClick(index)
+function TeronAutoLFM.UI.Content.AutoInvite.OnRemoveKeywordClick(index)
   if isRestoringState then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
   -- Remove keyword at index
   if index <= table.getn(keywords) then
@@ -350,25 +350,25 @@ function AutoLFM.UI.Content.AutoInvite.OnRemoveKeywordClick(index)
   end
 
   -- Save updated keywords
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-    AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+    TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
 
   -- Refresh UI to reflect changes
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+  TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
 --- Handles add keyword button click
 --- Adds empty keyword entry and refreshes UI
-function AutoLFM.UI.Content.AutoInvite.OnAddKeywordClick()
+function TeronAutoLFM.UI.Content.AutoInvite.OnAddKeywordClick()
   if isRestoringState then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
   -- Don't add if we've reached max keywords
   if table.getn(keywords) >= MAX_KEYWORDS then
-    AutoLFM.Core.Utils.LogWarning("Maximum keywords (" .. MAX_KEYWORDS .. ") reached")
+    TeronAutoLFM.Core.Utils.LogWarning("Maximum keywords (" .. MAX_KEYWORDS .. ") reached")
     return
   end
 
@@ -376,21 +376,21 @@ function AutoLFM.UI.Content.AutoInvite.OnAddKeywordClick()
   table.insert(keywords, "")
 
   -- Save updated keywords
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-    AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+    TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
 
   -- Refresh UI to show new field
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+  TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
 --- Handles clear keyword button click (x on first line)
 --- @param index number - The keyword slot index to clear
-function AutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(index)
+function TeronAutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(index)
   if isRestoringState then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
   -- Clear the keyword at this index
   if index <= table.getn(keywords) then
@@ -403,24 +403,24 @@ function AutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(index)
   end
 
   -- Save updated keywords
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-    AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+    TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
 
   -- Refresh UI
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+  TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
 --- Handles add keyword line button click (+ button)
 --- Shows the next keyword input line and hides the current add button
-function AutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
+function TeronAutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
   local numKeywords = table.getn(keywords)
 
   -- Add an empty keyword to make room for the next line
@@ -428,25 +428,25 @@ function AutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
     table.insert(keywords, "")
 
     -- Save updated keywords
-    if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-      AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+    if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+      TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
     end
 
     -- Refresh UI to show next line
-    AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+    TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
   end
 end
 
 --- Handles delete keyword line button click (x on additional lines)
 --- @param index number - The keyword line index to remove
-function AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(index)
+function TeronAutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(index)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   -- Get current keywords from persistent storage
-  local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+  local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
   -- Remove keyword at index
   if index <= table.getn(keywords) then
@@ -454,12 +454,12 @@ function AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(index)
   end
 
   -- Save updated keywords
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetAutoInviteKeywords then
-    AutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetAutoInviteKeywords then
+    TeronAutoLFM.Core.Storage.SetAutoInviteKeywords(keywords)
   end
 
   -- Refresh UI to reflect changes (keywords will move up)
-  AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+  TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
 end
 
 --=============================================================================
@@ -467,19 +467,19 @@ end
 --=============================================================================
 --- Refreshes all UI elements from persistent storage
 --- Called when panel is shown or after keyword changes
-function AutoLFM.UI.Content.AutoInvite.RefreshPanel()
+function TeronAutoLFM.UI.Content.AutoInvite.RefreshPanel()
   if not panel then return end
 
   isRestoringState = true
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if scrollChild then
     -- Get current state from persistent storage
-    local isEnabled = AutoLFM.Core.Storage.GetAutoInviteEnabled()
-    local isConfirmEnabled = AutoLFM.Core.Storage.GetAutoInviteConfirm()
-    local useRandomMessages = AutoLFM.Core.Storage.GetAutoInviteRandomMessages()
-    local respondWhenNotLeader = AutoLFM.Core.Storage.GetAutoInviteRespondWhenNotLeader()
-    local keywords = AutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
+    local isEnabled = TeronAutoLFM.Core.Storage.GetAutoInviteEnabled()
+    local isConfirmEnabled = TeronAutoLFM.Core.Storage.GetAutoInviteConfirm()
+    local useRandomMessages = TeronAutoLFM.Core.Storage.GetAutoInviteRandomMessages()
+    local respondWhenNotLeader = TeronAutoLFM.Core.Storage.GetAutoInviteRespondWhenNotLeader()
+    local keywords = TeronAutoLFM.Core.Storage.GetAutoInviteKeywords() or {}
 
     -- Update enable radio buttons
     local enableOnRadio = getglobal(scrollChild:GetName().."_StatusContainer_OnRadio")

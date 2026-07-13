@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Eye Animation Component
+-- TeronAutoLFM: Eye Animation Component
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Components = AutoLFM.Components or {}
-AutoLFM.Components.EyeAnimation = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Components = TeronAutoLFM.Components or {}
+TeronAutoLFM.Components.EyeAnimation = {}
 
 --=============================================================================
 -- CONSTANTS
@@ -28,20 +28,20 @@ local isAnimating = false
 -- HELPER FUNCTIONS
 --=============================================================================
 --- Updates the texture of an icon to display the current animation frame
---- @param textureName string - The global name of the texture (e.g., "AutoLFM_MainFrame_Icon")
+--- @param textureName string - The global name of the texture (e.g., "TeronAutoLFM_MainFrame_Icon")
 --- @param frameName string - The name of the frame (e.g., "Eye01")
 local function updateIconTexture(textureName, frameName)
   local texture = getglobal(textureName)
   if not texture then return end
   
-  local path = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\Eye\\" .. frameName
+  local path = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Eye\\" .. frameName
   texture:SetTexture(path)
 end
 
 --- Ensures the animation frame exists (created once, reused)
 local function ensureAnimationFrame()
   if animationTimer then return end
-  animationTimer = CreateFrame("Frame", "AutoLFM_EyeAnimationTimer")
+  animationTimer = CreateFrame("Frame", "TeronAutoLFM_EyeAnimationTimer")
   animationTimer:Hide()
   animationTimer:SetScript("OnUpdate", function()
     local currentTime = GetTime()
@@ -52,8 +52,8 @@ local function ensureAnimationFrame()
         currentFrameIndex = 1
       end
       local frameName = ANIMATION_FRAMES[currentFrameIndex]
-      updateIconTexture("AutoLFM_MainFrame_Icon", frameName)
-      updateIconTexture("AutoLFM_MinimapButton_Icon", frameName)
+      updateIconTexture("TeronAutoLFM_MainFrame_Icon", frameName)
+      updateIconTexture("TeronAutoLFM_MinimapButton_Icon", frameName)
     end
   end)
 end
@@ -75,22 +75,22 @@ local function stopAnimation()
   if animationTimer then
     animationTimer:Hide()
   end
-  updateIconTexture("AutoLFM_MainFrame_Icon", "Eye00")
-  updateIconTexture("AutoLFM_MinimapButton_Icon", "Eye00")
+  updateIconTexture("TeronAutoLFM_MainFrame_Icon", "Eye00")
+  updateIconTexture("TeronAutoLFM_MinimapButton_Icon", "Eye00")
 end
 
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
 --- Starts the eye animation
-function AutoLFM.Components.EyeAnimation.Start()
+function TeronAutoLFM.Components.EyeAnimation.Start()
   if not isAnimating then
     startAnimation()
   end
 end
 
 --- Stops the eye animation
-function AutoLFM.Components.EyeAnimation.Stop()
+function TeronAutoLFM.Components.EyeAnimation.Stop()
   if isAnimating then
     stopAnimation()
   end
@@ -98,28 +98,28 @@ end
 
 --- Returns whether animation is currently running
 --- @return boolean - True if animation is active
-function AutoLFM.Components.EyeAnimation.IsAnimating()
+function TeronAutoLFM.Components.EyeAnimation.IsAnimating()
   return isAnimating
 end
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Components.EyeAnimation", function()
+TeronAutoLFM.Core.SafeRegisterInit("Components.EyeAnimation", function()
   --- Listen to Broadcaster.IsRunning state changes
-  AutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)
+  TeronAutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)
     if newValue then
       -- Start animation when broadcast starts
-      AutoLFM.Components.EyeAnimation.Start()
+      TeronAutoLFM.Components.EyeAnimation.Start()
     else
       -- Stop animation when broadcast stops
-      AutoLFM.Components.EyeAnimation.Stop()
+      TeronAutoLFM.Components.EyeAnimation.Stop()
     end
   end)
   
   -- Start animation if broadcaster is already running
-  if AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") then
-    AutoLFM.Components.EyeAnimation.Start()
+  if TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") then
+    TeronAutoLFM.Components.EyeAnimation.Start()
   end
 end, {
   id = "I19",

@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Messaging Logic
+-- TeronAutoLFM: Messaging Logic
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
-AutoLFM.Logic.Content.Messaging = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Content = TeronAutoLFM.Logic.Content or {}
+TeronAutoLFM.Logic.Content.Messaging = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -18,17 +18,17 @@ local Original_ChatFrame_OnHyperlinkShow = nil
 --- Retrieves the custom message editbox from the Messaging UI
 --- @return frame|nil - The editbox frame, or nil if UI not initialized
 local function getCustomMessageEditBox()
-  if AutoLFM.UI and AutoLFM.UI.Content and AutoLFM.UI.Content.Messaging then
-    return AutoLFM.UI.Content.Messaging.GetCustomMessageEditBox and
-           AutoLFM.UI.Content.Messaging.GetCustomMessageEditBox()
+  if TeronAutoLFM.UI and TeronAutoLFM.UI.Content and TeronAutoLFM.UI.Content.Messaging then
+    return TeronAutoLFM.UI.Content.Messaging.GetCustomMessageEditBox and
+           TeronAutoLFM.UI.Content.Messaging.GetCustomMessageEditBox()
   end
   return nil
 end
 
---- Checks if AutoLFM main window is visible and ready to receive links
+--- Checks if TeronAutoLFM main window is visible and ready to receive links
 --- @return boolean - True if main window is visible
-local function isAutoLFMReady()
-  return AutoLFM_MainFrame and AutoLFM_MainFrame:IsVisible()
+local function isTeronAutoLFMReady()
+  return TeronAutoLFM_MainFrame and TeronAutoLFM_MainFrame:IsVisible()
 end
 
 --- Inserts an item/quest link into the custom message editbox
@@ -36,16 +36,16 @@ end
 --- @return boolean - True if link was successfully inserted, false otherwise
 local function insertLinkIntoEditBox(link)
   if not link then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogWarning("InsertLink: no link provided")
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogWarning("InsertLink: no link provided")
     end
     return false
   end
 
   local editBox = getCustomMessageEditBox()
   if not editBox then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogWarning("InsertLink: editbox not found")
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogWarning("InsertLink: editbox not found")
     end
     return false
   end
@@ -57,8 +57,8 @@ local function insertLinkIntoEditBox(link)
   editBox:SetFocus()
   editBox:HighlightText(0, 0)
 
-  if AutoLFM.Core and AutoLFM.Core.Utils then
-    AutoLFM.Core.Utils.LogAction("Link inserted: " .. link)
+  if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+    TeronAutoLFM.Core.Utils.LogAction("Link inserted: " .. link)
   end
 
   return true
@@ -72,7 +72,7 @@ local function hookBagClicks()
 
   ContainerFrameItemButton_OnClick = function(button, ignoreModifiers)
     local success, err = pcall(function()
-      if IsShiftKeyDown() and isAutoLFMReady() then
+      if IsShiftKeyDown() and isTeronAutoLFMReady() then
         local bag = this:GetParent():GetID()
         local slot = this:GetID()
         local itemLink = GetContainerItemLink(bag, slot)
@@ -128,13 +128,13 @@ local function hookChatLinks()
     end
 
     -- Shift+Click on item/quest → insert into editbox
-    if IsShiftKeyDown() and isAutoLFMReady() then
+    if IsShiftKeyDown() and isTeronAutoLFMReady() then
       -- Check if it's an item or quest link
       local isItemOrQuest = link and (string.find(link, "^item:") or string.find(link, "^quest:"))
 
       if isItemOrQuest and text then
-        if AutoLFM.Core and AutoLFM.Core.Utils then
-          AutoLFM.Core.Utils.LogInfo("Attempting to insert link: " .. tostring(text))
+        if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+          TeronAutoLFM.Core.Utils.LogInfo("Attempting to insert link: " .. tostring(text))
         end
 
         if insertLinkIntoEditBox(text) then
@@ -159,10 +159,10 @@ end
 --- Joins a chat channel if the player is not already in it
 --- @param channelName string - The name of the channel to join (e.g., "LookingForGroup")
 --- @return boolean - True if in channel (already or newly joined), false if invalid channel name
-function AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
+function TeronAutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
   if not channelName or channelName == "" then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogWarning("JoinChannel: no channel name provided")
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogWarning("JoinChannel: no channel name provided")
     end
     return false
   end
@@ -173,13 +173,13 @@ function AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
     -- GetChannelName returns: id, name (id first!)
     local generalID, generalName = GetChannelName(1)
     if generalID and generalID > 0 then
-      if AutoLFM.Core and AutoLFM.Core.Utils then
-        AutoLFM.Core.Utils.LogInfo("General channel available: " .. (generalName or "1"))
+      if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+        TeronAutoLFM.Core.Utils.LogInfo("General channel available: " .. (generalName or "1"))
       end
       return true
     else
-      if AutoLFM.Core and AutoLFM.Core.Utils then
-        AutoLFM.Core.Utils.LogWarning("General channel not available in this zone")
+      if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+        TeronAutoLFM.Core.Utils.LogWarning("General channel not available in this zone")
       end
       return false
     end
@@ -189,8 +189,8 @@ function AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
   local channelID = GetChannelName(channelName)
 
   if channelID > 0 then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogInfo("Already in channel: " .. channelName .. " (ID: " .. channelID .. ")")
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogInfo("Already in channel: " .. channelName .. " (ID: " .. channelID .. ")")
     end
     return true
   end
@@ -203,15 +203,15 @@ function AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
   -- Verify the join succeeded by checking if we're now in the channel
   local verifyChannelID = GetChannelName(channelName)
   if verifyChannelID <= 0 then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogWarning("Failed to join channel: " .. channelName)
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogWarning("Failed to join channel: " .. channelName)
     end
     return false
   end
 
-  if AutoLFM.Core and AutoLFM.Core.Utils then
-    AutoLFM.Core.Utils.LogAction("Joined channel: " .. channelName .. " (ID: " .. verifyChannelID .. ")")
-    AutoLFM.Core.Utils.Print("Joined channel: " .. channelName)
+  if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+    TeronAutoLFM.Core.Utils.LogAction("Joined channel: " .. channelName .. " (ID: " .. verifyChannelID .. ")")
+    TeronAutoLFM.Core.Utils.Print("Joined channel: " .. channelName)
   end
 
   return true
@@ -222,16 +222,16 @@ end
 --=============================================================================
 --- Toggles a channel in the selection and joins it if selected
 --- @param channelName string - The name of the channel to toggle
-function AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
+function TeronAutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
   if not channelName or channelName == "" then
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogWarning("ToggleChannel: no channel name provided")
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogWarning("ToggleChannel: no channel name provided")
     end
     return
   end
 
   -- Get current channels from Maestro State
-  local channelsList = AutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
+  local channelsList = TeronAutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
   
   -- Check if channel is already selected
   local isSelected = false
@@ -245,9 +245,9 @@ function AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
   local newChannelsList
   if isSelected then
     -- Remove channel from list
-    newChannelsList = AutoLFM.Core.Utils.RemoveFromArray(channelsList, channelName)
-    if AutoLFM.Core and AutoLFM.Core.Utils then
-      AutoLFM.Core.Utils.LogAction("Channel deselected: " .. channelName)
+    newChannelsList = TeronAutoLFM.Core.Utils.RemoveFromArray(channelsList, channelName)
+    if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+      TeronAutoLFM.Core.Utils.LogAction("Channel deselected: " .. channelName)
     end
   else
     -- Add channel to list
@@ -257,19 +257,19 @@ function AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
     end
     table.insert(newChannelsList, channelName)
     -- Join the channel
-    AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
+    TeronAutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
   end
 
   -- Update state
-  AutoLFM.Core.Maestro.SetState("Channels.ActiveChannels", newChannelsList)
+  TeronAutoLFM.Core.Maestro.SetState("Channels.ActiveChannels", newChannelsList)
 
   -- Save to persistent storage
-  if AutoLFM.Core and AutoLFM.Core.Storage then
-    AutoLFM.Core.Storage.SetSelectedChannels(newChannelsList)
+  if TeronAutoLFM.Core and TeronAutoLFM.Core.Storage then
+    TeronAutoLFM.Core.Storage.SetSelectedChannels(newChannelsList)
   end
 
   -- Dispatch event
-  AutoLFM.Core.Maestro.Dispatch("Channels.Changed")
+  TeronAutoLFM.Core.Maestro.Dispatch("Channels.Changed")
 end
 
 --=============================================================================
@@ -278,13 +278,13 @@ end
 --- Initializes link integration for item and quest links
 --- Hooks bag item clicks and chat hyperlinks to enable Shift+Click link insertion
 --- into the custom message editbox in the Messaging UI
-function AutoLFM.Logic.Content.Messaging.InitLinkIntegration()
+function TeronAutoLFM.Logic.Content.Messaging.InitLinkIntegration()
   local success, err = pcall(function()
     hookBagClicks()
     hookChatLinks()
   end)
-  if not success and AutoLFM.Core and AutoLFM.Core.Utils then
-    AutoLFM.Core.Utils.PrintError("Failed to initialize link integration: " .. tostring(err))
+  if not success and TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
+    TeronAutoLFM.Core.Utils.PrintError("Failed to initialize link integration: " .. tostring(err))
   end
 end
 
@@ -292,21 +292,21 @@ end
 -- MAESTRO DECLARATIONS
 --=============================================================================
 --- Command: Toggle channel selection
-AutoLFM.Core.Maestro.RegisterCommand("Channels.ToggleChannel", function(channelName)
-  AutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
+TeronAutoLFM.Core.Maestro.RegisterCommand("Channels.ToggleChannel", function(channelName)
+  TeronAutoLFM.Logic.Content.Messaging.ToggleChannel(channelName)
 end, { id = "C16" })
 
 --- Event: Channels selection changed
-AutoLFM.Core.Maestro.RegisterEvent("Channels.Changed", { id = "E04" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Channels.Changed", { id = "E04" })
 
 --- State: Active channels list
-AutoLFM.Core.SafeRegisterState("Channels.ActiveChannels", {}, { id = "S18" })
+TeronAutoLFM.Core.SafeRegisterState("Channels.ActiveChannels", {}, { id = "S18" })
 
 --- Loads selected channels from persistent storage and restores selection state
 local function loadSavedChannels()
-  if not AutoLFM.Core or not AutoLFM.Core.Storage then return end
+  if not TeronAutoLFM.Core or not TeronAutoLFM.Core.Storage then return end
 
-  local savedChannels = AutoLFM.Core.Storage.GetSelectedChannels()
+  local savedChannels = TeronAutoLFM.Core.Storage.GetSelectedChannels()
   if not savedChannels or type(savedChannels) ~= "table" then return end
 
   -- Join all saved channels
@@ -314,15 +314,15 @@ local function loadSavedChannels()
     local channelName = savedChannels[i]
     if channelName and channelName ~= "" then
       -- Join the channel
-      AutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
+      TeronAutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
     end
   end
 
   -- Update Maestro state with saved channels
-  AutoLFM.Core.Maestro.SetState("Channels.ActiveChannels", savedChannels)
+  TeronAutoLFM.Core.Maestro.SetState("Channels.ActiveChannels", savedChannels)
 end
 
-AutoLFM.Core.SafeRegisterInit("Logic.Content.Messaging", function()
-  AutoLFM.Logic.Content.Messaging.InitLinkIntegration()
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Content.Messaging", function()
+  TeronAutoLFM.Logic.Content.Messaging.InitLinkIntegration()
   loadSavedChannels()
 end, { id = "I10", dependencies = { "Core.Storage" } })

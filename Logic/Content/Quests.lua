@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Quests Logic
+-- TeronAutoLFM: Quests Logic
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
-AutoLFM.Logic.Content.Quests = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Content = TeronAutoLFM.Logic.Content or {}
+TeronAutoLFM.Logic.Content.Quests = {}
 
 --=============================================================================
 -- PRIVATE HELPERS
@@ -15,10 +15,10 @@ AutoLFM.Logic.Content.Quests = {}
 --- @return table - Color object with r, g, b, hex, name, priority fields
 local function getQuestColor(questLevel, playerLevel)
   if not questLevel or not playerLevel then
-    return AutoLFM.Core.Utils.GetColorForLevel(1, AutoLFM.Core.Constants.INVALID_LEVEL, AutoLFM.Core.Constants.INVALID_LEVEL)
+    return TeronAutoLFM.Core.Utils.GetColorForLevel(1, TeronAutoLFM.Core.Constants.INVALID_LEVEL, TeronAutoLFM.Core.Constants.INVALID_LEVEL)
   end
 
-  return AutoLFM.Core.Utils.GetColorForLevel(playerLevel, questLevel, questLevel)
+  return TeronAutoLFM.Core.Utils.GetColorForLevel(playerLevel, questLevel, questLevel)
 end
 
 --- Retrieves the zone name for a quest by scanning upward for its header
@@ -77,7 +77,7 @@ end
 --- Creates a quest hyperlink for chat messages
 --- @param questIndex number - Quest log index
 --- @return string|nil - Formatted quest link, or nil if quest not found
-function AutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
+function TeronAutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
   if not questIndex or questIndex < 1 then return nil end
 
   local title, level, _, _, _, _, _, questID = GetQuestLogTitle(questIndex)
@@ -110,8 +110,8 @@ local function isQuestLinkInMessage(link)
   local escapedLink = string.gsub(link, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
 
   -- Check both States
-  local detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
-  local customText = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+  local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+  local customText = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
 
   return string.find(detailsText, escapedLink) ~= nil or string.find(customText, escapedLink) ~= nil
 end
@@ -123,23 +123,23 @@ local function addQuestLinkToMessage(link)
 
   -- Determine current broadcast mode from UI
   local broadcastMode = "details"  -- Default
-  if AutoLFM.UI and AutoLFM.UI.Content and AutoLFM.UI.Content.Messaging then
-    if AutoLFM.UI.Content.Messaging.GetCurrentMode then
-      broadcastMode = AutoLFM.UI.Content.Messaging.GetCurrentMode()
+  if TeronAutoLFM.UI and TeronAutoLFM.UI.Content and TeronAutoLFM.UI.Content.Messaging then
+    if TeronAutoLFM.UI.Content.Messaging.GetCurrentMode then
+      broadcastMode = TeronAutoLFM.UI.Content.Messaging.GetCurrentMode()
     end
   end
 
   -- Get the appropriate State based on current broadcast mode
   local currentText = ""
   if broadcastMode == "custom" then
-    currentText = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+    currentText = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
     local newText = currentText == "" and link or (currentText .. " " .. link)
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", newText)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", newText)
   else
     -- Details mode (default)
-    currentText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+    currentText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
     local newText = currentText == "" and link or (currentText .. " " .. link)
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", newText)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", newText)
   end
 end
 
@@ -149,11 +149,11 @@ local function removeQuestLinkFromMessage(link)
   if not link then return end
 
   -- Get current mode to determine which State to update
-  local mode = AutoLFM.Core.Maestro.GetState("Selection.Mode") or "none"
+  local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode") or "none"
 
   -- Try both States to find and remove the link
-  local detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
-  local customText = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+  local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+  local customText = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
 
   -- Escape special pattern characters in the link
   local escapedLink = string.gsub(link, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
@@ -165,14 +165,14 @@ local function removeQuestLinkFromMessage(link)
     newText = string.gsub(newText, "%s+", " ")
     newText = string.gsub(newText, "^%s+", "")
     newText = string.gsub(newText, "%s+$", "")
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", newText)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", newText)
   elseif string.find(customText, escapedLink) then
     local newText = string.gsub(customText, escapedLink, "")
     -- Clean up extra spaces
     newText = string.gsub(newText, "%s+", " ")
     newText = string.gsub(newText, "^%s+", "")
     newText = string.gsub(newText, "%s+$", "")
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", newText)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", newText)
   end
 end
 
@@ -180,26 +180,26 @@ end
 -- COMMANDS
 --=============================================================================
 --- Toggles quest selection and adds/removes its link from the current message
-AutoLFM.Core.Maestro.RegisterCommand("Quests.Toggle", function(questIndex)
+TeronAutoLFM.Core.Maestro.RegisterCommand("Quests.Toggle", function(questIndex)
   if not questIndex or type(questIndex) ~= "number" then
-    AutoLFM.Core.Utils.LogError("Quests.Toggle: Invalid index type " .. type(questIndex) .. " (expected number)")
+    TeronAutoLFM.Core.Utils.LogError("Quests.Toggle: Invalid index type " .. type(questIndex) .. " (expected number)")
     return
   end
 
   -- Create quest link
-  local link = AutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
+  local link = TeronAutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
   if not link then
-    AutoLFM.Core.Utils.LogError("Quests.Toggle: Failed to create link for quest at index " .. questIndex .. " (quest may not exist)")
+    TeronAutoLFM.Core.Utils.LogError("Quests.Toggle: Failed to create link for quest at index " .. questIndex .. " (quest may not exist)")
     return
   end
 
   -- Toggle link in current message (details or custom)
   if isQuestLinkInMessage(link) then
     removeQuestLinkFromMessage(link)
-    AutoLFM.Core.Utils.LogAction("Removed quest link from message")
+    TeronAutoLFM.Core.Utils.LogAction("Removed quest link from message")
   else
     addQuestLinkToMessage(link)
-    AutoLFM.Core.Utils.LogAction("Added quest link to message")
+    TeronAutoLFM.Core.Utils.LogAction("Added quest link to message")
   end
 end, { id = "C20" })
 
@@ -208,21 +208,21 @@ end, { id = "C20" })
 --=============================================================================
 --- Returns quests from quest log sorted by level (uses cache)
 --- @return table - Array of {index, name, level, tag, zone, color} sorted by level
-function AutoLFM.Logic.Content.Quests.GetSortedQuests()
-  return AutoLFM.Core.Cache.Get("Quests")
+function TeronAutoLFM.Logic.Content.Quests.GetSortedQuests()
+  return TeronAutoLFM.Core.Cache.Get("Quests")
 end
 
 --- Clears the cached quest list
 --- Call this when quest log is updated or player levels up
-function AutoLFM.Logic.Content.Quests.ClearCache()
-  AutoLFM.Core.Cache.Clear("Quests")
+function TeronAutoLFM.Logic.Content.Quests.ClearCache()
+  TeronAutoLFM.Core.Cache.Clear("Quests")
 end
 
 --- Checks if a quest link is in any message (details or custom)
 --- @param questIndex number - Quest log index
 --- @return boolean - True if quest link is in any message
-function AutoLFM.Logic.Content.Quests.IsQuestSelected(questIndex)
-  local link = AutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
+function TeronAutoLFM.Logic.Content.Quests.IsQuestSelected(questIndex)
+  local link = TeronAutoLFM.Logic.Content.Quests.CreateQuestLink(questIndex)
   if not link then return false end
   return isQuestLinkInMessage(link)
 end
@@ -231,6 +231,6 @@ end
 -- INITIALIZATION
 --=============================================================================
 --- Register cache builder for quests
-if AutoLFM.Core.Cache then
-  AutoLFM.Core.Cache.Register("Quests", buildSortedQuests)
+if TeronAutoLFM.Core.Cache then
+  TeronAutoLFM.Core.Cache.Register("Quests", buildSortedQuests)
 end

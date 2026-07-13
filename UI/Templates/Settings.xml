@@ -2,7 +2,7 @@
   <!--==========================================================================
     Settings Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_Settings" parent="AutoLFM_MainFrame_ContentContainer" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Settings" parent="TeronAutoLFM_MainFrame_ContentContainer" hidden="true">
     <Size>
       <AbsDimension x="298" y="252"/>
     </Size>
@@ -75,7 +75,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnFilterToggle("GRAY", this:GetChecked() == 1)
+                TeronAutoLFM.UI.Content.Settings.OnFilterToggle("GRAY", this:GetChecked() == 1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -92,7 +92,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnFilterToggle("GREEN", this:GetChecked() == 1)
+                TeronAutoLFM.UI.Content.Settings.OnFilterToggle("GREEN", this:GetChecked() == 1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -109,7 +109,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnFilterToggle("YELLOW", this:GetChecked() == 1)
+                TeronAutoLFM.UI.Content.Settings.OnFilterToggle("YELLOW", this:GetChecked() == 1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -126,7 +126,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnFilterToggle("ORANGE", this:GetChecked() == 1)
+                TeronAutoLFM.UI.Content.Settings.OnFilterToggle("ORANGE", this:GetChecked() == 1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -143,7 +143,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnFilterToggle("RED", this:GetChecked() == 1)
+                TeronAutoLFM.UI.Content.Settings.OnFilterToggle("RED", this:GetChecked() == 1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -192,7 +192,7 @@
                 </Offset>
               </Anchor>
             </Anchors>
-            <Backdrop bgFile="Interface\AddOns\AutoLFM\UI\Textures\SliderBackground" edgeFile="Interface\AddOns\AutoLFM\UI\Textures\SliderBorder" tile="true">
+            <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\SliderBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\SliderBorder" tile="true">
               <BackgroundInsets>
                 <AbsInset left="3" right="3" top="6" bottom="6"/>
               </BackgroundInsets>
@@ -203,16 +203,16 @@
                 <AbsValue val="8"/>
               </EdgeSize>
             </Backdrop>
-            <ThumbTexture file="Interface\AddOns\AutoLFM\UI\Textures\SliderButton"/>
+            <ThumbTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\SliderButton"/>
             <Scripts>
               <OnLoad>
                 this:EnableMouseWheel(true)
               </OnLoad>
               <OnValueChanged>
-                AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderChanged(this)
+                TeronAutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderChanged(this)
               </OnValueChanged>
               <OnMouseWheel>
-                AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderMouseWheel(this, arg1)
+                TeronAutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderMouseWheel(this, arg1)
               </OnMouseWheel>
             </Scripts>
           </Slider>
@@ -302,7 +302,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnMinimapRadioClick(true)
+                TeronAutoLFM.UI.Content.Settings.OnMinimapRadioClick(true)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -336,7 +336,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnMinimapRadioClick(false)
+                TeronAutoLFM.UI.Content.Settings.OnMinimapRadioClick(false)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -354,7 +354,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnMinimapResetClick()
+                TeronAutoLFM.UI.Content.Settings.OnMinimapResetClick()
               </OnClick>
             </Scripts>
             <NormalFont inherits="GameFontNormalSmall"/>
@@ -426,7 +426,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnDarkUIRadioClick(true)
+                TeronAutoLFM.UI.Content.Settings.OnDarkUIRadioClick(true)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -460,7 +460,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnDarkUIRadioClick(false)
+                TeronAutoLFM.UI.Content.Settings.OnDarkUIRadioClick(false)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -478,7 +478,7 @@
             </Anchors>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnDarkUIReloadClick()
+                TeronAutoLFM.UI.Content.Settings.OnDarkUIReloadClick()
               </OnClick>
             </Scripts>
             <NormalFont inherits="GameFontNormalSmall"/>
@@ -550,7 +550,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(1)
+                TeronAutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(1)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -584,7 +584,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(2)
+                TeronAutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(2)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -652,7 +652,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick("details")
+                TeronAutoLFM.UI.Content.Settings.OnMessagingModeRadioClick("details")
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -686,7 +686,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick("custom")
+                TeronAutoLFM.UI.Content.Settings.OnMessagingModeRadioClick("custom")
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -754,7 +754,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnPresetsRadioClick(false)
+                TeronAutoLFM.UI.Content.Settings.OnPresetsRadioClick(false)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -788,7 +788,7 @@
             </Layers>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.Content.Settings.OnPresetsRadioClick(true)
+                TeronAutoLFM.UI.Content.Settings.OnPresetsRadioClick(true)
               </OnClick>
             </Scripts>
           </CheckButton>
@@ -893,7 +893,7 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.Content.Settings.OnDryRunToggle(this:GetChecked() == 1)
+            TeronAutoLFM.UI.Content.Settings.OnDryRunToggle(this:GetChecked() == 1)
           </OnClick>
         </Scripts>
       </CheckButton>
@@ -924,7 +924,7 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.Content.Settings.OnDebugToggle(this:GetChecked() == 1)
+            TeronAutoLFM.UI.Content.Settings.OnDebugToggle(this:GetChecked() == 1)
           </OnClick>
         </Scripts>
       </CheckButton>
@@ -936,10 +936,10 @@
     </Frames>
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Settings.OnLoad(this)
+        TeronAutoLFM.UI.Content.Settings.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Settings.OnShow(this)
+        TeronAutoLFM.UI.Content.Settings.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>

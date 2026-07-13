@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
-  <Frame name="AutoLFM_Content_Presets" parent="AutoLFM_MainFrame_ContentContainer" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Presets" parent="TeronAutoLFM_MainFrame_ContentContainer" hidden="true">
     <Size>
       <AbsDimension x="298" y="252"/>
     </Size>
@@ -32,26 +32,26 @@
     </Frames>
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Presets.OnLoad(this)
+        TeronAutoLFM.UI.Content.Presets.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Presets.OnShow(this)
+        TeronAutoLFM.UI.Content.Presets.OnShow(this)
       </OnShow>
       <OnHide>
-        AutoLFM.UI.Content.Presets.OnHide(this)
+        TeronAutoLFM.UI.Content.Presets.OnHide(this)
       </OnHide>
     </Scripts>
   </Frame>
 
   <!-- Save Preset Popup -->
-  <Frame name="AutoLFM_SavePresetPopup" parent="UIParent" frameStrata="DIALOG" hidden="true" toplevel="true" enableMouse="true">
+  <Frame name="TeronAutoLFM_SavePresetPopup" parent="UIParent" frameStrata="DIALOG" hidden="true" toplevel="true" enableMouse="true">
     <Size>
       <AbsDimension x="300" y="160"/>
     </Size>
     <Anchors>
       <Anchor point="CENTER"/>
     </Anchors>
-    <Backdrop bgFile="Interface\AddOns\AutoLFM\UI\Textures\DialogBoxBackground" edgeFile="Interface\AddOns\AutoLFM\UI\Textures\DialogBoxBorder" tile="true">
+    <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBorder" tile="true">
       <BackgroundInsets>
         <AbsInset left="11" right="12" top="12" bottom="11"/>
       </BackgroundInsets>
@@ -99,10 +99,10 @@
         </Anchors>
         <Scripts>
           <OnEnterPressed>
-            AutoLFM.UI.Content.Presets.OnSaveConfirm()
+            TeronAutoLFM.UI.Content.Presets.OnSaveConfirm()
           </OnEnterPressed>
           <OnEscapePressed>
-            AutoLFM.UI.Content.Presets.OnSaveCancel()
+            TeronAutoLFM.UI.Content.Presets.OnSaveCancel()
           </OnEscapePressed>
         </Scripts>
       </EditBox>
@@ -119,7 +119,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.Content.Presets.OnSaveConfirm()
+            TeronAutoLFM.UI.Content.Presets.OnSaveConfirm()
           </OnClick>
         </Scripts>
       </Button>
@@ -136,7 +136,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.Content.Presets.OnSaveCancel()
+            TeronAutoLFM.UI.Content.Presets.OnSaveCancel()
           </OnClick>
         </Scripts>
       </Button>

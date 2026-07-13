@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Dungeons UI
+-- TeronAutoLFM: Dungeons UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
 
 --=============================================================================
 -- ROW CREATION
@@ -16,14 +16,14 @@ local function CreateDungeonRows(scrollChild)
     return
   end
 
-  local sorted = AutoLFM.Logic.Content.Dungeons.GetSortedDungeons()
+  local sorted = TeronAutoLFM.Logic.Content.Dungeons.GetSortedDungeons()
   if not sorted then
     return
   end
 
-  local rowHeight = AutoLFM.Core.Constants.ROW_HEIGHT
+  local rowHeight = TeronAutoLFM.Core.Constants.ROW_HEIGHT
   local numRows = table.getn(sorted)
-  local scrollHeight = AutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight)
+  local scrollHeight = TeronAutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight)
 
   scrollChild:SetHeight(scrollHeight)
 
@@ -31,10 +31,10 @@ local function CreateDungeonRows(scrollChild)
     local entry = sorted[i]
     local dungeon = entry.dungeon
     local color = entry.color
-    local rowName = "AutoLFM_DungeonRow" .. i
+    local rowName = "TeronAutoLFM_DungeonRow" .. i
 
     -- Get or create row using factory
-    local row = AutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "AutoLFM_DungeonRow_Template", i, rowHeight)
+    local row = TeronAutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "TeronAutoLFM_DungeonRow_Template", i, rowHeight)
     if not row then
       return
     end
@@ -58,10 +58,10 @@ local function CreateDungeonRows(scrollChild)
     local elements = {}
     if label then table.insert(elements, label) end
     if secondaryLabel then table.insert(elements, secondaryLabel) end
-    AutoLFM.UI.RowList.SetupHover(checkbox, row, color, elements)
+    TeronAutoLFM.UI.RowList.SetupHover(checkbox, row, color, elements)
 
     if checkbox then
-      local selectedDungeonNames = AutoLFM.Core.Maestro.GetState("Selection.DungeonNames") or {}
+      local selectedDungeonNames = TeronAutoLFM.Core.Maestro.GetState("Selection.DungeonNames") or {}
       local isSelected = false
       for j = 1, table.getn(selectedDungeonNames) do
         if selectedDungeonNames[j] == dungeon.name then
@@ -72,7 +72,7 @@ local function CreateDungeonRows(scrollChild)
       checkbox:SetChecked(isSelected)
 
       checkbox:SetScript("OnClick", function()
-        AutoLFM.Core.Maestro.Dispatch("Selection.ToggleDungeon", row.dungeonIndex)
+        TeronAutoLFM.Core.Maestro.Dispatch("Selection.ToggleDungeon", row.dungeonIndex)
       end)
     end
 
@@ -80,7 +80,7 @@ local function CreateDungeonRows(scrollChild)
   end
 
   -- Force scroll frame update
-  AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+  TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
 end
 
 --=============================================================================
@@ -88,11 +88,11 @@ end
 --=============================================================================
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
-AutoLFM.UI.Content.Dungeons = AutoLFM.UI.CreateContentPanel({
+TeronAutoLFM.UI.Content.Dungeons = TeronAutoLFM.UI.CreateContentPanel({
   name = "Dungeons",
-  rowTemplatePrefix = "AutoLFM_DungeonRow",
+  rowTemplatePrefix = "TeronAutoLFM_DungeonRow",
   createRowsFunc = CreateDungeonRows,
-  clearCacheFunc = AutoLFM.Logic.Content.Dungeons.ClearCache,
+  clearCacheFunc = TeronAutoLFM.Logic.Content.Dungeons.ClearCache,
   listeningEvent = "Selection.Changed",
   listenerDependencies = { "Logic.Selection" },
   listenerId = "L10"

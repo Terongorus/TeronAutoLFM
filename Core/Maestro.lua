@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Maestro System
+-- TeronAutoLFM: Maestro System
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Maestro = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Maestro = {}
 
 --=============================================================================
 -- SAFE REGISTRATION
@@ -16,9 +16,9 @@ local pendingStates = {}
 --- @param namespace string - Unique identifier for this state
 --- @param initialValue any - Initial state value
 --- @param options table - Optional table with id
-function AutoLFM.Core.SafeRegisterState(namespace, initialValue, options)
-  if AutoLFM.Core.Maestro.RegisterState then
-      AutoLFM.Core.Maestro.RegisterState(namespace, initialValue, options)
+function TeronAutoLFM.Core.SafeRegisterState(namespace, initialValue, options)
+  if TeronAutoLFM.Core.Maestro.RegisterState then
+      TeronAutoLFM.Core.Maestro.RegisterState(namespace, initialValue, options)
       return
   end
 
@@ -34,9 +34,9 @@ end
 --- @param id string - Unique identifier for the initialization handler
 --- @param handler function - The initialization function to execute
 --- @param options table - Optional table with dependencies and order
-function AutoLFM.Core.SafeRegisterInit(id, handler, options)
-  if AutoLFM.Core.Maestro.RegisterInit then
-      AutoLFM.Core.Maestro.RegisterInit(id, handler, options)
+function TeronAutoLFM.Core.SafeRegisterInit(id, handler, options)
+  if TeronAutoLFM.Core.Maestro.RegisterInit then
+      TeronAutoLFM.Core.Maestro.RegisterInit(id, handler, options)
       return
   end
 
@@ -87,7 +87,7 @@ local stateRegistry = {}
 --- @param handler function - The function to execute when command is dispatched
 --- @param options table - Optional table with {silent=bool, order=number}
 --- @return number - The order ID assigned to this command
-function AutoLFM.Core.Maestro.RegisterCommand(key, handler, options)
+function TeronAutoLFM.Core.Maestro.RegisterCommand(key, handler, options)
   if commands[key] then
     error("Maestro: Command '" .. key .. "' already registered")
   end
@@ -152,7 +152,7 @@ end
 --- First checks if key is a registered command, then checks if it's an event
 --- @param key string - The command/event key to dispatch (e.g., "MainFrame.Toggle", "Selection.Changed")
 --- @param ... any - Optional arguments to pass to the command handler or event listeners
-function AutoLFM.Core.Maestro.Dispatch(key, ...)
+function TeronAutoLFM.Core.Maestro.Dispatch(key, ...)
   local args = arg  -- Store varargs as table for Lua 5.0 compatibility
 
   -- Check if it's a registered command first
@@ -160,15 +160,15 @@ function AutoLFM.Core.Maestro.Dispatch(key, ...)
   if command then
       if not command.silent then
           -- Pass arguments to LogCommand for display in logs
-          AutoLFM.Core.Utils.LogCommand(key, command.id, unpack(args))
+          TeronAutoLFM.Core.Utils.LogCommand(key, command.id, unpack(args))
 
           local eventName = generateEventName(key)
-          AutoLFM.Core.Utils.LogEvent(eventName)
+          TeronAutoLFM.Core.Utils.LogEvent(eventName)
       end
 
       local success, err = pcall(command.handler, unpack(args))
       if not success then
-          AutoLFM.Core.Utils.LogError("Command '" .. key .. "' failed: " .. tostring(err))
+          TeronAutoLFM.Core.Utils.LogError("Command '" .. key .. "' failed: " .. tostring(err))
           error("Maestro: Error executing command '" .. key .. "': " .. tostring(err))
       end
       return
@@ -179,14 +179,14 @@ function AutoLFM.Core.Maestro.Dispatch(key, ...)
   if event then
       if not event.silent then
           -- Pass arguments to LogEvent for display in logs
-          AutoLFM.Core.Utils.LogEvent(key, event.id, unpack(args))
+          TeronAutoLFM.Core.Utils.LogEvent(key, event.id, unpack(args))
       end
 
       -- Call all listeners for this event
       for i = 1, table.getn(event.listeners) do
           local success, err = pcall(event.listeners[i], unpack(args))
           if not success then
-              AutoLFM.Core.Utils.LogError("Event listener failed for '" .. key .. "': " .. tostring(err))
+              TeronAutoLFM.Core.Utils.LogError("Event listener failed for '" .. key .. "': " .. tostring(err))
           end
       end
       return
@@ -204,7 +204,7 @@ end
 --- @param key string - Event key (e.g., "Selection.Changed")
 --- @param options table - Optional table with {silent=bool, id=string}
 --- @return string - The ID assigned to this event (e.g., "E01")
-function AutoLFM.Core.Maestro.RegisterEvent(key, options)
+function TeronAutoLFM.Core.Maestro.RegisterEvent(key, options)
   if events[key] then
     error("Maestro: Event '" .. key .. "' already registered")
   end
@@ -234,7 +234,7 @@ end
 --- @param callback function - The function to call when event is emitted
 --- @param options table - Optional table with {id=string}
 --- @return string - The ID assigned to this listener (e.g., "L01")
-function AutoLFM.Core.Maestro.Listen(listenerId, eventKey, callback, options)
+function TeronAutoLFM.Core.Maestro.Listen(listenerId, eventKey, callback, options)
   if not events[eventKey] then
       error("Maestro: Cannot listen to unregistered event '" .. eventKey .. "'")
       return
@@ -270,9 +270,9 @@ end
 --- Removes the listener callback so it won't be called on future events
 --- @param listenerId string - The identifier returned by Listen()
 --- @return boolean - true if listener was found and removed, false otherwise
-function AutoLFM.Core.Maestro.UnListen(listenerId)
+function TeronAutoLFM.Core.Maestro.UnListen(listenerId)
   if not listeners[listenerId] then
-    AutoLFM.Core.Utils.LogWarning("Maestro: UnListen - Listener '" .. listenerId .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Maestro: UnListen - Listener '" .. listenerId .. "' not found")
     return false
   end
 
@@ -293,7 +293,7 @@ function AutoLFM.Core.Maestro.UnListen(listenerId)
   -- Remove from listeners registry
   listeners[listenerId] = nil
 
-  AutoLFM.Core.Utils.LogInfo("Maestro: UnListen - Removed listener '" .. listenerId .. "'")
+  TeronAutoLFM.Core.Utils.LogInfo("Maestro: UnListen - Removed listener '" .. listenerId .. "'")
   return true
 end
 
@@ -301,9 +301,9 @@ end
 --- Removes the command so it can no longer be dispatched
 --- @param key string - The command key to unregister (e.g., "MainFrame.Toggle")
 --- @return boolean - true if command was found and removed, false otherwise
-function AutoLFM.Core.Maestro.UnregisterCommand(key)
+function TeronAutoLFM.Core.Maestro.UnregisterCommand(key)
   if not commands[key] then
-    AutoLFM.Core.Utils.LogWarning("Maestro: UnregisterCommand - Command '" .. key .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Maestro: UnregisterCommand - Command '" .. key .. "' not found")
     return false
   end
 
@@ -318,7 +318,7 @@ function AutoLFM.Core.Maestro.UnregisterCommand(key)
     end
   end
 
-  AutoLFM.Core.Utils.LogInfo("Maestro: UnregisterCommand - Removed command '" .. key .. "'")
+  TeronAutoLFM.Core.Utils.LogInfo("Maestro: UnregisterCommand - Removed command '" .. key .. "'")
   return true
 end
 
@@ -331,7 +331,7 @@ end
 --- @param handler function - The initialization function to execute
 --- @param options table - Optional {dependencies=table, order=number}
 --- @return number - The order ID assigned to this handler
-function AutoLFM.Core.Maestro.RegisterInit(id, handler, options)
+function TeronAutoLFM.Core.Maestro.RegisterInit(id, handler, options)
   if initHandlers[id] then
     error("Maestro: Init handler '" .. id .. "' already registered")
   end
@@ -360,7 +360,7 @@ end
 local function flushPendingStates()
   for i = 1, table.getn(pendingStates) do
       local reg = pendingStates[i]
-      AutoLFM.Core.Maestro.RegisterState(reg.namespace, reg.initialValue, reg.options)
+      TeronAutoLFM.Core.Maestro.RegisterState(reg.namespace, reg.initialValue, reg.options)
   end
   -- Release memory by removing reference to pending table
   pendingStates = nil
@@ -370,7 +370,7 @@ end
 local function flushPendingInits()
   for i = 1, table.getn(pendingInits) do
       local reg = pendingInits[i]
-      AutoLFM.Core.Maestro.RegisterInit(reg.id, reg.handler, reg.options)
+      TeronAutoLFM.Core.Maestro.RegisterInit(reg.id, reg.handler, reg.options)
   end
   -- Release memory by removing reference to pending table
   pendingInits = nil
@@ -529,14 +529,14 @@ end
 --- Executes all registered initialization handlers in dependency order
 --- Uses topological sort (Kahn's algorithm) to resolve dependencies
 --- Logs errors but continues initialization on failure
-function AutoLFM.Core.Maestro.RunInit()
+function TeronAutoLFM.Core.Maestro.RunInit()
   if isInitialized then
       return
   end
 
   local sorted = topologicalSort(initHandlers)
   if not sorted then
-      AutoLFM.Core.Utils.PrintError("Failed to initialize: circular dependencies")
+      TeronAutoLFM.Core.Utils.PrintError("Failed to initialize: circular dependencies")
       return
   end
 
@@ -549,8 +549,8 @@ function AutoLFM.Core.Maestro.RunInit()
 
   for i = 1, table.getn(stateList) do
     local item = stateList[i]
-    local idColored = AutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
-    AutoLFM.Core.Utils.LogState(idColored .. " " .. item.namespace)
+    local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
+    TeronAutoLFM.Core.Utils.LogState(idColored .. " " .. item.namespace)
   end
 
   -- Phase 1b: Log all registered events (in sorted order by ID)
@@ -563,8 +563,8 @@ function AutoLFM.Core.Maestro.RunInit()
 
   for i = 1, table.getn(eventList) do
     local item = eventList[i]
-    local idColored = AutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
-    AutoLFM.Core.Utils.LogEvent(idColored .. " " .. item.key)
+    local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
+    TeronAutoLFM.Core.Utils.LogEvent(idColored .. " " .. item.key)
   end
 
   -- Phase 1c: Log all registered commands (in sorted order by ID)
@@ -577,16 +577,16 @@ function AutoLFM.Core.Maestro.RunInit()
 
   for i = 1, table.getn(commandList) do
     local item = commandList[i]
-    local idColored = AutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
-    AutoLFM.Core.Utils.LogCommand(idColored .. " " .. item.key)
+    local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. item.id .. "]", "GRAY")
+    TeronAutoLFM.Core.Utils.LogCommand(idColored .. " " .. item.key)
   end
 
   -- Phase 2: Log all INIT events
   for i = 1, table.getn(sorted) do
       local id = sorted[i]
       local data = initHandlers[id]
-      local idColored = AutoLFM.Core.Utils.ColorText("[" .. (data.id or "I??") .. "]", "GRAY")
-      AutoLFM.Core.Utils.LogInit(idColored .. " " .. id)
+      local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. (data.id or "I??") .. "]", "GRAY")
+      TeronAutoLFM.Core.Utils.LogInit(idColored .. " " .. id)
   end
 
   -- Phase 3: Run all initialization handlers
@@ -596,24 +596,24 @@ function AutoLFM.Core.Maestro.RunInit()
 
       local success, err = pcall(data.handler)
       if not success then
-          AutoLFM.Core.Utils.LogError("Init handler '" .. id .. "' failed: " .. tostring(err))
+          TeronAutoLFM.Core.Utils.LogError("Init handler '" .. id .. "' failed: " .. tostring(err))
       end
   end
 
   isInitialized = true
 
   -- Validate initialization - check all critical states and events are registered
-  local valid, errMsg = AutoLFM.Core.Utils.ValidateInitialization()
+  local valid, errMsg = TeronAutoLFM.Core.Utils.ValidateInitialization()
   if not valid then
-    AutoLFM.Core.Utils.LogError("Initialization validation failed: " .. tostring(errMsg))
+    TeronAutoLFM.Core.Utils.LogError("Initialization validation failed: " .. tostring(errMsg))
   end
 
-  AutoLFM.Core.Utils.PrintSuccess("Successfully loaded!")
+  TeronAutoLFM.Core.Utils.PrintSuccess("Successfully loaded!")
 end
 
 --- Returns whether the addon has completed initialization
 --- @return boolean - True if RunInit() has completed successfully
-function AutoLFM.Core.Maestro.IsInitialized()
+function TeronAutoLFM.Core.Maestro.IsInitialized()
   return isInitialized
 end
 
@@ -626,14 +626,14 @@ end
 --- @param options table - Optional table with {id=string, validator=function}
 ---   validator: Optional function(value) -> boolean that validates state values before SetState
 --- @return string - The ID assigned to this state (e.g., "S01")
-function AutoLFM.Core.Maestro.RegisterState(namespace, initialValue, options)
+function TeronAutoLFM.Core.Maestro.RegisterState(namespace, initialValue, options)
   if not namespace or type(namespace) ~= "string" then
-    AutoLFM.Core.Utils.LogError("RegisterState: namespace must be a non-empty string")
+    TeronAutoLFM.Core.Utils.LogError("RegisterState: namespace must be a non-empty string")
     return
   end
 
   if stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogWarning("RegisterState: namespace '" .. namespace .. "' already registered")
+    TeronAutoLFM.Core.Utils.LogWarning("RegisterState: namespace '" .. namespace .. "' already registered")
     return
   end
 
@@ -655,9 +655,9 @@ end
 --- Gets the current value of a state namespace (READ-ONLY)
 --- @param namespace string - The state namespace to retrieve
 --- @return any - The current state value, or nil if namespace not found
-function AutoLFM.Core.Maestro.GetState(namespace)
+function TeronAutoLFM.Core.Maestro.GetState(namespace)
   if not stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogWarning("GetState: namespace '" .. tostring(namespace) .. "' not registered")
+    TeronAutoLFM.Core.Utils.LogWarning("GetState: namespace '" .. tostring(namespace) .. "' not registered")
     return nil
   end
 
@@ -670,9 +670,9 @@ end
 --- @param namespace string - The state namespace to update
 --- @param newValue any - The new state value
 --- @return boolean - true if value was set, false if validation failed
-function AutoLFM.Core.Maestro.SetState(namespace, newValue)
+function TeronAutoLFM.Core.Maestro.SetState(namespace, newValue)
   if not stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogError("SetState: namespace '" .. tostring(namespace) .. "' not registered")
+    TeronAutoLFM.Core.Utils.LogError("SetState: namespace '" .. tostring(namespace) .. "' not registered")
     return false
   end
 
@@ -681,12 +681,12 @@ function AutoLFM.Core.Maestro.SetState(namespace, newValue)
   if validator then
     local isValid, result = pcall(validator, newValue)
     if not isValid then
-      AutoLFM.Core.Utils.LogError("SetState: validator error for '" .. namespace .. "': " .. tostring(result))
+      TeronAutoLFM.Core.Utils.LogError("SetState: validator error for '" .. namespace .. "': " .. tostring(result))
       return false
     end
     -- If validator returned false/nil, reject the value
     if not result then
-      AutoLFM.Core.Utils.LogWarning("SetState: validation failed for '" .. namespace .. "'")
+      TeronAutoLFM.Core.Utils.LogWarning("SetState: validation failed for '" .. namespace .. "'")
       return false
     end
   end
@@ -699,14 +699,14 @@ function AutoLFM.Core.Maestro.SetState(namespace, newValue)
   for i = 1, table.getn(subscribers) do
     local success, err = pcall(subscribers[i], newValue, oldValue)
     if not success then
-      AutoLFM.Core.Utils.LogError("State subscriber failed for '" .. namespace .. "': " .. tostring(err))
+      TeronAutoLFM.Core.Utils.LogError("State subscriber failed for '" .. namespace .. "': " .. tostring(err))
     end
   end
 
   -- Emit Maestro event for loose coupling (only if event is registered)
   local eventName = "State.Changed." .. namespace
   if events[eventName] then
-    AutoLFM.Core.Maestro.Dispatch(eventName, {
+    TeronAutoLFM.Core.Maestro.Dispatch(eventName, {
       namespace = namespace,
       newValue = newValue,
       oldValue = oldValue
@@ -721,14 +721,14 @@ end
 --- @param namespace string - The state namespace to watch
 --- @param callback function - Function to call when state changes: callback(newValue, oldValue)
 --- @return boolean - True if subscription successful
-function AutoLFM.Core.Maestro.SubscribeState(namespace, callback)
+function TeronAutoLFM.Core.Maestro.SubscribeState(namespace, callback)
   if not stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogError("SubscribeState: namespace '" .. tostring(namespace) .. "' not registered")
+    TeronAutoLFM.Core.Utils.LogError("SubscribeState: namespace '" .. tostring(namespace) .. "' not registered")
     return false
   end
 
   if type(callback) ~= "function" then
-    AutoLFM.Core.Utils.LogError("SubscribeState: callback must be a function")
+    TeronAutoLFM.Core.Utils.LogError("SubscribeState: callback must be a function")
     return false
   end
 
@@ -741,14 +741,14 @@ end
 --- @param namespace string - The state namespace to unwatch
 --- @param callback function - The callback function to remove
 --- @return boolean - True if unsubscription successful, false if callback not found
-function AutoLFM.Core.Maestro.UnSubscribeState(namespace, callback)
+function TeronAutoLFM.Core.Maestro.UnSubscribeState(namespace, callback)
   if not stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogWarning("UnSubscribeState: namespace '" .. tostring(namespace) .. "' not registered")
+    TeronAutoLFM.Core.Utils.LogWarning("UnSubscribeState: namespace '" .. tostring(namespace) .. "' not registered")
     return false
   end
 
   if type(callback) ~= "function" then
-    AutoLFM.Core.Utils.LogError("UnSubscribeState: callback must be a function")
+    TeronAutoLFM.Core.Utils.LogError("UnSubscribeState: callback must be a function")
     return false
   end
 
@@ -756,12 +756,12 @@ function AutoLFM.Core.Maestro.UnSubscribeState(namespace, callback)
   for i = 1, table.getn(subscribers) do
     if subscribers[i] == callback then
       table.remove(subscribers, i)
-      AutoLFM.Core.Utils.LogInfo("UnSubscribeState: Removed subscriber for '" .. namespace .. "'")
+      TeronAutoLFM.Core.Utils.LogInfo("UnSubscribeState: Removed subscriber for '" .. namespace .. "'")
       return true
     end
   end
 
-  AutoLFM.Core.Utils.LogWarning("UnSubscribeState: callback not found for '" .. namespace .. "'")
+  TeronAutoLFM.Core.Utils.LogWarning("UnSubscribeState: callback not found for '" .. namespace .. "'")
   return false
 end
 
@@ -769,14 +769,14 @@ end
 --- Useful for complex state modifications (e.g., table manipulations)
 --- @param namespace string - The state namespace to update
 --- @param transformer function - Function that receives current state and returns new state: newState = transformer(oldState)
-function AutoLFM.Core.Maestro.UpdateState(namespace, transformer)
+function TeronAutoLFM.Core.Maestro.UpdateState(namespace, transformer)
   if not stateRegistry[namespace] then
-    AutoLFM.Core.Utils.LogError("UpdateState: namespace '" .. tostring(namespace) .. "' not registered")
+    TeronAutoLFM.Core.Utils.LogError("UpdateState: namespace '" .. tostring(namespace) .. "' not registered")
     return
   end
 
   if type(transformer) ~= "function" then
-    AutoLFM.Core.Utils.LogError("UpdateState: transformer must be a function")
+    TeronAutoLFM.Core.Utils.LogError("UpdateState: transformer must be a function")
     return
   end
 
@@ -784,11 +784,11 @@ function AutoLFM.Core.Maestro.UpdateState(namespace, transformer)
   local success, newValue = pcall(transformer, currentValue)
 
   if not success then
-    AutoLFM.Core.Utils.LogError("UpdateState: transformer failed for '" .. namespace .. "': " .. tostring(newValue))
+    TeronAutoLFM.Core.Utils.LogError("UpdateState: transformer failed for '" .. namespace .. "': " .. tostring(newValue))
     return
   end
 
-  AutoLFM.Core.Maestro.SetState(namespace, newValue)
+  TeronAutoLFM.Core.Maestro.SetState(namespace, newValue)
 end
 
 --=============================================================================
@@ -797,14 +797,14 @@ end
 --- Returns all registries for debugging
 --- Used by debug console to display registered commands, events, listeners, and handlers
 --- @return table, table, table, table - commandsRegistry, eventsRegistry, listenersRegistry, initRegistry
-function AutoLFM.Core.Maestro.GetRegistry()
+function TeronAutoLFM.Core.Maestro.GetRegistry()
   return commandsRegistry, eventsRegistry, listenersRegistry, initRegistry
 end
 
 --- Returns all registered states as a key-value table with IDs
 --- Used by debug console to display current state
 --- @return table - Table of namespace -> {value, id} mappings
-function AutoLFM.Core.Maestro.GetAllStates()
+function TeronAutoLFM.Core.Maestro.GetAllStates()
   local states = {}
   for namespace, data in pairs(stateRegistry) do
     states[namespace] = {
@@ -825,9 +825,9 @@ flushPendingInits()
 -- GAME INITIALIZATION TRIGGER
 --=============================================================================
 -- Handle PLAYER_ENTERING_WORLD to trigger RunInit() when game is ready
-local initFrame = CreateFrame("Frame", "AutoLFM_InitFrame")
+local initFrame = CreateFrame("Frame", "TeronAutoLFM_InitFrame")
 initFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 initFrame:SetScript("OnEvent", function()
-  AutoLFM.Core.Maestro.RunInit()
+  TeronAutoLFM.Core.Maestro.RunInit()
   initFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end)

@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Debug Window Component
+-- TeronAutoLFM: Debug Window Component
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Components = AutoLFM.Components or {}
-AutoLFM.Components.Debug = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Components = TeronAutoLFM.Components or {}
+TeronAutoLFM.Components.Debug = {}
 
 --=============================================================================
 -- CONSTANTS
@@ -40,14 +40,14 @@ local colorsByDebugCategory = nil
 local function getColorByDebugCategory(category)
   if not colorsByDebugCategory then
     colorsByDebugCategory = {}
-    for i = 1, table.getn(AutoLFM.Core.Constants.COLORS) do
-      local c = AutoLFM.Core.Constants.COLORS[i]
+    for i = 1, table.getn(TeronAutoLFM.Core.Constants.COLORS) do
+      local c = TeronAutoLFM.Core.Constants.COLORS[i]
       if c.debugCategory then
         colorsByDebugCategory[c.debugCategory] = c
       end
     end
   end
-  return colorsByDebugCategory[category] or AutoLFM.Core.Utils.GetColor("WHITE")
+  return colorsByDebugCategory[category] or TeronAutoLFM.Core.Utils.GetColor("WHITE")
 end
 
 --- Formats a log line with colored timestamp and category
@@ -74,7 +74,7 @@ local function addToBuffer(line)
   table.insert(logBuffer, line)
 
   -- Keep only last N lines to prevent memory bloat
-  local maxLines = AutoLFM.Core.Constants.DEBUG_BUFFER_MAX_LINES or 500
+  local maxLines = TeronAutoLFM.Core.Constants.DEBUG_BUFFER_MAX_LINES or 500
   if table.getn(logBuffer) > maxLines then
     table.remove(logBuffer, 1)
   end
@@ -177,10 +177,10 @@ end
 --- @param eventName string - The event name to log
 --- @param id string - Optional ID (e.g., "E01")
 --- @param ... any - Optional arguments to append to the log message
-function AutoLFM.Components.Debug.LogEvent(eventName, id, ...)
+function TeronAutoLFM.Components.Debug.LogEvent(eventName, id, ...)
   local message = eventName
-  if id and AutoLFM.Core.Utils and AutoLFM.Core.Utils.ColorText then
-    local idColored = AutoLFM.Core.Utils.ColorText("[" .. id .. "]", "GRAY")
+  if id and TeronAutoLFM.Core.Utils and TeronAutoLFM.Core.Utils.ColorText then
+    local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. id .. "]", "GRAY")
     message = idColored .. " " .. eventName
   elseif id then
     message = "[" .. id .. "] " .. eventName
@@ -198,10 +198,10 @@ end
 --- @param commandName string - The command name to log
 --- @param id string - Optional ID (e.g., "C01")
 --- @param ... any - Optional arguments to append to the log message
-function AutoLFM.Components.Debug.LogCommand(commandName, id, ...)
+function TeronAutoLFM.Components.Debug.LogCommand(commandName, id, ...)
   local message = commandName
-  if id and AutoLFM.Core.Utils and AutoLFM.Core.Utils.ColorText then
-    local idColored = AutoLFM.Core.Utils.ColorText("[" .. id .. "]", "GRAY")
+  if id and TeronAutoLFM.Core.Utils and TeronAutoLFM.Core.Utils.ColorText then
+    local idColored = TeronAutoLFM.Core.Utils.ColorText("[" .. id .. "]", "GRAY")
     message = idColored .. " " .. commandName
   elseif id then
     message = "[" .. id .. "] " .. commandName
@@ -217,43 +217,43 @@ end
 
 --- Logs an error message to the debug window (red)
 --- @param message string - The error message to log
-function AutoLFM.Components.Debug.LogError(message)
+function TeronAutoLFM.Components.Debug.LogError(message)
   log("ERROR", message)
 end
 
 --- Logs a warning message to the debug window (orange)
 --- @param message string - The warning message to log
-function AutoLFM.Components.Debug.LogWarning(message)
+function TeronAutoLFM.Components.Debug.LogWarning(message)
   log("WARNING", message)
 end
 
 --- Logs an info message to the debug window (white)
 --- @param message string - The info message to log
-function AutoLFM.Components.Debug.LogInfo(message)
+function TeronAutoLFM.Components.Debug.LogInfo(message)
   log("INFO", message)
 end
 
 --- Logs an action message to the debug window (purple)
 --- @param message string - The action message to log
-function AutoLFM.Components.Debug.LogAction(message)
+function TeronAutoLFM.Components.Debug.LogAction(message)
   log("ACTION", message)
 end
 
 --- Logs a registry message to the debug window
 --- @param message string - The registry message to log
-function AutoLFM.Components.Debug.LogRegistry(message)
+function TeronAutoLFM.Components.Debug.LogRegistry(message)
   log("REGISTRY", message)
 end
 
 --- Logs a state message to the debug window
 --- @param message string - The state message to log
-function AutoLFM.Components.Debug.LogState(message)
+function TeronAutoLFM.Components.Debug.LogState(message)
   log("STATE", message)
 end
 
 --- Logs an initialization message to the debug window
 --- @param message string - The initialization message to log
-function AutoLFM.Components.Debug.LogInit(message)
+function TeronAutoLFM.Components.Debug.LogInit(message)
   log("INIT", message)
 end
 
@@ -261,21 +261,21 @@ end
 -- WINDOW MANAGEMENT
 --=============================================================================
 --- Hides the debug window
-function AutoLFM.Components.Debug.Hide()
+function TeronAutoLFM.Components.Debug.Hide()
   if debugFrame then
       debugFrame:Hide()
       isEnabled = false
-      AutoLFM.Components.Debug.LogAction("Hide Debug Window")
+      TeronAutoLFM.Components.Debug.LogAction("Hide Debug Window")
 
       -- Sync the Settings checkbox
-      AutoLFM.Components.Debug.SyncSettingsCheckbox(false)
+      TeronAutoLFM.Components.Debug.SyncSettingsCheckbox(false)
   end
 end
 
 --- Shows the debug window (creates it if it doesn't exist)
-function AutoLFM.Components.Debug.Show()
+function TeronAutoLFM.Components.Debug.Show()
   if not debugFrame then
-      AutoLFM.Components.Debug.CreateFrame()
+      TeronAutoLFM.Components.Debug.CreateFrame()
   end
 
   if not debugFrame then
@@ -286,25 +286,25 @@ function AutoLFM.Components.Debug.Show()
   isEnabled = true
   updateDisplay()
 
-  AutoLFM.Components.Debug.LogAction("Show Debug Window")
+  TeronAutoLFM.Components.Debug.LogAction("Show Debug Window")
 
   -- Sync the Settings checkbox
-  AutoLFM.Components.Debug.SyncSettingsCheckbox(true)
+  TeronAutoLFM.Components.Debug.SyncSettingsCheckbox(true)
 end
 
 --- Toggles debug window visibility (show/hide)
-function AutoLFM.Components.Debug.Toggle()
+function TeronAutoLFM.Components.Debug.Toggle()
   if debugFrame and debugFrame:IsVisible() then
-      AutoLFM.Components.Debug.Hide()
+      TeronAutoLFM.Components.Debug.Hide()
   else
-      AutoLFM.Components.Debug.Show()
+      TeronAutoLFM.Components.Debug.Show()
   end
 end
 
 --- Syncs the debug checkbox state in the Settings panel
 --- @param isChecked boolean - True to check the checkbox, false to uncheck
-function AutoLFM.Components.Debug.SyncSettingsCheckbox(isChecked)
-  local optionsPanel = getglobal("AutoLFM_Content_Settings")
+function TeronAutoLFM.Components.Debug.SyncSettingsCheckbox(isChecked)
+  local optionsPanel = getglobal("TeronAutoLFM_Content_Settings")
   if not optionsPanel then return end
 
   local scrollChild = getglobal(optionsPanel:GetName().."_ScrollFrame_ScrollChild")
@@ -317,7 +317,7 @@ function AutoLFM.Components.Debug.SyncSettingsCheckbox(isChecked)
 end
 
 --- Clears all messages from the debug window
-function AutoLFM.Components.Debug.Clear()
+function TeronAutoLFM.Components.Debug.Clear()
   -- Clear buffer
   logBuffer = {}
 
@@ -345,7 +345,7 @@ end
 --- Toggles registry view on/off (tab mode)
 --- If already showing registry, returns to monitoring
 --- If in different mode, switches to registry
-function AutoLFM.Components.Debug.ShowRegistry()
+function TeronAutoLFM.Components.Debug.ShowRegistry()
   if currentViewMode == "registry" then
     -- Already showing registry - toggle back to monitoring
     currentViewMode = "monitoring"
@@ -360,25 +360,25 @@ function AutoLFM.Components.Debug.ShowRegistry()
   logBuffer = {}
   currentViewMode = "registry"
 
-  local titleColor = AutoLFM.Core.Utils.GetColor("WHITE")
-  local commandColor = AutoLFM.Core.Utils.GetColor("BLUE")
-  local eventColor = AutoLFM.Core.Utils.GetColor("CYAN")
-  local listenerColor = AutoLFM.Core.Utils.GetColor("MAGENTA")
-  local initColor = AutoLFM.Core.Utils.GetColor("PURPLE")
+  local titleColor = TeronAutoLFM.Core.Utils.GetColor("WHITE")
+  local commandColor = TeronAutoLFM.Core.Utils.GetColor("BLUE")
+  local eventColor = TeronAutoLFM.Core.Utils.GetColor("CYAN")
+  local listenerColor = TeronAutoLFM.Core.Utils.GetColor("MAGENTA")
+  local initColor = TeronAutoLFM.Core.Utils.GetColor("PURPLE")
 
-  AutoLFM.Components.Debug.LogInfo("|cff" .. titleColor.hex .. "=== MAESTRO REGISTRY ===|r")
+  TeronAutoLFM.Components.Debug.LogInfo("|cff" .. titleColor.hex .. "=== MAESTRO REGISTRY ===|r")
 
-  local commands, events, listeners, handlers = AutoLFM.Core.Maestro.GetRegistry()
+  local commands, events, listeners, handlers = TeronAutoLFM.Core.Maestro.GetRegistry()
 
   -- Commands Section (BLUE)
   table.sort(commands, function(a, b)
       return a.id < b.id
   end)
 
-  AutoLFM.Components.Debug.LogRegistry("|cff" .. commandColor.hex .. "COMMANDS (" .. table.getn(commands) .. " registered):|r")
+  TeronAutoLFM.Components.Debug.LogRegistry("|cff" .. commandColor.hex .. "COMMANDS (" .. table.getn(commands) .. " registered):|r")
   for i = 1, table.getn(commands) do
       local entry = commands[i]
-      AutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
+      TeronAutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
   end
 
   -- Events Section (CYAN)
@@ -386,10 +386,10 @@ function AutoLFM.Components.Debug.ShowRegistry()
       return a.id < b.id
   end)
 
-  AutoLFM.Components.Debug.LogRegistry("|cff" .. eventColor.hex .. "EVENTS (" .. table.getn(events) .. " registered):|r")
+  TeronAutoLFM.Components.Debug.LogRegistry("|cff" .. eventColor.hex .. "EVENTS (" .. table.getn(events) .. " registered):|r")
   for i = 1, table.getn(events) do
       local entry = events[i]
-      AutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
+      TeronAutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
   end
 
   -- Listeners Section (MAGENTA)
@@ -397,10 +397,10 @@ function AutoLFM.Components.Debug.ShowRegistry()
       return a.id < b.id
   end)
 
-  AutoLFM.Components.Debug.LogRegistry("|cff" .. listenerColor.hex .. "LISTENERS (" .. table.getn(listeners) .. " registered):|r")
+  TeronAutoLFM.Components.Debug.LogRegistry("|cff" .. listenerColor.hex .. "LISTENERS (" .. table.getn(listeners) .. " registered):|r")
   for i = 1, table.getn(listeners) do
       local entry = listeners[i]
-      AutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
+      TeronAutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
   end
 
   -- Init Handlers Section (PURPLE)
@@ -408,10 +408,10 @@ function AutoLFM.Components.Debug.ShowRegistry()
       return a.id < b.id
   end)
 
-  AutoLFM.Components.Debug.LogRegistry("|cff" .. initColor.hex .. "INIT HANDLERS (" .. table.getn(handlers) .. " registered):|r")
+  TeronAutoLFM.Components.Debug.LogRegistry("|cff" .. initColor.hex .. "INIT HANDLERS (" .. table.getn(handlers) .. " registered):|r")
   for i = 1, table.getn(handlers) do
       local entry = handlers[i]
-      AutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
+      TeronAutoLFM.Components.Debug.LogRegistry("|cff888888[" .. entry.id .. "]|r |cffffaa00" .. entry.key .. "|r")
   end
 
   updateButtonStyling()
@@ -423,7 +423,7 @@ end
 --- Toggles state view on/off (tab mode)
 --- If already showing state, returns to monitoring
 --- If in different mode, switches to state
-function AutoLFM.Components.Debug.ShowState()
+function TeronAutoLFM.Components.Debug.ShowState()
   if currentViewMode == "state" then
     -- Already showing state - toggle back to monitoring
     currentViewMode = "monitoring"
@@ -438,13 +438,13 @@ function AutoLFM.Components.Debug.ShowState()
   logBuffer = {}
   currentViewMode = "state"
 
-  local titleColor = AutoLFM.Core.Utils.GetColor("WHITE")
-  local stateColor = AutoLFM.Core.Utils.GetColor("GREEN")
+  local titleColor = TeronAutoLFM.Core.Utils.GetColor("WHITE")
+  local stateColor = TeronAutoLFM.Core.Utils.GetColor("GREEN")
 
-  AutoLFM.Components.Debug.LogInfo("|cff" .. titleColor.hex .. "=== MAESTRO STATE ===|r")
+  TeronAutoLFM.Components.Debug.LogInfo("|cff" .. titleColor.hex .. "=== MAESTRO STATE ===|r")
 
   -- Get all registered states from Maestro
-  local states = AutoLFM.Core.Maestro.GetAllStates()
+  local states = TeronAutoLFM.Core.Maestro.GetAllStates()
 
   -- Sort by ID (S01, S02, S03...)
   local sortedKeys = {}
@@ -494,11 +494,11 @@ function AutoLFM.Components.Debug.ShowState()
       valueStr = "nil"
     end
 
-    AutoLFM.Components.Debug.LogState("|cff888888[" .. id .. "]|r |cffffaa00" .. key .. "|r: " .. valueStr)
+    TeronAutoLFM.Components.Debug.LogState("|cff888888[" .. id .. "]|r |cffffaa00" .. key .. "|r: " .. valueStr)
   end
 
   if not hasState then
-    AutoLFM.Components.Debug.LogState("|cff888888(No states registered)|r")
+    TeronAutoLFM.Components.Debug.LogState("|cff888888(No states registered)|r")
   end
 
   updateButtonStyling()
@@ -511,13 +511,13 @@ end
 -- FRAME CREATION (PURE LUA)
 --=============================================================================
 --- Creates the debug window frame entirely in Lua (no XML)
-function AutoLFM.Components.Debug.CreateFrame()
+function TeronAutoLFM.Components.Debug.CreateFrame()
   if debugFrame then
       return
   end
 
   -- Main window frame (simple frame, no template)
-  debugFrame = CreateFrame("Frame", "AutoLFM_DebugWindow", UIParent)
+  debugFrame = CreateFrame("Frame", "TeronAutoLFM_DebugWindow", UIParent)
   debugFrame:SetWidth(DEBUG_WINDOW_WIDTH)
   debugFrame:SetHeight(DEBUG_WINDOW_HEIGHT)
   debugFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
@@ -529,8 +529,8 @@ function AutoLFM.Components.Debug.CreateFrame()
 
   -- Add backdrop (dialog box style)
   debugFrame:SetBackdrop({
-    bgFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\DialogBoxBackground",
-    edgeFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\DialogBoxBorder",
+    bgFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\DialogBoxBackground",
+    edgeFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\DialogBoxBorder",
     tile = true,
     tileSize = 32,
     edgeSize = 32,
@@ -542,15 +542,15 @@ function AutoLFM.Components.Debug.CreateFrame()
   local title = debugFrame:CreateFontString(nil, "OVERLAY")
   title:SetFont("Fonts\\FRIZQT__.TTF", 16)
   title:SetTextColor(1, 0.84, 0)  -- Gold color
-  title:SetText("AutoLFM Maestro Debug")
+  title:SetText("TeronAutoLFM Maestro Debug")
   title:SetPoint("TOP", debugFrame, "TOP", 0, -15)
 
   -- Close button
   local closeBtn = CreateFrame("Button", nil, debugFrame, "UIPanelCloseButton")
   closeBtn:SetPoint("TOPRIGHT", debugFrame, "TOPRIGHT", -5, -5)
   closeBtn:SetScript("OnClick", function()
-    if AutoLFM.Components.Debug then
-      AutoLFM.Components.Debug.Hide()
+    if TeronAutoLFM.Components.Debug then
+      TeronAutoLFM.Components.Debug.Hide()
     end
   end)
 
@@ -586,8 +586,8 @@ function AutoLFM.Components.Debug.CreateFrame()
   clearBtn:SetPoint("BOTTOM", debugFrame, "BOTTOM", -135, 15)
   clearBtn:SetText("Clear")
   clearBtn:SetScript("OnClick", function()
-    if AutoLFM.Components.Debug then
-      AutoLFM.Components.Debug.Clear()
+    if TeronAutoLFM.Components.Debug then
+      TeronAutoLFM.Components.Debug.Clear()
     end
   end)
 
@@ -611,8 +611,8 @@ function AutoLFM.Components.Debug.CreateFrame()
   stateBtn:SetPoint("BOTTOM", debugFrame, "BOTTOM", 45, 15)
   stateBtn:SetText("State")
   stateBtn:SetScript("OnClick", function()
-    if AutoLFM.Components.Debug then
-      AutoLFM.Components.Debug.ShowState()
+    if TeronAutoLFM.Components.Debug then
+      TeronAutoLFM.Components.Debug.ShowState()
     end
   end)
 
@@ -623,8 +623,8 @@ function AutoLFM.Components.Debug.CreateFrame()
   registryBtn:SetPoint("BOTTOM", debugFrame, "BOTTOM", 135, 15)
   registryBtn:SetText("Registry")
   registryBtn:SetScript("OnClick", function()
-    if AutoLFM.Components.Debug then
-      AutoLFM.Components.Debug.ShowRegistry()
+    if TeronAutoLFM.Components.Debug then
+      TeronAutoLFM.Components.Debug.ShowRegistry()
     end
   end)
 
@@ -643,14 +643,14 @@ function AutoLFM.Components.Debug.CreateFrame()
   end)
 
   -- Register with DarkUI if available
-  if AutoLFM.Components.DarkUI and AutoLFM.Components.DarkUI.RegisterFrame then
-      AutoLFM.Components.DarkUI.RegisterFrame(debugFrame)
+  if TeronAutoLFM.Components.DarkUI and TeronAutoLFM.Components.DarkUI.RegisterFrame then
+      TeronAutoLFM.Components.DarkUI.RegisterFrame(debugFrame)
   end
 end
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Debug", function()
-  AutoLFM.Core.Maestro.RegisterCommand("Debug.Toggle", AutoLFM.Components.Debug.Toggle, { id = "C02" })
+TeronAutoLFM.Core.SafeRegisterInit("Debug", function()
+  TeronAutoLFM.Core.Maestro.RegisterCommand("Debug.Toggle", TeronAutoLFM.Components.Debug.Toggle, { id = "C02" })
 end, { id = "I21" })

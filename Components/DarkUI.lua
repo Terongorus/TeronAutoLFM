@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Dark UI Theme
+-- TeronAutoLFM: Dark UI Theme
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Components = AutoLFM.Components or {}
-AutoLFM.Components.DarkUI = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Components = TeronAutoLFM.Components or {}
+TeronAutoLFM.Components.DarkUI = {}
 
 --=============================================================================
 -- PRIVATE CONSTANTS
@@ -166,11 +166,11 @@ end
 --- Recursively darkens a frame and all its children
 --- Applies dark theme to backdrop, borders, and text regions
 --- @param frame frame - The frame to darken
-function AutoLFM.Components.DarkUI.DarkenFrame(frame)
+function TeronAutoLFM.Components.DarkUI.DarkenFrame(frame)
   if not enabled then return end
   if not frame then return end
 
-  processChildren(frame, AutoLFM.Components.DarkUI.DarkenFrame)
+  processChildren(frame, TeronAutoLFM.Components.DarkUI.DarkenFrame)
 
   if frame.GetRegions then
       processBackdropBorder(frame)
@@ -188,7 +188,7 @@ local function applyDarkTheme()
 
   for _, frame in pairs(darkenedFrames) do
       if frame then
-          AutoLFM.Components.DarkUI.DarkenFrame(frame)
+          TeronAutoLFM.Components.DarkUI.DarkenFrame(frame)
       end
   end
 end
@@ -199,19 +199,19 @@ end
 --- Registers a frame for dark theme application
 --- Frame will be darkened immediately if dark mode is enabled
 --- @param frame frame - The frame to register for dark theme
-function AutoLFM.Components.DarkUI.RegisterFrame(frame)
+function TeronAutoLFM.Components.DarkUI.RegisterFrame(frame)
   if not frame then return end
 
   table.insert(darkenedFrames, frame)
 
   if enabled then
-      AutoLFM.Components.DarkUI.DarkenFrame(frame)
+      TeronAutoLFM.Components.DarkUI.DarkenFrame(frame)
   end
 end
 
 --- Returns whether dark mode is currently enabled
 --- @return boolean - True if dark mode is active
-function AutoLFM.Components.DarkUI.IsEnabled()
+function TeronAutoLFM.Components.DarkUI.IsEnabled()
   return enabled
 end
 
@@ -220,10 +220,10 @@ end
 --=============================================================================
 --- Initializes dark mode from persistent settings
 --- Applies dark theme to all registered frames if enabled
-function AutoLFM.Components.DarkUI.Init()
-  if not AutoLFM.Core.Storage then return end
+function TeronAutoLFM.Components.DarkUI.Init()
+  if not TeronAutoLFM.Core.Storage then return end
 
-  enabled = AutoLFM.Core.Storage.GetDarkMode()
+  enabled = TeronAutoLFM.Core.Storage.GetDarkMode()
   if enabled then
       applyDarkTheme()
   end
@@ -232,8 +232,8 @@ end
 --=============================================================================
 -- AUTO-REGISTER INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Components.DarkUI", function()
-  AutoLFM.Components.DarkUI.Init()
+TeronAutoLFM.Core.SafeRegisterInit("Components.DarkUI", function()
+  TeronAutoLFM.Components.DarkUI.Init()
 end, {
   id = "I14",
   dependencies = {"Core.Storage"}

@@ -1,14 +1,14 @@
 --=============================================================================
--- AutoLFM: Raids UI
+-- TeronAutoLFM: Raids UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
 
 --=============================================================================
 -- ROW CREATION
 --=============================================================================
-local RAID_COLOR = AutoLFM.Core.Utils.GetColor("GOLD")
+local RAID_COLOR = TeronAutoLFM.Core.Utils.GetColor("GOLD")
 
 --- Creates and updates raid rows with size sliders for variable-size raids
 --- Handles complex UI: checkboxes, sliders, editboxes with synchronized values
@@ -18,22 +18,22 @@ local function CreateRaidRows(scrollChild)
     return
   end
 
-  local raids = AutoLFM.Logic.Content.Raids.GetRaids()
+  local raids = TeronAutoLFM.Logic.Content.Raids.GetRaids()
   if not raids then
     return
   end
 
-  local rowHeight = AutoLFM.Core.Constants.ROW_HEIGHT
+  local rowHeight = TeronAutoLFM.Core.Constants.ROW_HEIGHT
   local numRows = table.getn(raids)
 
-  scrollChild:SetHeight(AutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
+  scrollChild:SetHeight(TeronAutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
 
   for i = 1, numRows do
     local raid = raids[i]
-    local rowName = "AutoLFM_RaidRow" .. i
+    local rowName = "TeronAutoLFM_RaidRow" .. i
 
     -- Get or create row using factory
-    local row = AutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "AutoLFM_RaidRow_Template", i, rowHeight)
+    local row = TeronAutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "TeronAutoLFM_RaidRow_Template", i, rowHeight)
     if not row then
       return
     end
@@ -61,17 +61,17 @@ local function CreateRaidRows(scrollChild)
     local isVariableSize = raid.raidSizeMin ~= raid.raidSizeMax
     if isVariableSize then
       -- Read current size from Maestro State (only if this raid is selected)
-      local selectedRaidName = AutoLFM.Core.Maestro.GetState("Selection.RaidName")
+      local selectedRaidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
       local currentSize = raid.raidSizeMin
       if selectedRaidName == raid.name then
-        currentSize = AutoLFM.Core.Maestro.GetState("Selection.RaidSize") or raid.raidSizeMin
+        currentSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or raid.raidSizeMin
       end
 
       -- Create size control using component
       local hoverElements = {}
       if label then table.insert(hoverElements, label) end
 
-      local sizeControl = AutoLFM.UI.SizeControl.Create({
+      local sizeControl = TeronAutoLFM.UI.SizeControl.Create({
         id = "Raid" .. i,
         parent = row,
         minSize = raid.raidSizeMin,
@@ -80,12 +80,12 @@ local function CreateRaidRows(scrollChild)
         color = RAID_COLOR,
         hoverElements = hoverElements,
         onValueChanged = function(value, silent)
-          AutoLFM.Core.Maestro.Dispatch("Selection.SetRaidSize", value, silent)
+          TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetRaidSize", value, silent)
         end
       })
 
       if not sizeControl then
-        AutoLFM.Core.Utils.LogError("Failed to create size control for raid " .. i)
+        TeronAutoLFM.Core.Utils.LogError("Failed to create size control for raid " .. i)
         return
       end
 
@@ -101,11 +101,11 @@ local function CreateRaidRows(scrollChild)
     if label then table.insert(checkboxElements, label) end
     if secondaryLabel then table.insert(checkboxElements, secondaryLabel) end
     if row.sizeEditBox then table.insert(checkboxElements, row.sizeEditBox) end
-    AutoLFM.UI.RowList.SetupHover(checkbox, row, nil, checkboxElements)
+    TeronAutoLFM.UI.RowList.SetupHover(checkbox, row, nil, checkboxElements)
 
     if checkbox then
       -- Sync checkbox state with selection (read from Maestro State)
-      local selectedRaidName = AutoLFM.Core.Maestro.GetState("Selection.RaidName")
+      local selectedRaidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
       local isSelected = (selectedRaidName == raid.name)
       checkbox:SetChecked(isSelected)
 
@@ -125,7 +125,7 @@ local function CreateRaidRows(scrollChild)
         local parentRow = this:GetParent()
 
         -- Dispatch Command to toggle raid selection
-        AutoLFM.Core.Maestro.Dispatch("Selection.ToggleRaid", parentRow.raidIndex)
+        TeronAutoLFM.Core.Maestro.Dispatch("Selection.ToggleRaid", parentRow.raidIndex)
 
         if parentRow.isVariableSize then
           if isChecked then
@@ -150,7 +150,7 @@ local function CreateRaidRows(scrollChild)
   end
 
   -- Force scroll frame update
-  AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+  TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
 end
 
 --=============================================================================
@@ -158,9 +158,9 @@ end
 --=============================================================================
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
-AutoLFM.UI.Content.Raids = AutoLFM.UI.CreateContentPanel({
+TeronAutoLFM.UI.Content.Raids = TeronAutoLFM.UI.CreateContentPanel({
   name = "Raids",
-  rowTemplatePrefix = "AutoLFM_RaidRow",
+  rowTemplatePrefix = "TeronAutoLFM_RaidRow",
   createRowsFunc = CreateRaidRows,
   clearCacheFunc = nil,  -- No cache to clear for raids
   listeningEvent = "Selection.Changed",

@@ -1,16 +1,16 @@
 --=============================================================================
--- AutoLFM: Raids Logic
+-- TeronAutoLFM: Raids Logic
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
-AutoLFM.Logic.Content.Raids = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Content = TeronAutoLFM.Logic.Content or {}
+TeronAutoLFM.Logic.Content.Raids = {}
 
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
 --- Returns the array of raid definitions from Constants.RAIDS
 --- @return table - Array of raid objects with name, tag, raidSizeMin, raidSizeMax
-function AutoLFM.Logic.Content.Raids.GetRaids()
-  return AutoLFM.Core.Constants.RAIDS
+function TeronAutoLFM.Logic.Content.Raids.GetRaids()
+  return TeronAutoLFM.Core.Constants.RAIDS
 end

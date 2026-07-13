@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Settings Logic
+-- TeronAutoLFM: Settings Logic
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
-AutoLFM.Logic.Content.Settings = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Content = TeronAutoLFM.Logic.Content or {}
+TeronAutoLFM.Logic.Content.Settings = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -23,13 +23,13 @@ local dungeonFilters = {
 --=============================================================================
 --- Loads all setting values from persistent storage into local state
 --- Called during initialization to restore saved settings (dungeon filters, etc.)
-function AutoLFM.Logic.Content.Settings.LoadSettings()
+function TeronAutoLFM.Logic.Content.Settings.LoadSettings()
   -- Load dungeon filters
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetDungeonFilters then
-      local filters = AutoLFM.Core.Storage.GetDungeonFilters()
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetDungeonFilters then
+      local filters = TeronAutoLFM.Core.Storage.GetDungeonFilters()
       if filters then
-          if AutoLFM.Core.Storage.DeepCopy then
-              dungeonFilters = AutoLFM.Core.Storage.DeepCopy(filters)
+          if TeronAutoLFM.Core.Storage.DeepCopy then
+              dungeonFilters = TeronAutoLFM.Core.Storage.DeepCopy(filters)
           else
               dungeonFilters = filters
           end
@@ -38,7 +38,7 @@ function AutoLFM.Logic.Content.Settings.LoadSettings()
 end
 
 --- Initializes settings logic (currently no commands to register)
-function AutoLFM.Logic.Content.Settings.Init()
+function TeronAutoLFM.Logic.Content.Settings.Init()
   -- No commands to register anymore
   -- Filter toggles are now handled directly by UI layer
 end
@@ -48,7 +48,7 @@ end
 --=============================================================================
 --- Returns the current dungeon filter states for all difficulty colors
 --- @return table - Table with color names as keys (GRAY, GREEN, YELLOW, ORANGE, RED) and boolean values
-function AutoLFM.Logic.Content.Settings.GetDungeonFilters()
+function TeronAutoLFM.Logic.Content.Settings.GetDungeonFilters()
   return dungeonFilters
 end
 
@@ -59,16 +59,16 @@ end
 --- @param colorId string - Color filter ID (e.g., "GRAY", "GREEN", "YELLOW", "ORANGE", "RED")
 --- @param isEnabled boolean - New state of the filter (true = enabled, false = disabled)
 --- @return boolean - True if filter was set, false on validation error
-function AutoLFM.Logic.Content.Settings.SetDungeonFilter(colorId, isEnabled)
+function TeronAutoLFM.Logic.Content.Settings.SetDungeonFilter(colorId, isEnabled)
   -- Validate colorId parameter
   if type(colorId) ~= "string" then
-    AutoLFM.Core.Utils.LogError("SetDungeonFilter: colorId must be string, got " .. type(colorId))
+    TeronAutoLFM.Core.Utils.LogError("SetDungeonFilter: colorId must be string, got " .. type(colorId))
     return false
   end
 
   -- Validate isEnabled parameter
   if type(isEnabled) ~= "boolean" then
-    AutoLFM.Core.Utils.LogError("SetDungeonFilter: isEnabled must be boolean, got " .. type(isEnabled))
+    TeronAutoLFM.Core.Utils.LogError("SetDungeonFilter: isEnabled must be boolean, got " .. type(isEnabled))
     return false
   end
 
@@ -87,40 +87,40 @@ end
 --- Toggles minimap button visibility and saves the setting
 --- @param isShow boolean - True to show the minimap button, false to hide it
 --- @return boolean|nil - False on validation error
-function AutoLFM.Logic.Content.Settings.ToggleMinimapVisibility(isShow)
+function TeronAutoLFM.Logic.Content.Settings.ToggleMinimapVisibility(isShow)
   -- Validate isShow parameter
   if type(isShow) ~= "boolean" then
-    AutoLFM.Core.Utils.LogError("ToggleMinimapVisibility: isShow must be boolean, got " .. type(isShow))
+    TeronAutoLFM.Core.Utils.LogError("ToggleMinimapVisibility: isShow must be boolean, got " .. type(isShow))
     return false
   end
 
   -- Save to persistent storage
-  AutoLFM.Core.Storage.SetMinimapHidden(not isShow)
+  TeronAutoLFM.Core.Storage.SetMinimapHidden(not isShow)
 
   -- Log the change
   local action = isShow and "Show" or "Hide"
-  AutoLFM.Core.Utils.LogInfo(action .. " minimap button")
+  TeronAutoLFM.Core.Utils.LogInfo(action .. " minimap button")
 
   -- Update minimap button visibility
-  if AutoLFM.Components.MinimapButton then
+  if TeronAutoLFM.Components.MinimapButton then
       if isShow then
-          AutoLFM.Components.MinimapButton.Show()
+          TeronAutoLFM.Components.MinimapButton.Show()
       else
-          AutoLFM.Components.MinimapButton.Hide()
+          TeronAutoLFM.Components.MinimapButton.Hide()
       end
   end
 end
 
 --- Resets minimap button to its default position (left side of minimap)
 --- Clears saved position from persistent storage and repositions the button
-function AutoLFM.Logic.Content.Settings.ResetMinimapPosition()
+function TeronAutoLFM.Logic.Content.Settings.ResetMinimapPosition()
   -- Clear saved position
-  AutoLFM.Core.Storage.SetMinimapPos(nil, nil)
+  TeronAutoLFM.Core.Storage.SetMinimapPos(nil, nil)
 
   -- Reset minimap button to default position
-  if AutoLFM.Components.MinimapButton and AutoLFM.Components.MinimapButton.ResetPosition then
-      AutoLFM.Components.MinimapButton.ResetPosition()
-      AutoLFM.Core.Utils.LogInfo("Reset minimap button position")
+  if TeronAutoLFM.Components.MinimapButton and TeronAutoLFM.Components.MinimapButton.ResetPosition then
+      TeronAutoLFM.Components.MinimapButton.ResetPosition()
+      TeronAutoLFM.Core.Utils.LogInfo("Reset minimap button position")
   end
 end
 
@@ -131,26 +131,26 @@ end
 --- Changes require UI reload to take effect on all frames
 --- @param isEnabled boolean - True to enable dark mode, false to disable
 --- @return boolean|nil - False on validation error
-function AutoLFM.Logic.Content.Settings.ToggleDarkMode(isEnabled)
+function TeronAutoLFM.Logic.Content.Settings.ToggleDarkMode(isEnabled)
   -- Validate isEnabled parameter
   if type(isEnabled) ~= "boolean" then
-    AutoLFM.Core.Utils.LogError("ToggleDarkMode: isEnabled must be boolean, got " .. type(isEnabled))
+    TeronAutoLFM.Core.Utils.LogError("ToggleDarkMode: isEnabled must be boolean, got " .. type(isEnabled))
     return false
   end
 
   -- Save to persistent storage
-  AutoLFM.Core.Storage.SetDarkMode(isEnabled)
+  TeronAutoLFM.Core.Storage.SetDarkMode(isEnabled)
 
   -- Log the change
   local action = isEnabled and "Enable" or "Disable"
-  AutoLFM.Core.Utils.LogInfo(action .. " dark mode")
+  TeronAutoLFM.Core.Utils.LogInfo(action .. " dark mode")
 
   -- Show reload message
-  local reloadText = AutoLFM.Core.Utils.ColorText("Reload", "GREEN")
+  local reloadText = TeronAutoLFM.Core.Utils.ColorText("Reload", "GREEN")
   if isEnabled then
-      AutoLFM.Core.Utils.Print("Dark mode enabled. Click " .. reloadText .. " to apply changes.")
+      TeronAutoLFM.Core.Utils.Print("Dark mode enabled. Click " .. reloadText .. " to apply changes.")
   else
-      AutoLFM.Core.Utils.Print("Dark mode disabled. Click " .. reloadText .. " to apply changes.")
+      TeronAutoLFM.Core.Utils.Print("Dark mode disabled. Click " .. reloadText .. " to apply changes.")
   end
 end
 
@@ -161,19 +161,19 @@ end
 --- Condensed mode shows compact preset list, full mode shows expanded details
 --- @param isCondensed boolean - True for condensed view, false for full view
 --- @return boolean|nil - False on validation error
-function AutoLFM.Logic.Content.Settings.TogglePresetsCondensed(isCondensed)
+function TeronAutoLFM.Logic.Content.Settings.TogglePresetsCondensed(isCondensed)
   -- Validate isCondensed parameter
   if type(isCondensed) ~= "boolean" then
-    AutoLFM.Core.Utils.LogError("TogglePresetsCondensed: isCondensed must be boolean, got " .. type(isCondensed))
+    TeronAutoLFM.Core.Utils.LogError("TogglePresetsCondensed: isCondensed must be boolean, got " .. type(isCondensed))
     return false
   end
 
   -- Save to persistent storage
-  AutoLFM.Core.Storage.SetPresetsCondensed(isCondensed)
+  TeronAutoLFM.Core.Storage.SetPresetsCondensed(isCondensed)
 
   -- Log the change
   local mode = isCondensed and "condensed" or "full"
-  AutoLFM.Core.Utils.LogAction("Set presets view to " .. mode)
+  TeronAutoLFM.Core.Utils.LogAction("Set presets view to " .. mode)
 end
 
 --=============================================================================
@@ -183,46 +183,46 @@ end
 --- When enabled, addon simulates actions but doesn't perform actual chat/whisper operations
 --- @param isEnabled boolean - True to enable dry run mode, false to disable
 --- @return boolean|nil - False on validation error
-function AutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
+function TeronAutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
   -- Validate isEnabled parameter
   if type(isEnabled) ~= "boolean" then
-    AutoLFM.Core.Utils.LogError("ToggleDryRun: isEnabled must be boolean, got " .. type(isEnabled))
+    TeronAutoLFM.Core.Utils.LogError("ToggleDryRun: isEnabled must be boolean, got " .. type(isEnabled))
     return false
   end
 
   -- Update Maestro state
-  AutoLFM.Core.Maestro.SetState("Settings.DryRun", isEnabled)
+  TeronAutoLFM.Core.Maestro.SetState("Settings.DryRun", isEnabled)
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetDryRun then
-    AutoLFM.Core.Storage.SetDryRun(isEnabled)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetDryRun then
+    TeronAutoLFM.Core.Storage.SetDryRun(isEnabled)
   end
 
   -- Log the change
   local action = isEnabled and "Enabled" or "Disabled"
-  AutoLFM.Core.Utils.LogInfo(action .. " dry run mode")
+  TeronAutoLFM.Core.Utils.LogInfo(action .. " dry run mode")
 end
 
 --=============================================================================
 -- EVENT AND STATE DECLARATIONS
 --=============================================================================
 --- Event: Settings changed
-AutoLFM.Core.Maestro.RegisterEvent("Settings.Changed", { id = "E07" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Settings.Changed", { id = "E07" })
 
 --- State: Dry run mode enabled/disabled
-AutoLFM.Core.SafeRegisterState("Settings.DryRun", false, { id = "S20" })
+TeronAutoLFM.Core.SafeRegisterState("Settings.DryRun", false, { id = "S20" })
 
 --=============================================================================
 -- AUTO-REGISTER INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Logic.Content.Settings", function()
-  AutoLFM.Logic.Content.Settings.LoadSettings()
-  AutoLFM.Logic.Content.Settings.Init()
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Content.Settings", function()
+  TeronAutoLFM.Logic.Content.Settings.LoadSettings()
+  TeronAutoLFM.Logic.Content.Settings.Init()
 
   -- Load dry run state from persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetDryRun then
-    local dryRunEnabled = AutoLFM.Core.Storage.GetDryRun()
-    AutoLFM.Core.Maestro.SetState("Settings.DryRun", dryRunEnabled)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetDryRun then
+    local dryRunEnabled = TeronAutoLFM.Core.Storage.GetDryRun()
+    TeronAutoLFM.Core.Maestro.SetState("Settings.DryRun", dryRunEnabled)
   end
 end, {
   id = "I13",

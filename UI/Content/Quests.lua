@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Quests UI
+-- TeronAutoLFM: Quests UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
 
 --=============================================================================
 -- ROW CREATION
@@ -15,23 +15,23 @@ local function CreateQuestRows(scrollChild)
     return
   end
 
-  local sorted = AutoLFM.Logic.Content.Quests.GetSortedQuests()
+  local sorted = TeronAutoLFM.Logic.Content.Quests.GetSortedQuests()
   if not sorted then
     return
   end
 
-  local rowHeight = AutoLFM.Core.Constants.ROW_HEIGHT
+  local rowHeight = TeronAutoLFM.Core.Constants.ROW_HEIGHT
   local numRows = table.getn(sorted)
 
-  scrollChild:SetHeight(AutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
+  scrollChild:SetHeight(TeronAutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight))
 
   for i = 1, numRows do
     local entry = sorted[i]
     local color = entry.color
-    local rowName = "AutoLFM_QuestRow" .. i
+    local rowName = "TeronAutoLFM_QuestRow" .. i
 
     -- Get or create row using factory
-    local row = AutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "AutoLFM_QuestRow_Template", i, rowHeight)
+    local row = TeronAutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, "TeronAutoLFM_QuestRow_Template", i, rowHeight)
     if not row then
       return
     end
@@ -61,20 +61,20 @@ local function CreateQuestRows(scrollChild)
     local elements = {}
     if label then table.insert(elements, label) end
     if secondaryLabel then table.insert(elements, secondaryLabel) end
-    AutoLFM.UI.RowList.SetupHover(checkbox, row, color, elements, {
+    TeronAutoLFM.UI.RowList.SetupHover(checkbox, row, color, elements, {
       tooltipZone = entry.zone
     })
 
     if checkbox then
       -- Sync checkbox state with custom message (check if quest link is present)
-      local isSelected = AutoLFM.Logic.Content.Quests.IsQuestSelected(entry.index)
+      local isSelected = TeronAutoLFM.Logic.Content.Quests.IsQuestSelected(entry.index)
       checkbox:SetChecked(isSelected)
 
       checkbox:SetScript("OnClick", function()
         local parentRow = this:GetParent()
         if parentRow and parentRow.questIndex then
           -- Dispatch command to toggle quest link in custom message
-          AutoLFM.Core.Maestro.Dispatch("Quests.Toggle", parentRow.questIndex)
+          TeronAutoLFM.Core.Maestro.Dispatch("Quests.Toggle", parentRow.questIndex)
         end
       end)
     end
@@ -83,7 +83,7 @@ local function CreateQuestRows(scrollChild)
   end
 
   -- Force scroll frame update
-  AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+  TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
 end
 
 --=============================================================================
@@ -91,17 +91,17 @@ end
 --=============================================================================
 -- Create panel using ContentPanel factory
 -- Init Handler ID will be auto-assigned by ContentPanel factory
-AutoLFM.UI.Content.Quests = AutoLFM.UI.CreateContentPanel({
+TeronAutoLFM.UI.Content.Quests = TeronAutoLFM.UI.CreateContentPanel({
   name = "Quests",
-  rowTemplatePrefix = "AutoLFM_QuestRow",
+  rowTemplatePrefix = "TeronAutoLFM_QuestRow",
   createRowsFunc = CreateQuestRows,
-  clearCacheFunc = AutoLFM.Logic.Content.Quests.ClearCache,
+  clearCacheFunc = TeronAutoLFM.Logic.Content.Quests.ClearCache,
   listeningEvent = "Selection.Changed",
   listenerDependencies = {},
   listenerId = "L12"
 })
 
 -- Additional command registration for QuestsList.Refresh (legacy support)
-AutoLFM.Core.SafeRegisterInit("UI.Quests.Commands", function()
-  AutoLFM.Core.Maestro.RegisterCommand("QuestsList.Refresh", AutoLFM.UI.Content.Quests.Refresh, { id = "C21" })
+TeronAutoLFM.Core.SafeRegisterInit("UI.Quests.Commands", function()
+  TeronAutoLFM.Core.Maestro.RegisterCommand("QuestsList.Refresh", TeronAutoLFM.UI.Content.Quests.Refresh, { id = "C21" })
 end, { id = "I18", dependencies = { "UI.Quests" } })

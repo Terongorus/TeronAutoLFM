@@ -2,7 +2,7 @@
   <!--==========================================================================
     AutoInvite Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_AutoInvite" parent="AutoLFM_MainFrame_ContentContainer" hidden="true">
+  <Frame name="TeronAutoLFM_Content_AutoInvite" parent="TeronAutoLFM_MainFrame_ContentContainer" hidden="true">
     <Size>
       <AbsDimension x="298" y="252"/>
     </Size>
@@ -22,7 +22,7 @@
           </Anchor>
         </Anchors>
         <ScrollChild>
-          <Frame name="AutoLFM_Content_AutoInvite_ScrollFrame_ScrollChild">
+          <Frame name="TeronAutoLFM_Content_AutoInvite_ScrollFrame_ScrollChild">
             <Size>
               <AbsDimension x="298" y="252"/>
             </Size>
@@ -180,7 +180,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(true)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(true)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -214,7 +214,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(false)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnEnableRadioClick(false)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -282,7 +282,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(true)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(true)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -316,7 +316,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(false)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnConfirmRadioClick(false)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -384,7 +384,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(true)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(true)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -418,7 +418,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(false)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnRandomMessagesRadioClick(false)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -486,7 +486,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(true)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(true)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -520,7 +520,7 @@
                     </Layers>
                     <Scripts>
                       <OnClick>
-                        AutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(false)
+                        TeronAutoLFM.UI.Content.AutoInvite.OnRespondNotLeaderRadioClick(false)
                       </OnClick>
                     </Scripts>
                   </CheckButton>
@@ -572,7 +572,7 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(1)
+                    TeronAutoLFM.UI.Content.AutoInvite.OnClearKeywordClick(1)
                   </OnClick>
                 </Scripts>
                 <NormalFont inherits="GameFontNormalSmall"/>
@@ -596,7 +596,7 @@
                 <TextInsets>
                   <AbsInset left="6" right="6" top="3" bottom="3"/>
                 </TextInsets>
-                <Backdrop bgFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBorder" tile="true">
+                <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="true">
                   <EdgeSize>
                     <AbsValue val="12"/>
                   </EdgeSize>
@@ -622,7 +622,7 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
+                    TeronAutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
                   </OnClick>
                 </Scripts>
                 <NormalFont inherits="GameFontNormalSmall"/>
@@ -645,7 +645,7 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(2)
+                    TeronAutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(2)
                   </OnClick>
                 </Scripts>
                 <NormalFont inherits="GameFontNormalSmall"/>
@@ -669,7 +669,7 @@
                 <TextInsets>
                   <AbsInset left="6" right="6" top="3" bottom="3"/>
                 </TextInsets>
-                <Backdrop bgFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBorder" tile="true">
+                <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="true">
                   <EdgeSize>
                     <AbsValue val="12"/>
                   </EdgeSize>
@@ -695,7 +695,7 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
+                    TeronAutoLFM.UI.Content.AutoInvite.OnAddKeywordLineClick()
                   </OnClick>
                 </Scripts>
                 <NormalFont inherits="GameFontNormalSmall"/>
@@ -718,7 +718,7 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(3)
+                    TeronAutoLFM.UI.Content.AutoInvite.OnDeleteKeywordLineClick(3)
                   </OnClick>
                 </Scripts>
                 <NormalFont inherits="GameFontNormalSmall"/>
@@ -742,7 +742,7 @@
                 <TextInsets>
                   <AbsInset left="6" right="6" top="3" bottom="3"/>
                 </TextInsets>
-                <Backdrop bgFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBorder" tile="true">
+                <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="true">
                   <EdgeSize>
                     <AbsValue val="12"/>
                   </EdgeSize>
@@ -761,10 +761,10 @@
     </Frames>
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.AutoInvite.OnLoad(this)
+        TeronAutoLFM.UI.Content.AutoInvite.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.AutoInvite.OnShow(this)
+        TeronAutoLFM.UI.Content.AutoInvite.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>

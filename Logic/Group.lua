@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Group Management
+-- TeronAutoLFM: Group Management
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Group = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Group = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -21,39 +21,39 @@ local conversionAttempts = 0
 --=============================================================================
 --- Gets current group size (1 for solo, 2-5 for party, 6-40 for raid)
 --- @return number - Current group size
-function AutoLFM.Logic.Group.GetSize()
-  return AutoLFM.Core.Maestro.GetState("Group.Size") or 1
+function TeronAutoLFM.Logic.Group.GetSize()
+  return TeronAutoLFM.Core.Maestro.GetState("Group.Size") or 1
 end
 
 --- Gets current group type
 --- @return string - "solo", "party", or "raid"
-function AutoLFM.Logic.Group.GetType()
-  return AutoLFM.Core.Maestro.GetState("Group.Type") or "solo"
+function TeronAutoLFM.Logic.Group.GetType()
+  return TeronAutoLFM.Core.Maestro.GetState("Group.Type") or "solo"
 end
 
 --- Checks if player is party/raid leader or solo
 --- @return boolean - True if player can invite
-function AutoLFM.Logic.Group.IsLeader()
-  return AutoLFM.Core.Maestro.GetState("Group.IsLeader") or false
+function TeronAutoLFM.Logic.Group.IsLeader()
+  return TeronAutoLFM.Core.Maestro.GetState("Group.IsLeader") or false
 end
 
 --- Checks if player can invite (leader or solo)
 --- @return boolean - True if player can invite
-function AutoLFM.Logic.Group.CanInvite()
-  local groupType = AutoLFM.Logic.Group.GetType()
+function TeronAutoLFM.Logic.Group.CanInvite()
+  local groupType = TeronAutoLFM.Logic.Group.GetType()
   if groupType == "solo" then return true end
-  return AutoLFM.Logic.Group.IsLeader()
+  return TeronAutoLFM.Logic.Group.IsLeader()
 end
 
 --- Gets the target group size based on current selection mode
 --- @return number - Target group size (5 for dungeons, variable for raids/custom)
-function AutoLFM.Logic.Group.GetTargetSize()
-  local selectionMode = AutoLFM.Core.Maestro.GetState("Selection.Mode")
+function TeronAutoLFM.Logic.Group.GetTargetSize()
+  local selectionMode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
 
   if selectionMode == "raid" then
-    return AutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
+    return TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
   elseif selectionMode == "custom" then
-    return AutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
+    return TeronAutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
   end
   return 5
 end
@@ -62,9 +62,9 @@ end
 --- Uses deferred execution to avoid API call issues in event callbacks
 --- Implements retry logic with exponential backoff for failed conversion attempts
 --- Conditions: 2+ players, target size > 5, player is leader, in party (not raid)
-function AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
-  local groupSize = AutoLFM.Logic.Group.GetSize()
-  local targetSize = AutoLFM.Logic.Group.GetTargetSize()
+function TeronAutoLFM.Logic.Group.ConvertToRaidIfNeeded()
+  local groupSize = TeronAutoLFM.Logic.Group.GetSize()
+  local targetSize = TeronAutoLFM.Logic.Group.GetTargetSize()
 
   -- Need at least 2 players and target > 5
   if groupSize < 2 or targetSize <= 5 then
@@ -72,13 +72,13 @@ function AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
   end
 
   -- Must be in party (not already raid)
-  local groupType = AutoLFM.Logic.Group.GetType()
+  local groupType = TeronAutoLFM.Logic.Group.GetType()
   if groupType ~= "party" then
     return
   end
 
   -- Must be leader
-  if not AutoLFM.Logic.Group.IsLeader() then
+  if not TeronAutoLFM.Logic.Group.IsLeader() then
     return
   end
 
@@ -95,14 +95,14 @@ function AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
     local success, err = pcall(ConvertToRaid)
 
     if success then
-      AutoLFM.Core.Utils.PrintSuccess("Converted party to raid")
+      TeronAutoLFM.Core.Utils.PrintSuccess("Converted party to raid")
       conversionPending = false
       return true
     end
 
     -- Retry with exponential backoff if attempts remain
     if conversionAttempts < MAX_CONVERSION_ATTEMPTS then
-      AutoLFM.Core.Utils.LogWarning("Conversion attempt " .. conversionAttempts .. " failed, retrying...")
+      TeronAutoLFM.Core.Utils.LogWarning("Conversion attempt " .. conversionAttempts .. " failed, retrying...")
       -- Exponential backoff: 1 frame, 2 frames, 3 frames
       local backoffFrames = conversionAttempts
       local frameCounter = 0
@@ -119,7 +119,7 @@ function AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
     end
 
     -- Max attempts reached
-    AutoLFM.Core.Utils.LogError("Failed to convert to raid after " .. MAX_CONVERSION_ATTEMPTS .. " attempts: " .. tostring(err))
+    TeronAutoLFM.Core.Utils.LogError("Failed to convert to raid after " .. MAX_CONVERSION_ATTEMPTS .. " attempts: " .. tostring(err))
     conversionPending = false
     conversionFrame:Hide()
     return false
@@ -136,7 +136,7 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Logic.Group", function() end, {
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Group", function() end, {
   id = "I07",
   dependencies = { "Core.Events" }
 })

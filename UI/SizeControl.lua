@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Size Control
+-- TeronAutoLFM: Size Control
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.SizeControl = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.SizeControl = {}
 
 --=============================================================================
 -- UI CONSTANTS
@@ -22,7 +22,7 @@ local SLIDER_RIGHT_OFFSET = -40
 --- @param config table - Configuration: {id, parent, minSize, maxSize, currentSize, color}
 --- @return frame - The configured slider frame
 local function createSlider(config)
-  local sliderName = "AutoLFM_SizeSlider_" .. config.id
+  local sliderName = "TeronAutoLFM_SizeSlider_" .. config.id
   local slider = getglobal(sliderName)
 
   if not slider then
@@ -33,14 +33,14 @@ local function createSlider(config)
     slider:SetHeight(SLIDER_HEIGHT)
     slider:SetOrientation("HORIZONTAL")
     slider:SetBackdrop({
-      bgFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\SliderBackground",
-      edgeFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\SliderBorder",
+      bgFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\SliderBackground",
+      edgeFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\SliderBorder",
       tile = true,
       tileSize = 8,
       edgeSize = 8,
       insets = { left = 3, right = 3, top = 6, bottom = 6 }
     })
-    slider:SetThumbTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\SliderButton")
+    slider:SetThumbTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\SliderButton")
     slider:EnableMouseWheel(true)
   end
 
@@ -69,7 +69,7 @@ end
 --- @param config table - Configuration: {id, parent, currentSize, color}
 --- @return frame - The configured editbox frame
 local function createEditBox(config)
-  local editBoxName = "AutoLFM_SizeEditBox_" .. config.id
+  local editBoxName = "TeronAutoLFM_SizeEditBox_" .. config.id
   local editBox = getglobal(editBoxName)
 
   if not editBox then
@@ -85,7 +85,7 @@ local function createEditBox(config)
     editBox:SetFontObject(GameFontNormal)
     editBox:SetTextInsets(2, 2, 2, 2)
     editBox:SetBackdrop({
-      edgeFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\TooltipBorder",
+      edgeFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\TooltipBorder",
       tile = false,
       edgeSize = 12,
       insets = { left = 2, right = 2, top = 2, bottom = 2 }
@@ -120,10 +120,10 @@ end
 ---   Required: {id, parent, minSize, maxSize, currentSize, onValueChanged}
 ---   Optional: {color, hoverElements}
 --- @return table - Control object {slider, editBox, SetValue, GetValue, Show, Hide}
-function AutoLFM.UI.SizeControl.Create(config)
+function TeronAutoLFM.UI.SizeControl.Create(config)
   -- Validate required parameters
   if not config.id or not config.parent or not config.minSize or not config.maxSize or not config.currentSize then
-    AutoLFM.Core.Utils.LogError("SizeControl.Create: missing required parameters")
+    TeronAutoLFM.Core.Utils.LogError("SizeControl.Create: missing required parameters")
     return nil
   end
 
@@ -152,7 +152,7 @@ function AutoLFM.UI.SizeControl.Create(config)
       end
 
       isUpdatingFromSlider = true
-      local eb = getglobal("AutoLFM_SizeEditBox_" .. this.controlId)
+      local eb = getglobal("TeronAutoLFM_SizeEditBox_" .. this.controlId)
       if eb then
         eb:SetText(tostring(value))
       end
@@ -167,7 +167,7 @@ function AutoLFM.UI.SizeControl.Create(config)
         config.onValueChanged(value, false)
       end
 
-      local eb = getglobal("AutoLFM_SizeEditBox_" .. this.controlId)
+      local eb = getglobal("TeronAutoLFM_SizeEditBox_" .. this.controlId)
       if eb then
         eb:SetFocus()
         eb:HighlightText()
@@ -203,7 +203,7 @@ function AutoLFM.UI.SizeControl.Create(config)
           config.onValueChanged(value, false)
         end
 
-        local sl = getglobal("AutoLFM_SizeSlider_" .. eb.controlId)
+        local sl = getglobal("TeronAutoLFM_SizeSlider_" .. eb.controlId)
         if sl then
           sl.isInitializing = true
           sl:SetValue(value)
@@ -243,20 +243,20 @@ function AutoLFM.UI.SizeControl.Create(config)
   slider.isInitializing = false
 
   -- Setup hover effects if provided
-  if config.hoverElements and AutoLFM.UI.RowList and AutoLFM.UI.RowList.SetupHover then
+  if config.hoverElements and TeronAutoLFM.UI.RowList and TeronAutoLFM.UI.RowList.SetupHover then
     local sliderElements = {}
     for i = 1, table.getn(config.hoverElements) do
       table.insert(sliderElements, config.hoverElements[i])
     end
     table.insert(sliderElements, editBox)
-    AutoLFM.UI.RowList.SetupHover(slider, config.parent, config.color and config.color.name or nil, sliderElements)
+    TeronAutoLFM.UI.RowList.SetupHover(slider, config.parent, config.color and config.color.name or nil, sliderElements)
 
     local editBoxElements = {}
     for i = 1, table.getn(config.hoverElements) do
       table.insert(editBoxElements, config.hoverElements[i])
     end
     table.insert(editBoxElements, editBox)
-    AutoLFM.UI.RowList.SetupHover(editBox, config.parent, config.color and config.color.name or nil, editBoxElements)
+    TeronAutoLFM.UI.RowList.SetupHover(editBox, config.parent, config.color and config.color.name or nil, editBoxElements)
   end
 
   -- Return control object with public methods

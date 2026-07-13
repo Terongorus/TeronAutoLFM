@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Settings UI
+-- TeronAutoLFM: Settings UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
-AutoLFM.UI.Content.Settings = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
+TeronAutoLFM.UI.Content.Settings = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -19,21 +19,21 @@ local isRestoringState = false  -- Flag to prevent OnClick during restoration
 --- Applies colors to filter checkboxes and labels
 --- @param scrollChild frame - The scroll child container frame
 local function applyColors(scrollChild)
-  if not scrollChild or not AutoLFM.Core.Utils or not AutoLFM.Core.Constants then return end
+  if not scrollChild or not TeronAutoLFM.Core.Utils or not TeronAutoLFM.Core.Constants then return end
 
   -- Color filter checkboxes from COLORS constant (priority 1-5 are dungeon filters)
-  for _, color in ipairs(AutoLFM.Core.Constants.COLORS) do
+  for _, color in ipairs(TeronAutoLFM.Core.Constants.COLORS) do
     if color.priority >= 1 and color.priority <= 5 then
       local checkbox = getglobal(scrollChild:GetName().."_FiltersContainer_Filter"..color.name)
       if checkbox then
-        AutoLFM.Core.Utils.SetCheckboxColorByName(checkbox, color.name)
+        TeronAutoLFM.Core.Utils.SetCheckboxColorByName(checkbox, color.name)
       end
     end
   end
 
   -- Color labels
-  AutoLFM.Core.Utils.SetTextColorByName(getglobal(scrollChild:GetName().."_DryRun_Label"), "YELLOW")
-  AutoLFM.Core.Utils.SetTextColorByName(getglobal(scrollChild:GetName().."_Debug_Label"), "ORANGE")
+  TeronAutoLFM.Core.Utils.SetTextColorByName(getglobal(scrollChild:GetName().."_DryRun_Label"), "YELLOW")
+  TeronAutoLFM.Core.Utils.SetTextColorByName(getglobal(scrollChild:GetName().."_Debug_Label"), "ORANGE")
 end
 
 --=============================================================================
@@ -108,23 +108,23 @@ end
 --=============================================================================
 --- XML OnLoad callback - initializes the Settings panel UI
 --- @param frame frame - The Settings panel frame
-function AutoLFM.UI.Content.Settings.OnLoad(frame)
+function TeronAutoLFM.UI.Content.Settings.OnLoad(frame)
   panel = frame
-  applyColors(AutoLFM.UI.RowList.GetScrollChild(panel))
-  AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
+  applyColors(TeronAutoLFM.UI.RowList.GetScrollChild(panel))
+  TeronAutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
 end
 
 --- XML OnShow callback - restores saved option states when panel is shown
 --- @param frame frame - The Settings panel frame
-function AutoLFM.UI.Content.Settings.OnShow(frame)
-  applyColors(AutoLFM.UI.RowList.GetScrollChild(panel))
-  AutoLFM.UI.Content.Settings.RestoreState()
+function TeronAutoLFM.UI.Content.Settings.OnShow(frame)
+  applyColors(TeronAutoLFM.UI.RowList.GetScrollChild(panel))
+  TeronAutoLFM.UI.Content.Settings.RestoreState()
 end
 
 --- Creates the default panel dropdown menu using WoW's native dropdown system
 --- Allows user to select which panel (Dungeons, Raids, Quests, Messaging, Presets) opens by default
-function AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+function TeronAutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   local placeholderFrame = getglobal(scrollChild:GetName().."_DefaultPanelContainer_DropdownPlaceholder")
   if not placeholderFrame then return end
 
@@ -147,10 +147,10 @@ function AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
 
               -- Save to persistent storage
               local internalName = string.lower(itemName)
-              AutoLFM.Core.Storage.SetDefaultPanel(internalName)
+              TeronAutoLFM.Core.Storage.SetDefaultPanel(internalName)
 
               -- Log the change
-              AutoLFM.Core.Utils.LogInfo("Set default panel to " .. itemName)
+              TeronAutoLFM.Core.Utils.LogInfo("Set default panel to " .. itemName)
           end
           info.checked = nil
           UIDropDownMenu_AddButton(info)
@@ -158,7 +158,7 @@ function AutoLFM.UI.Content.Settings.CreateDefaultPanelDropdown()
   end)
 
   -- Set initial value from saved setting
-  local defaultPanel = AutoLFM.Core.Storage.GetDefaultPanel()
+  local defaultPanel = TeronAutoLFM.Core.Storage.GetDefaultPanel()
   if not defaultPanel then
       defaultPanel = "dungeons"
   end
@@ -175,27 +175,27 @@ end
 --- Saves to persistent storage and refreshes dungeon list UI
 --- @param filterId string - Color filter ID (e.g., "GRAY", "GREEN", "YELLOW", "ORANGE", "RED")
 --- @param isEnabled boolean - New state of the filter (true = enabled, false = disabled)
-function AutoLFM.UI.Content.Settings.OnFilterToggle(filterId, isEnabled)
+function TeronAutoLFM.UI.Content.Settings.OnFilterToggle(filterId, isEnabled)
   if isRestoringState then return end
 
   -- Update local state in Logic layer
-  if AutoLFM.Logic.Content.Settings and AutoLFM.Logic.Content.Settings.SetDungeonFilter then
-      AutoLFM.Logic.Content.Settings.SetDungeonFilter(filterId, isEnabled)
+  if TeronAutoLFM.Logic.Content.Settings and TeronAutoLFM.Logic.Content.Settings.SetDungeonFilter then
+      TeronAutoLFM.Logic.Content.Settings.SetDungeonFilter(filterId, isEnabled)
   end
 
   -- Save to persistent storage
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetDungeonFilter then
-      AutoLFM.Core.Storage.SetDungeonFilter(filterId, isEnabled)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetDungeonFilter then
+      TeronAutoLFM.Core.Storage.SetDungeonFilter(filterId, isEnabled)
   end
 
   -- Clear dungeon cache to force rebuild with new filter
-  if AutoLFM.Logic.Content.Dungeons and AutoLFM.Logic.Content.Dungeons.ClearCache then
-      AutoLFM.Logic.Content.Dungeons.ClearCache()
+  if TeronAutoLFM.Logic.Content.Dungeons and TeronAutoLFM.Logic.Content.Dungeons.ClearCache then
+      TeronAutoLFM.Logic.Content.Dungeons.ClearCache()
   end
 
   -- Refresh dungeons UI if visible
-  if AutoLFM.UI.Content.Dungeons and AutoLFM.UI.Content.Dungeons.Refresh then
-      AutoLFM.UI.Content.Dungeons.Refresh()
+  if TeronAutoLFM.UI.Content.Dungeons and TeronAutoLFM.UI.Content.Dungeons.Refresh then
+      TeronAutoLFM.UI.Content.Dungeons.Refresh()
   end
 end
 
@@ -204,10 +204,10 @@ end
 --=============================================================================
 --- Handles minimap visibility radio button clicks (Show/Hide)
 --- @param isShow boolean - True to show minimap button, false to hide
-function AutoLFM.UI.Content.Settings.OnMinimapRadioClick(isShow)
+function TeronAutoLFM.UI.Content.Settings.OnMinimapRadioClick(isShow)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local radios = {
@@ -216,17 +216,17 @@ function AutoLFM.UI.Content.Settings.OnMinimapRadioClick(isShow)
   }
 
   handleRadioClick(radios, isShow, function(value)
-  if AutoLFM.Logic.Content.Settings then
-    AutoLFM.Logic.Content.Settings.ToggleMinimapVisibility(value)
+  if TeronAutoLFM.Logic.Content.Settings then
+    TeronAutoLFM.Logic.Content.Settings.ToggleMinimapVisibility(value)
   end
   end)
 end
 
 --- Handles minimap reset button click - resets minimap button to default position
-function AutoLFM.UI.Content.Settings.OnMinimapResetClick()
+function TeronAutoLFM.UI.Content.Settings.OnMinimapResetClick()
   -- Delegate to Logic layer
-  if AutoLFM.Logic.Content.Settings then
-      AutoLFM.Logic.Content.Settings.ResetMinimapPosition()
+  if TeronAutoLFM.Logic.Content.Settings then
+      TeronAutoLFM.Logic.Content.Settings.ResetMinimapPosition()
   end
 end
 
@@ -235,10 +235,10 @@ end
 --=============================================================================
 --- Handles dark mode radio button clicks (On/Off)
 --- @param isEnabled boolean - True to enable dark mode, false to disable
-function AutoLFM.UI.Content.Settings.OnDarkUIRadioClick(isEnabled)
+function TeronAutoLFM.UI.Content.Settings.OnDarkUIRadioClick(isEnabled)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local radios = {
@@ -247,14 +247,14 @@ function AutoLFM.UI.Content.Settings.OnDarkUIRadioClick(isEnabled)
   }
 
   handleRadioClick(radios, isEnabled, function(value)
-  if AutoLFM.Logic.Content.Settings then
-    AutoLFM.Logic.Content.Settings.ToggleDarkMode(value)
+  if TeronAutoLFM.Logic.Content.Settings then
+    TeronAutoLFM.Logic.Content.Settings.ToggleDarkMode(value)
   end
   end)
 end
 
 --- Handles reload button click - reloads the UI to apply dark mode changes
-function AutoLFM.UI.Content.Settings.OnDarkUIReloadClick()
+function TeronAutoLFM.UI.Content.Settings.OnDarkUIReloadClick()
   ReloadUI()
 end
 
@@ -263,10 +263,10 @@ end
 --=============================================================================
 --- Handles message mode radio button clicks (Details/Custom)
 --- @param mode string - "details" for details mode, "custom" for custom mode
-function AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick(mode)
+function TeronAutoLFM.UI.Content.Settings.OnMessagingModeRadioClick(mode)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local isDetails = (mode == "details")
@@ -277,9 +277,9 @@ function AutoLFM.UI.Content.Settings.OnMessagingModeRadioClick(mode)
 
   handleRadioClick(radios, isDetails, function(value)
   local isCustom = not value
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetCustomInput then
-    AutoLFM.Core.Storage.SetCustomInput(isCustom)
-    AutoLFM.Core.Utils.LogInfo("Set custom input mode to " .. tostring(isCustom))
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetCustomInput then
+    TeronAutoLFM.Core.Storage.SetCustomInput(isCustom)
+    TeronAutoLFM.Core.Utils.LogInfo("Set custom input mode to " .. tostring(isCustom))
   end
   end)
 end
@@ -289,10 +289,10 @@ end
 --=============================================================================
 --- Handles preview message lines radio button clicks (1 line / 2 lines)
 --- @param lines number - 1 for single line, 2 for two lines
-function AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(lines)
+function TeronAutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(lines)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local is1Line = (lines == 1)
@@ -303,14 +303,14 @@ function AutoLFM.UI.Content.Settings.OnPreviewLinesRadioClick(lines)
 
   handleRadioClick(radios, is1Line, function(value)
   local lineCount = value and 1 or 2
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetPreviewMessageLines then
-    AutoLFM.Core.Storage.SetPreviewMessageLines(lineCount)
-    AutoLFM.Core.Utils.LogInfo("Set preview message lines to " .. lineCount)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetPreviewMessageLines then
+    TeronAutoLFM.Core.Storage.SetPreviewMessageLines(lineCount)
+    TeronAutoLFM.Core.Utils.LogInfo("Set preview message lines to " .. lineCount)
 
     -- Update the message preview immediately
-    local currentMessage = AutoLFM.Core.Maestro.GetState("Message.ToBroadcast")
-    if AutoLFM.UI.MainFrame and AutoLFM.UI.MainFrame.UpdateMessagePreview and currentMessage then
-      AutoLFM.UI.MainFrame.UpdateMessagePreview(currentMessage)
+    local currentMessage = TeronAutoLFM.Core.Maestro.GetState("Message.ToBroadcast")
+    if TeronAutoLFM.UI.MainFrame and TeronAutoLFM.UI.MainFrame.UpdateMessagePreview and currentMessage then
+      TeronAutoLFM.UI.MainFrame.UpdateMessagePreview(currentMessage)
     end
   end
   end)
@@ -321,10 +321,10 @@ end
 --=============================================================================
 --- Handles presets view mode radio button clicks (Condensed/Full)
 --- @param isCondensed boolean - True for condensed view, false for full view
-function AutoLFM.UI.Content.Settings.OnPresetsRadioClick(isCondensed)
+function TeronAutoLFM.UI.Content.Settings.OnPresetsRadioClick(isCondensed)
   if isRestoringState then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local radios = {
@@ -333,8 +333,8 @@ function AutoLFM.UI.Content.Settings.OnPresetsRadioClick(isCondensed)
   }
 
   handleRadioClick(radios, isCondensed, function(value)
-  if AutoLFM.Logic.Content.Settings then
-    AutoLFM.Logic.Content.Settings.TogglePresetsCondensed(value)
+  if TeronAutoLFM.Logic.Content.Settings then
+    TeronAutoLFM.Logic.Content.Settings.TogglePresetsCondensed(value)
   end
   end)
 end
@@ -345,7 +345,7 @@ end
 --- Handles broadcast interval slider value changes
 --- Updates both the display label and saves the value to Broadcaster
 --- @param slider frame - The broadcast interval slider
-function AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderChanged(slider)
+function TeronAutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderChanged(slider)
   if isRestoringState then return end
 
   local value = math.floor(slider:GetValue())
@@ -358,19 +358,19 @@ function AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderChanged(slider)
   end
 
   -- Save to Broadcaster (which will save to persistent storage)
-  if AutoLFM.Logic and AutoLFM.Logic.Broadcaster and AutoLFM.Logic.Broadcaster.SetInterval then
-    AutoLFM.Logic.Broadcaster.SetInterval(value)
+  if TeronAutoLFM.Logic and TeronAutoLFM.Logic.Broadcaster and TeronAutoLFM.Logic.Broadcaster.SetInterval then
+    TeronAutoLFM.Logic.Broadcaster.SetInterval(value)
   end
 end
 
 --- Handles broadcast interval slider mousewheel scrolling
 --- @param slider frame - The broadcast interval slider
 --- @param delta number - Mouse wheel direction (positive = scroll up, negative = scroll down)
-function AutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderMouseWheel(slider, delta)
+function TeronAutoLFM.UI.Content.Settings.OnBroadcastIntervalSliderMouseWheel(slider, delta)
   local value = slider:GetValue()
   local step = delta > 0 and 10 or -10
-  local min = AutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL or 30
-  local max = AutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL or 120
+  local min = TeronAutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL or 30
+  local max = TeronAutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL or 120
   local newValue = math.max(min, math.min(max, value + step))
   slider:SetValue(newValue)
 end
@@ -380,42 +380,42 @@ end
 --=============================================================================
 --- Handles dry run checkbox toggle - enables/disables message simulation mode
 --- @param isEnabled boolean - True to enable dry run mode, false to disable
-function AutoLFM.UI.Content.Settings.OnDryRunToggle(isEnabled)
+function TeronAutoLFM.UI.Content.Settings.OnDryRunToggle(isEnabled)
   -- Delegate to Logic layer
-  if AutoLFM.Logic.Content.Settings then
-      AutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
+  if TeronAutoLFM.Logic.Content.Settings then
+      TeronAutoLFM.Logic.Content.Settings.ToggleDryRun(isEnabled)
   end
 end
 
 --- Handles debug window checkbox toggle - shows/hides the debug console
 --- @param isEnabled boolean - True to show debug window, false to hide
-function AutoLFM.UI.Content.Settings.OnDebugToggle(isEnabled)
+function TeronAutoLFM.UI.Content.Settings.OnDebugToggle(isEnabled)
   if isRestoringState then return end
 
   -- Call Debug window show/hide directly
-  if AutoLFM.Components.Debug then
+  if TeronAutoLFM.Components.Debug then
       if isEnabled then
-          AutoLFM.Components.Debug.Show()
+          TeronAutoLFM.Components.Debug.Show()
       else
-          AutoLFM.Components.Debug.Hide()
+          TeronAutoLFM.Components.Debug.Hide()
       end
   end
 end
 
 --- Syncs the debug checkbox with the actual debug window state
 --- Called after tab changes to ensure checkbox reflects if debug window is open
-function AutoLFM.UI.Content.Settings.SyncDebugCheckbox()
+function TeronAutoLFM.UI.Content.Settings.SyncDebugCheckbox()
   if not panel then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local debugCheckbox = getglobal(scrollChild:GetName().."_Debug")
   if debugCheckbox then
       -- Check if debug window is actually visible
       local isDebugWindowOpen = false
-      if AutoLFM.Components.Debug then
-          local debugFrame = getglobal("AutoLFM_DebugWindow")
+      if TeronAutoLFM.Components.Debug then
+          local debugFrame = getglobal("TeronAutoLFM_DebugWindow")
           if debugFrame and debugFrame:IsVisible() then
               isDebugWindowOpen = true
           end
@@ -430,10 +430,10 @@ end
 --- Updates a dungeon filter checkbox state (called by Logic layer)
 --- @param colorId string - Color filter ID to update
 --- @param isEnabled boolean - New state of the filter
-function AutoLFM.UI.Content.Settings.UpdateFilterCheckbox(colorId, isEnabled)
+function TeronAutoLFM.UI.Content.Settings.UpdateFilterCheckbox(colorId, isEnabled)
   if not panel then return end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if not scrollChild then return end
 
   local checkbox = getglobal(scrollChild:GetName().."_FiltersContainer_Filter"..colorId)
@@ -444,17 +444,17 @@ end
 
 --- Restores all option states from persistent storage
 --- Called when Settings panel is shown to sync UI with saved settings
-function AutoLFM.UI.Content.Settings.RestoreState()
+function TeronAutoLFM.UI.Content.Settings.RestoreState()
   if not panel then return end
 
   isRestoringState = true
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(panel)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
   if scrollChild then
       -- Build filter mapping from COLORS constant (priority 1-5)
       local filterMapping = {}
-      if AutoLFM.Core.Constants and AutoLFM.Core.Constants.COLORS then
-        for _, color in ipairs(AutoLFM.Core.Constants.COLORS) do
+      if TeronAutoLFM.Core.Constants and TeronAutoLFM.Core.Constants.COLORS then
+        for _, color in ipairs(TeronAutoLFM.Core.Constants.COLORS) do
           if color.priority >= 1 and color.priority <= 5 then
             filterMapping[color.name] = color.name
           end
@@ -462,30 +462,30 @@ function AutoLFM.UI.Content.Settings.RestoreState()
       end
 
       -- Restore dungeon filters using helper
-      restoreCheckboxes(scrollChild, "_FiltersContainer_Filter", filterMapping, AutoLFM.Core.Storage.GetDungeonFilters)
+      restoreCheckboxes(scrollChild, "_FiltersContainer_Filter", filterMapping, TeronAutoLFM.Core.Storage.GetDungeonFilters)
 
       -- Restore minimap visibility using helper
       restoreRadioPair(scrollChild, "_MinimapContainer_ShowRadio", "_MinimapContainer_HideRadio",
-          function() return not AutoLFM.Core.Storage.GetMinimapHidden() end)
+          function() return not TeronAutoLFM.Core.Storage.GetMinimapHidden() end)
 
       -- Restore DarkUI using helper
       restoreRadioPair(scrollChild, "_DarkUIContainer_OnRadio", "_DarkUIContainer_OffRadio",
-          AutoLFM.Core.Storage.GetDarkMode)
+          TeronAutoLFM.Core.Storage.GetDarkMode)
 
       -- Restore preview message lines using helper
       restoreRadioPair(scrollChild, "_PreviewLinesContainer_1LineRadio", "_PreviewLinesContainer_2LinesRadio",
-          function() return AutoLFM.Core.Storage.GetPreviewMessageLines() == 1 end)
+          function() return TeronAutoLFM.Core.Storage.GetPreviewMessageLines() == 1 end)
 
       -- Restore messaging view using helper
       restoreRadioPair(scrollChild, "_MessagingModeContainer_SimpleRadio", "_MessagingModeContainer_CustomRadio",
-          function() return not AutoLFM.Core.Storage.GetCustomInput() end)
+          function() return not TeronAutoLFM.Core.Storage.GetCustomInput() end)
 
       -- Restore presets condensed using helper
       restoreRadioPair(scrollChild, "_PresetsContainer_CondensedRadio", "_PresetsContainer_FullRadio",
-          AutoLFM.Core.Storage.GetPresetsCondensed)
+          TeronAutoLFM.Core.Storage.GetPresetsCondensed)
 
       -- Restore default panel dropdown
-      local defaultPanel = AutoLFM.Core.Storage.GetDefaultPanel()
+      local defaultPanel = TeronAutoLFM.Core.Storage.GetDefaultPanel()
       if defaultPanelDropdown and defaultPanel then
           -- Capitalize first letter for display
           local displayName = string.upper(string.sub(defaultPanel, 1, 1)) .. string.sub(defaultPanel, 2)
@@ -495,8 +495,8 @@ function AutoLFM.UI.Content.Settings.RestoreState()
 
       -- Restore broadcast interval slider
       local broadcastIntervalSlider = getglobal(scrollChild:GetName().."_BroadcastIntervalContainer_Slider")
-      if broadcastIntervalSlider and AutoLFM.Core.Maestro then
-        local interval = AutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
+      if broadcastIntervalSlider and TeronAutoLFM.Core.Maestro then
+        local interval = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
         broadcastIntervalSlider:SetValue(interval)
         local valueLabel = getglobal(scrollChild:GetName() .. "_BroadcastIntervalContainer_SliderValueFrame_Text")
         if valueLabel then
@@ -505,12 +505,12 @@ function AutoLFM.UI.Content.Settings.RestoreState()
       end
 
       -- Restore dry run
-      local dryRun = AutoLFM.Core.Storage.GetDryRun()
+      local dryRun = TeronAutoLFM.Core.Storage.GetDryRun()
       local dryRunCheckbox = getglobal(scrollChild:GetName().."_DryRun")
       if dryRunCheckbox then dryRunCheckbox:SetChecked(dryRun and 1 or nil) end
 
       -- Restore debug checkbox to reflect actual window state
-      AutoLFM.UI.Content.Settings.SyncDebugCheckbox()
+      TeronAutoLFM.UI.Content.Settings.SyncDebugCheckbox()
   end
 
   isRestoringState = false

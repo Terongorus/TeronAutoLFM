@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Utils
+-- TeronAutoLFM: Utils
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Utils = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Utils = {}
 
 --=============================================================================
 -- FORWARD DECLARATIONS
@@ -23,8 +23,8 @@ local function BuildColorLookupTable()
   if colorTableBuilt then return end
   colorTableBuilt = true
 
-  for i = 1, table.getn(AutoLFM.Core.Constants.COLORS) do
-    local color = AutoLFM.Core.Constants.COLORS[i]
+  for i = 1, table.getn(TeronAutoLFM.Core.Constants.COLORS) do
+    local color = TeronAutoLFM.Core.Constants.COLORS[i]
     COLORS_BY_NAME[color.name] = color
   end
 end
@@ -38,34 +38,34 @@ end
 --- @param applyFunc function - Function that takes (element, color) and applies the color
 local function applyColorToElement(element, colorName, applyFunc)
   if not element then return end
-  local color = AutoLFM.Core.Utils.GetColor(colorName)
+  local color = TeronAutoLFM.Core.Utils.GetColor(colorName)
   applyFunc(element, color)
 end
 
 --- Retrieves a color object by name from the color lookup table
 --- @param colorName string - The name of the color (e.g., "RED", "GREEN", "YELLOW")
 --- @return table - Color object with r, g, b, hex, name fields. Returns GRAY if color not found.
-function AutoLFM.Core.Utils.GetColor(colorName)
+function TeronAutoLFM.Core.Utils.GetColor(colorName)
   if type(colorName) == "string" and COLORS_BY_NAME[colorName] then
     return COLORS_BY_NAME[colorName]
   end
-  return COLORS_BY_NAME["GRAY"] or AutoLFM.Core.Constants.COLORS[5]
+  return COLORS_BY_NAME["GRAY"] or TeronAutoLFM.Core.Constants.COLORS[5]
 end
 
 --- Returns text wrapped in WoW color codes for chat display
 --- @param text string - The text to colorize
 --- @param colorName string - The name of the color to apply
 --- @return string - Text with color codes (|cFFHEXCODE...text...|r)
-function AutoLFM.Core.Utils.ColorText(text, colorName)
+function TeronAutoLFM.Core.Utils.ColorText(text, colorName)
   if not text then return "" end
-  local color = AutoLFM.Core.Utils.GetColor(colorName)
+  local color = TeronAutoLFM.Core.Utils.GetColor(colorName)
   return "|cFF" .. color.hex .. text .. "|r"
 end
 
 --- Sets text color for a UI element by color name
 --- @param element frame - The UI element (FontString) to colorize
 --- @param colorName string - The name of the color to apply
-function AutoLFM.Core.Utils.SetTextColorByName(element, colorName)
+function TeronAutoLFM.Core.Utils.SetTextColorByName(element, colorName)
   applyColorToElement(element, colorName, function(elem, color)
     elem:SetTextColor(color.r, color.g, color.b)
   end)
@@ -75,7 +75,7 @@ end
 --- @param texture texture - The texture object to colorize
 --- @param colorName string - The name of the color to apply
 --- @param alpha number - Optional alpha transparency (0.0-1.0), defaults to 1.0
-function AutoLFM.Core.Utils.SetVertexColorByName(texture, colorName, alpha)
+function TeronAutoLFM.Core.Utils.SetVertexColorByName(texture, colorName, alpha)
   applyColorToElement(texture, colorName, function(elem, color)
     elem:SetVertexColor(color.r, color.g, color.b, alpha or 1)
   end)
@@ -85,7 +85,7 @@ end
 --- @param checkbox frame - The checkbox button to colorize
 --- @param colorName string - The name of the color to apply
 --- @param alpha number - Optional alpha transparency (0.0-1.0), defaults to 1.0
-function AutoLFM.Core.Utils.SetCheckboxColorByName(checkbox, colorName, alpha)
+function TeronAutoLFM.Core.Utils.SetCheckboxColorByName(checkbox, colorName, alpha)
   applyColorToElement(checkbox, colorName, function(elem, color)
     alpha = alpha or 1
     local normalTex = elem:GetNormalTexture()
@@ -108,10 +108,10 @@ end
 --- @param minLevel number - Minimum level for the content
 --- @param maxLevel number - Maximum level for the content
 --- @return table - Color object (RED, ORANGE, YELLOW, GREEN, or GRAY)
-function AutoLFM.Core.Utils.GetColorForLevel(playerLevel, minLevel, maxLevel)
+function TeronAutoLFM.Core.Utils.GetColorForLevel(playerLevel, minLevel, maxLevel)
   -- Validation
   if not (playerLevel and minLevel and maxLevel and minLevel >= 1 and maxLevel >= minLevel) then
-    return AutoLFM.Core.Utils.GetColor("GRAY")
+    return TeronAutoLFM.Core.Utils.GetColor("GRAY")
   end
 
   -- Calculate level difference
@@ -119,16 +119,16 @@ function AutoLFM.Core.Utils.GetColorForLevel(playerLevel, minLevel, maxLevel)
   local diff = avgLevel - playerLevel
 
   -- Fixed thresholds for RED, ORANGE, YELLOW
-  if diff >= 5 then return AutoLFM.Core.Utils.GetColor("RED") end
-  if diff >= 3 then return AutoLFM.Core.Utils.GetColor("ORANGE") end
-  if diff >= -2 then return AutoLFM.Core.Utils.GetColor("YELLOW") end
+  if diff >= 5 then return TeronAutoLFM.Core.Utils.GetColor("RED") end
+  if diff >= 3 then return TeronAutoLFM.Core.Utils.GetColor("ORANGE") end
+  if diff >= -2 then return TeronAutoLFM.Core.Utils.GetColor("YELLOW") end
 
   -- Dynamic GREEN threshold based on player level
   local thresholdIndex = math.min(math.floor(playerLevel / 10) + 1, 5)
-  local greenThreshold = -(AutoLFM.Core.Constants.GREEN_DIFFICULTY_THRESHOLD_BY_LEVEL_BRACKET[thresholdIndex] or 8)
+  local greenThreshold = -(TeronAutoLFM.Core.Constants.GREEN_DIFFICULTY_THRESHOLD_BY_LEVEL_BRACKET[thresholdIndex] or 8)
 
-  if diff >= greenThreshold then return AutoLFM.Core.Utils.GetColor("GREEN") end
-  return AutoLFM.Core.Utils.GetColor("GRAY")
+  if diff >= greenThreshold then return TeronAutoLFM.Core.Utils.GetColor("GREEN") end
+  return TeronAutoLFM.Core.Utils.GetColor("GRAY")
 end
 
 --=============================================================================
@@ -140,9 +140,9 @@ end
 local function printToChat(message, colorHex)
   if message then
       if colorHex then
-          DEFAULT_CHAT_FRAME:AddMessage(AutoLFM.Core.Constants.CHAT_PREFIX .. " |cff" .. colorHex .. message .. "|r")
+          DEFAULT_CHAT_FRAME:AddMessage(TeronAutoLFM.Core.Constants.CHAT_PREFIX .. " |cff" .. colorHex .. message .. "|r")
       else
-          DEFAULT_CHAT_FRAME:AddMessage(AutoLFM.Core.Constants.CHAT_PREFIX .. " " .. message)
+          DEFAULT_CHAT_FRAME:AddMessage(TeronAutoLFM.Core.Constants.CHAT_PREFIX .. " " .. message)
       end
   end
 end
@@ -153,7 +153,7 @@ end
 local function CreatePrintFunction(colorName)
   if colorName then
       return function(message)
-          local color = AutoLFM.Core.Utils.GetColor(colorName)
+          local color = TeronAutoLFM.Core.Utils.GetColor(colorName)
           printToChat(message, color and color.hex)
       end
   else
@@ -165,27 +165,27 @@ end
 
 --- Prints message to chat with addon prefix
 --- @param message string - The message to print
-AutoLFM.Core.Utils.Print = CreatePrintFunction()
+TeronAutoLFM.Core.Utils.Print = CreatePrintFunction()
 
 --- Prints error message to chat in red with addon prefix
 --- @param message string - The error message to print
-AutoLFM.Core.Utils.PrintError = CreatePrintFunction("RED")
+TeronAutoLFM.Core.Utils.PrintError = CreatePrintFunction("RED")
 
 --- Prints success message to chat in green with addon prefix
 --- @param message string - The success message to print
-AutoLFM.Core.Utils.PrintSuccess = CreatePrintFunction("GREEN")
+TeronAutoLFM.Core.Utils.PrintSuccess = CreatePrintFunction("GREEN")
 
 --- Prints title message to chat in cyan with addon prefix
 --- @param message string - The title message to print
-AutoLFM.Core.Utils.PrintTitle = CreatePrintFunction("BLUE")
+TeronAutoLFM.Core.Utils.PrintTitle = CreatePrintFunction("BLUE")
 
 --- Prints info message to chat in gray with addon prefix
 --- @param message string - The info message to print
-AutoLFM.Core.Utils.PrintInfo = CreatePrintFunction("GRAY")
+TeronAutoLFM.Core.Utils.PrintInfo = CreatePrintFunction("GRAY")
 
 --- Prints warning message to chat in orange with addon prefix
 --- @param message string - The warning message to print
-AutoLFM.Core.Utils.PrintWarning = CreatePrintFunction("ORANGE")
+TeronAutoLFM.Core.Utils.PrintWarning = CreatePrintFunction("ORANGE")
 
 --=============================================================================
 -- DEBUG WINDOW LOGGING FUNCTIONS
@@ -195,43 +195,43 @@ AutoLFM.Core.Utils.PrintWarning = CreatePrintFunction("ORANGE")
 --- @return function - Function that logs messages to the debug window
 local function CreateLogFunction(methodName)
   return function(message, id, ...)
-      if AutoLFM.Components.Debug and AutoLFM.Components.Debug[methodName] then
-          AutoLFM.Components.Debug[methodName](message, id, unpack(arg))
+      if TeronAutoLFM.Components.Debug and TeronAutoLFM.Components.Debug[methodName] then
+          TeronAutoLFM.Components.Debug[methodName](message, id, unpack(arg))
       end
   end
 end
 
 --- Logs info message to debug window (white)
 --- @param message string - The info message to log
-AutoLFM.Core.Utils.LogInfo = CreateLogFunction("LogInfo")
+TeronAutoLFM.Core.Utils.LogInfo = CreateLogFunction("LogInfo")
 
 --- Logs action message to debug window (purple)
 --- @param message string - The action message to log
-AutoLFM.Core.Utils.LogAction = CreateLogFunction("LogAction")
+TeronAutoLFM.Core.Utils.LogAction = CreateLogFunction("LogAction")
 
 --- Logs error message to debug window (red)
 --- @param message string - The error message to log
-AutoLFM.Core.Utils.LogError = CreateLogFunction("LogError")
+TeronAutoLFM.Core.Utils.LogError = CreateLogFunction("LogError")
 
 --- Logs event message to debug window (green)
 --- @param message string - The event message to log
-AutoLFM.Core.Utils.LogEvent = CreateLogFunction("LogEvent")
+TeronAutoLFM.Core.Utils.LogEvent = CreateLogFunction("LogEvent")
 
 --- Logs command message to debug window (blue)
 --- @param message string - The command message to log
-AutoLFM.Core.Utils.LogCommand = CreateLogFunction("LogCommand")
+TeronAutoLFM.Core.Utils.LogCommand = CreateLogFunction("LogCommand")
 
 --- Logs warning message to debug window (orange)
 --- @param message string - The warning message to log
-AutoLFM.Core.Utils.LogWarning = CreateLogFunction("LogWarning")
+TeronAutoLFM.Core.Utils.LogWarning = CreateLogFunction("LogWarning")
 
 --- Logs state registration to debug window (green)
 --- @param message string - The state registration message to log
-AutoLFM.Core.Utils.LogState = CreateLogFunction("LogState")
+TeronAutoLFM.Core.Utils.LogState = CreateLogFunction("LogState")
 
 --- Logs initialization to debug window (yellow)
 --- @param message string - The initialization message to log
-AutoLFM.Core.Utils.LogInit = CreateLogFunction("LogInit")
+TeronAutoLFM.Core.Utils.LogInit = CreateLogFunction("LogInit")
 
 --=============================================================================
 -- STRING UTILITIES
@@ -239,7 +239,7 @@ AutoLFM.Core.Utils.LogInit = CreateLogFunction("LogInit")
 --- Trims whitespace from both ends of a string
 --- @param text string - Text to trim
 --- @return string - Trimmed text
-function AutoLFM.Core.Utils.Trim(text)
+function TeronAutoLFM.Core.Utils.Trim(text)
   if not text then return "" end
   return string.gsub(text, "^%s*(.-)%s*$", "%1")
 end
@@ -248,7 +248,7 @@ end
 --- This prevents users from accidentally (or maliciously) injecting regex patterns
 --- @param text string - Text to escape
 --- @return string - Escaped text safe for pattern matching
-function AutoLFM.Core.Utils.EscapePattern(text)
+function TeronAutoLFM.Core.Utils.EscapePattern(text)
   if not text then return "" end
   -- Escape all Lua pattern magic characters: ^$()%.[]*+-?
   return string.gsub(text, "([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
@@ -260,7 +260,7 @@ end
 --- Checks if a table is nil or empty
 --- @param tbl table - The table to check
 --- @return boolean - True if the table is nil or empty
-function AutoLFM.Core.Utils.IsEmpty(tbl)
+function TeronAutoLFM.Core.Utils.IsEmpty(tbl)
   return not tbl or table.getn(tbl) == 0
 end
 
@@ -268,7 +268,7 @@ end
 --- @param array table - The array to search
 --- @param value any - The value to find
 --- @return boolean - True if the value is in the array
-function AutoLFM.Core.Utils.ArrayContains(array, value)
+function TeronAutoLFM.Core.Utils.ArrayContains(array, value)
   if not array then return false end
   for i = 1, table.getn(array) do
     if array[i] == value then
@@ -281,7 +281,7 @@ end
 --- Creates a shallow copy of an array
 --- @param array table - The source array
 --- @return table - New array with same values
-function AutoLFM.Core.Utils.ShallowCopy(array)
+function TeronAutoLFM.Core.Utils.ShallowCopy(array)
   if not array then return {} end
   local copy = {}
   for i = 1, table.getn(array) do
@@ -294,7 +294,7 @@ end
 --- @param array table - The source array
 --- @param value any - The value to remove
 --- @return table - New array without the specified value
-function AutoLFM.Core.Utils.RemoveFromArray(array, value)
+function TeronAutoLFM.Core.Utils.RemoveFromArray(array, value)
   if not array then return {} end
   local newArray = {}
   for i = 1, table.getn(array) do
@@ -311,7 +311,7 @@ end
 --- Determines group type based on group size
 --- @param size number - The group size (1-40)
 --- @return string - "solo" (size 1), "party" (2-5), or "raid" (6+)
-function AutoLFM.Core.Utils.GetGroupTypeFromSize(size)
+function TeronAutoLFM.Core.Utils.GetGroupTypeFromSize(size)
   if size > 5 then return "raid" end
   if size == 1 then return "solo" end
   return "party"
@@ -323,38 +323,38 @@ end
 --- Finds a dungeon's index by its name using O(1) lookup table
 --- @param name string - The dungeon name to search for
 --- @return number|nil - The dungeon index (1-based), or nil if not found
-function AutoLFM.Core.Utils.GetDungeonIndexByName(name)
+function TeronAutoLFM.Core.Utils.GetDungeonIndexByName(name)
   BuildLookupTables()
   if not name or type(name) ~= "string" then return nil end
-  local info = AutoLFM.Core.Constants.DUNGEONS_BY_NAME[name]
+  local info = TeronAutoLFM.Core.Constants.DUNGEONS_BY_NAME[name]
   return info and info.index
 end
 
 --- Finds a dungeon's name by its index
 --- @param index number - The dungeon index (1-based)
 --- @return string|nil - The dungeon name, or nil if index is invalid
-function AutoLFM.Core.Utils.GetDungeonNameByIndex(index)
+function TeronAutoLFM.Core.Utils.GetDungeonNameByIndex(index)
   if not index or type(index) ~= "number" then return nil end
-  local dungeon = AutoLFM.Core.Constants.DUNGEONS[index]
+  local dungeon = TeronAutoLFM.Core.Constants.DUNGEONS[index]
   return dungeon and dungeon.name
 end
 
 --- Finds a raid's index by its name using O(1) lookup table
 --- @param name string - The raid name to search for
 --- @return number|nil - The raid index (1-based), or nil if not found
-function AutoLFM.Core.Utils.GetRaidIndexByName(name)
+function TeronAutoLFM.Core.Utils.GetRaidIndexByName(name)
   BuildLookupTables()
   if not name or type(name) ~= "string" then return nil end
-  local info = AutoLFM.Core.Constants.RAIDS_BY_NAME[name]
+  local info = TeronAutoLFM.Core.Constants.RAIDS_BY_NAME[name]
   return info and info.index
 end
 
 --- Finds a raid's name by its index
 --- @param index number - The raid index (1-based)
 --- @return string|nil - The raid name, or nil if index is invalid
-function AutoLFM.Core.Utils.GetRaidNameByIndex(index)
+function TeronAutoLFM.Core.Utils.GetRaidNameByIndex(index)
   if not index or type(index) ~= "number" then return nil end
-  local raid = AutoLFM.Core.Constants.RAIDS[index]
+  local raid = TeronAutoLFM.Core.Constants.RAIDS[index]
   return raid and raid.name
 end
 
@@ -410,7 +410,7 @@ local function iterativeFit(text, maxWidth, fontString)
 
   -- Try to break at word boundary if reasonable (uses WORD_BREAK_THRESHOLD)
   local breakPos = FindWordBreak(result, string.len(result))
-  local threshold = AutoLFM.Core.Constants.WORD_BREAK_THRESHOLD or 0.7
+  local threshold = TeronAutoLFM.Core.Constants.WORD_BREAK_THRESHOLD or 0.7
   if breakPos > string.len(result) * threshold then
     result = string.sub(result, 1, breakPos)
   end
@@ -492,7 +492,7 @@ end
 --- @param ellipsis string - String to append when truncated (default "...")
 --- @param maxLines number - Maximum number of lines (1 or 2, default 2)
 --- @return string, boolean - Truncated text (with newline if 2 lines) and whether it was truncated
-function AutoLFM.Core.Utils.TruncateByWidth(text, maxWidth, fontString, ellipsis, maxLines)
+function TeronAutoLFM.Core.Utils.TruncateByWidth(text, maxWidth, fontString, ellipsis, maxLines)
   if not text then return "", false end
   if not fontString then return text, false end
   if not maxWidth or maxWidth <= 0 then return text, false end
@@ -528,32 +528,32 @@ BuildLookupTables = function()
   lookupTablesBuilt = true
 
   -- Build dungeon lookup table and calculate count dynamically
-  local dungeonCount = table.getn(AutoLFM.Core.Constants.DUNGEONS)
+  local dungeonCount = table.getn(TeronAutoLFM.Core.Constants.DUNGEONS)
   for i = 1, dungeonCount do
-    local dungeon = AutoLFM.Core.Constants.DUNGEONS[i]
-    AutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeon.name] = {
+    local dungeon = TeronAutoLFM.Core.Constants.DUNGEONS[i]
+    TeronAutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeon.name] = {
       index = i,
       data = dungeon
     }
   end
   -- Update count dynamically (replaces hardcoded value)
-  AutoLFM.Core.Constants.DUNGEONS_COUNT = dungeonCount
+  TeronAutoLFM.Core.Constants.DUNGEONS_COUNT = dungeonCount
 
   -- Build raid lookup table and calculate count dynamically
-  local raidCount = table.getn(AutoLFM.Core.Constants.RAIDS)
+  local raidCount = table.getn(TeronAutoLFM.Core.Constants.RAIDS)
   for i = 1, raidCount do
-    local raid = AutoLFM.Core.Constants.RAIDS[i]
-    AutoLFM.Core.Constants.RAIDS_BY_NAME[raid.name] = {
+    local raid = TeronAutoLFM.Core.Constants.RAIDS[i]
+    TeronAutoLFM.Core.Constants.RAIDS_BY_NAME[raid.name] = {
       index = i,
       data = raid
     }
   end
   -- Update count dynamically (replaces hardcoded value)
-  AutoLFM.Core.Constants.RAIDS_COUNT = raidCount
+  TeronAutoLFM.Core.Constants.RAIDS_COUNT = raidCount
 end
 
 --- Public function to ensure lookup tables are built (for external modules)
-function AutoLFM.Core.Utils.EnsureLookupTables()
+function TeronAutoLFM.Core.Utils.EnsureLookupTables()
   BuildLookupTables()
 end
 
@@ -563,8 +563,8 @@ end
 --- Validates that all critical states and events are registered
 --- Called after initialization to ensure system integrity
 --- @return boolean, string - true if valid, false + error message if not
-function AutoLFM.Core.Utils.ValidateInitialization()
-  local maestro = AutoLFM.Core.Maestro
+function TeronAutoLFM.Core.Utils.ValidateInitialization()
+  local maestro = TeronAutoLFM.Core.Maestro
 
   -- Check critical states exist
   local criticalStates = {
@@ -600,7 +600,7 @@ function AutoLFM.Core.Utils.ValidateInitialization()
 
   -- Would check events if we had access to events registry
   -- For now, just log validation result
-  AutoLFM.Core.Utils.LogInfo("Initialization validation passed - all critical states registered")
+  TeronAutoLFM.Core.Utils.LogInfo("Initialization validation passed - all critical states registered")
   return true, ""
 end
 
@@ -610,4 +610,4 @@ end
 -- Build color lookup table immediately (before any other module loads)
 BuildColorLookupTable()
 
-AutoLFM.Core.SafeRegisterInit("Core.Utils", function() end, { id = "I04" })
+TeronAutoLFM.Core.SafeRegisterInit("Core.Utils", function() end, { id = "I04" })

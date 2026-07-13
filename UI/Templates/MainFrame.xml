@@ -1,8 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
   <!--==========================================================================
-    AutoLFM Main Frame
+    TeronAutoLFM Main Frame
     ==========================================================================-->
-  <Frame name="AutoLFM_MainFrame" parent="UIParent" enableMouse="true" hidden="true" toplevel="true" movable="true">
+  <Frame name="TeronAutoLFM_MainFrame" parent="UIParent" enableMouse="true" hidden="true" toplevel="true" movable="true">
     <Size>
       <AbsDimension x="384" y="512"/>
     </Size>
@@ -15,7 +15,7 @@
     </Anchors>
     <Layers>
       <Layer level="BACKGROUND">
-        <Texture file="Interface\AddOns\AutoLFM\UI\Textures\ContentBackground">
+        <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\ContentBackground">
           <Size>
             <AbsDimension x="512" y="256"/>
           </Size>
@@ -29,7 +29,7 @@
         </Texture>
       </Layer>
       <Layer level="ARTWORK">
-        <Texture file="Interface\AddOns\AutoLFM\UI\Textures\MainFrame">
+        <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\MainFrame">
           <Size>
             <AbsDimension x="512" y="512"/>
           </Size>
@@ -39,7 +39,7 @@
         </Texture>
       </Layer>
       <Layer level="OVERLAY">
-        <Texture name="$parent_Icon" file="Interface\AddOns\AutoLFM\UI\Textures\Eye\Eye00">
+        <Texture name="$parent_Icon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Eye\Eye00">
           <Size>
             <AbsDimension x="64" y="64"/>
           </Size>
@@ -51,7 +51,7 @@
             </Anchor>
           </Anchors>
         </Texture>
-        <FontString inherits="GameFontNormal" text="AutoLFM">
+        <FontString inherits="GameFontNormal" text="TeronAutoLFM">
           <Anchors>
             <Anchor point="TOP">
               <Offset>
@@ -73,7 +73,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnCloseButtonClick()
+            TeronAutoLFM.UI.MainFrame.OnCloseButtonClick()
           </OnClick>
         </Scripts>
       </Button>
@@ -93,7 +93,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture name="$parent_Background" file="Interface\AddOns\AutoLFM\UI\Textures\RolesBackground">
+            <Texture name="$parent_Background" file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesBackground">
               <TexCoords left="0.2968" right="0.5937" top="0" bottom="0.5937"/>
               <Size>
                 <AbsDimension x="84" y="84"/>
@@ -108,7 +108,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\RolesTank">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesTank">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -116,13 +116,13 @@
             </Texture>
           </Layer>
         </Layers>
-        <HighlightTexture file="Interface\AddOns\AutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
+        <HighlightTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.InitRoleButton(this)
+            TeronAutoLFM.UI.MainFrame.InitRoleButton(this)
           </OnLoad>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleButtonClick(this)
+            TeronAutoLFM.UI.MainFrame.OnRoleButtonClick(this)
           </OnClick>
         </Scripts>
       </Button>
@@ -139,7 +139,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "TANK")
+            TeronAutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "TANK")
           </OnClick>
         </Scripts>
       </CheckButton>
@@ -156,7 +156,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture name="$parent_Background" file="Interface\AddOns\AutoLFM\UI\Textures\RolesBackground">
+            <Texture name="$parent_Background" file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesBackground">
               <TexCoords left="0" right="0.2968" top="0" bottom="0.5937"/>
               <Size>
                 <AbsDimension x="84" y="84"/>
@@ -171,7 +171,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\RolesHeal">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesHeal">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -179,13 +179,13 @@
             </Texture>
           </Layer>
         </Layers>
-        <HighlightTexture file="Interface\AddOns\AutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
+        <HighlightTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.InitRoleButton(this)
+            TeronAutoLFM.UI.MainFrame.InitRoleButton(this)
           </OnLoad>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleButtonClick(this)
+            TeronAutoLFM.UI.MainFrame.OnRoleButtonClick(this)
           </OnClick>
         </Scripts>
       </Button>
@@ -202,7 +202,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "HEAL")
+            TeronAutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "HEAL")
           </OnClick>
         </Scripts>
       </CheckButton>
@@ -219,7 +219,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture name="$parent_Background" file="Interface\AddOns\AutoLFM\UI\Textures\RolesBackground">
+            <Texture name="$parent_Background" file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesBackground">
               <TexCoords left="0.5937" right="0.8906" top="0" bottom="0.5937"/>
               <Size>
                 <AbsDimension x="84" y="84"/>
@@ -234,7 +234,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\RolesDps">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesDps">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -242,13 +242,13 @@
             </Texture>
           </Layer>
         </Layers>
-        <HighlightTexture file="Interface\AddOns\AutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
+        <HighlightTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\RolesHighlight" alphaMode="ADD"/>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.InitRoleButton(this)
+            TeronAutoLFM.UI.MainFrame.InitRoleButton(this)
           </OnLoad>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleButtonClick(this)
+            TeronAutoLFM.UI.MainFrame.OnRoleButtonClick(this)
           </OnClick>
         </Scripts>
       </Button>
@@ -265,7 +265,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "DPS")
+            TeronAutoLFM.UI.MainFrame.OnRoleCheckboxClick(this, "DPS")
           </OnClick>
         </Scripts>
       </CheckButton>
@@ -311,17 +311,17 @@
                 </Offset>
               </Anchor>
             </Anchors>
-            <NormalTexture file="Interface\AddOns\AutoLFM\UI\Textures\Preview"/>
-            <HighlightTexture file="Interface\AddOns\AutoLFM\UI\Textures\Preview" alphaMode="ADD"/>
+            <NormalTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Preview"/>
+            <HighlightTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Preview" alphaMode="ADD"/>
             <Scripts>
               <OnClick>
-                AutoLFM.UI.MainFrame.ShowFullPreview()
+                TeronAutoLFM.UI.MainFrame.ShowFullPreview()
               </OnClick>
               <OnEnter>
-                AutoLFM.UI.MainFrame.OnPreviewButtonEnter(this)
+                TeronAutoLFM.UI.MainFrame.OnPreviewButtonEnter(this)
               </OnEnter>
               <OnLeave>
-                AutoLFM.UI.MainFrame.HideTooltip()
+                TeronAutoLFM.UI.MainFrame.HideTooltip()
               </OnLeave>
             </Scripts>
           </Button>
@@ -343,10 +343,10 @@
         </Anchors>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.OnMainButtonLoad(this)
+            TeronAutoLFM.UI.MainFrame.OnMainButtonLoad(this)
           </OnLoad>
           <OnClick>
-            AutoLFM.UI.MainFrame.OnMainButtonClick()
+            TeronAutoLFM.UI.MainFrame.OnMainButtonClick()
           </OnClick>
         </Scripts>
       </Button>
@@ -382,7 +382,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabActive">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabActive">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -390,7 +390,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
               <Size>
                 <AbsDimension x="80" y="24"/>
               </Size>
@@ -410,13 +410,13 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectBottomTab(1, "Dungeons")
+            TeronAutoLFM.Logic.MainFrame.SelectBottomTab(1, "Dungeons")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.OnBottomTabEnter(1)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabEnter(1)
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.OnBottomTabLeave(1)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabLeave(1)
           </OnLeave>
         </Scripts>
       </Button>
@@ -434,7 +434,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabInactive">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabInactive">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -442,7 +442,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
               <Size>
                 <AbsDimension x="80" y="24"/>
               </Size>
@@ -462,13 +462,13 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectBottomTab(2, "Raids")
+            TeronAutoLFM.Logic.MainFrame.SelectBottomTab(2, "Raids")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.OnBottomTabEnter(2)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabEnter(2)
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.OnBottomTabLeave(2)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabLeave(2)
           </OnLeave>
         </Scripts>
       </Button>
@@ -486,7 +486,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabInactive">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabInactive">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -494,7 +494,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
               <Size>
                 <AbsDimension x="80" y="24"/>
               </Size>
@@ -514,13 +514,13 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectBottomTab(3, "Quests")
+            TeronAutoLFM.Logic.MainFrame.SelectBottomTab(3, "Quests")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.OnBottomTabEnter(3)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabEnter(3)
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.OnBottomTabLeave(3)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabLeave(3)
           </OnLeave>
         </Scripts>
       </Button>
@@ -538,7 +538,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabInactive">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabInactive">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -546,7 +546,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\BottomTabHighlight" hidden="true">
               <Size>
                 <AbsDimension x="80" y="24"/>
               </Size>
@@ -566,13 +566,13 @@
         </Layers>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectBottomTab(4, "Messaging")
+            TeronAutoLFM.Logic.MainFrame.SelectBottomTab(4, "Messaging")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.OnBottomTabEnter(4)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabEnter(4)
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.OnBottomTabLeave(4)
+            TeronAutoLFM.UI.MainFrame.OnBottomTabLeave(4)
           </OnLeave>
         </Scripts>
       </Button>
@@ -593,7 +593,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTab">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTab">
               <Size>
                 <AbsDimension x="64" y="64"/>
               </Size>
@@ -607,7 +607,7 @@
             </Texture>
           </Layer>
           <Layer level="OVERLAY">
-            <Texture name="$parent_Icon" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\ClearAll">
+            <Texture name="$parent_Icon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\ClearAll">
               <Size>
                 <AbsDimension x="32" y="32"/>
               </Size>
@@ -617,13 +617,13 @@
             </Texture>
           </Layer>
           <Layer level="HIGHLIGHT">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
               </Anchors>
             </Texture>
-            <Texture name="$parent_Click" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabClick" hidden="true">
+            <Texture name="$parent_Click" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabClick" hidden="true">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -634,24 +634,24 @@
         <NormalTexture/>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.UpdateClearAllButton()
+            TeronAutoLFM.UI.MainFrame.UpdateClearAllButton()
           </OnLoad>
           <OnClick>
-            AutoLFM.Core.Maestro.Dispatch("Selection.ClearAll")
+            TeronAutoLFM.Core.Maestro.Dispatch("Selection.ClearAll")
           </OnClick>
           <OnMouseDown>
-            AutoLFM.UI.MainFrame.ShowClickEffect(this)
+            TeronAutoLFM.UI.MainFrame.ShowClickEffect(this)
           </OnMouseDown>
           <OnMouseUp>
-            AutoLFM.UI.MainFrame.HideClickEffect(this)
+            TeronAutoLFM.UI.MainFrame.HideClickEffect(this)
           </OnMouseUp>
           <OnEnter>
             if this:IsEnabled() then
-              AutoLFM.UI.MainFrame.ShowTooltip(this, "Clear all")
+              TeronAutoLFM.UI.MainFrame.ShowTooltip(this, "Clear all")
             end
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.HideTooltip()
+            TeronAutoLFM.UI.MainFrame.HideTooltip()
           </OnLeave>
         </Scripts>
       </Button>
@@ -669,7 +669,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTab">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTab">
               <Size>
                 <AbsDimension x="64" y="64"/>
               </Size>
@@ -683,7 +683,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\Presets">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\Presets">
               <Size>
                 <AbsDimension x="32" y="32"/>
               </Size>
@@ -693,7 +693,7 @@
             </Texture>
           </Layer>
           <Layer level="HIGHLIGHT">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -702,17 +702,17 @@
           </Layer>
         </Layers>
         <NormalTexture/>
-        <PushedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabClick"/>
-        <CheckedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
+        <PushedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabClick"/>
+        <CheckedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectSideTab(2, "Presets")
+            TeronAutoLFM.Logic.MainFrame.SelectSideTab(2, "Presets")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.ShowTooltip(this, "Show presets")
+            TeronAutoLFM.UI.MainFrame.ShowTooltip(this, "Show presets")
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.HideTooltip()
+            TeronAutoLFM.UI.MainFrame.HideTooltip()
           </OnLeave>
         </Scripts>
       </CheckButton>
@@ -730,7 +730,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTab">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTab">
               <Size>
                 <AbsDimension x="64" y="64"/>
               </Size>
@@ -744,7 +744,7 @@
             </Texture>
           </Layer>
           <Layer level="OVERLAY">
-            <Texture name="$parent_Icon" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\AddPreset">
+            <Texture name="$parent_Icon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\AddPreset">
               <Size>
                 <AbsDimension x="32" y="32"/>
               </Size>
@@ -754,13 +754,13 @@
             </Texture>
           </Layer>
           <Layer level="HIGHLIGHT">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
               </Anchors>
             </Texture>
-            <Texture name="$parent_Click" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabClick" hidden="true">
+            <Texture name="$parent_Click" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabClick" hidden="true">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -771,26 +771,26 @@
         <NormalTexture/>
         <Scripts>
           <OnLoad>
-            AutoLFM.UI.MainFrame.UpdateAddPresetButton()
+            TeronAutoLFM.UI.MainFrame.UpdateAddPresetButton()
           </OnLoad>
           <OnClick>
-            if AutoLFM.UI.Content.Presets and AutoLFM.UI.Content.Presets.ShowSavePopup then
-              AutoLFM.UI.Content.Presets.ShowSavePopup()
+            if TeronAutoLFM.UI.Content.Presets and TeronAutoLFM.UI.Content.Presets.ShowSavePopup then
+              TeronAutoLFM.UI.Content.Presets.ShowSavePopup()
             end
           </OnClick>
           <OnMouseDown>
-            AutoLFM.UI.MainFrame.ShowClickEffect(this)
+            TeronAutoLFM.UI.MainFrame.ShowClickEffect(this)
           </OnMouseDown>
           <OnMouseUp>
-            AutoLFM.UI.MainFrame.HideClickEffect(this)
+            TeronAutoLFM.UI.MainFrame.HideClickEffect(this)
           </OnMouseUp>
           <OnEnter>
             if this:IsEnabled() then
-              AutoLFM.UI.MainFrame.ShowTooltip(this, "Save current preset")
+              TeronAutoLFM.UI.MainFrame.ShowTooltip(this, "Save current preset")
             end
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.HideTooltip()
+            TeronAutoLFM.UI.MainFrame.HideTooltip()
           </OnLeave>
         </Scripts>
       </Button>
@@ -808,7 +808,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTab">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTab">
               <Size>
                 <AbsDimension x="64" y="64"/>
               </Size>
@@ -822,7 +822,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\AutoInvite">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\AutoInvite">
               <Size>
                 <AbsDimension x="32" y="32"/>
               </Size>
@@ -832,7 +832,7 @@
             </Texture>
           </Layer>
           <Layer level="HIGHLIGHT">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -841,17 +841,17 @@
           </Layer>
         </Layers>
         <NormalTexture/>
-        <PushedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabClick"/>
-        <CheckedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
+        <PushedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabClick"/>
+        <CheckedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectSideTab(4, "AutoInvite")
+            TeronAutoLFM.Logic.MainFrame.SelectSideTab(4, "AutoInvite")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.ShowTooltip(this, "AutoInvite")
+            TeronAutoLFM.UI.MainFrame.ShowTooltip(this, "AutoInvite")
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.HideTooltip()
+            TeronAutoLFM.UI.MainFrame.HideTooltip()
           </OnLeave>
         </Scripts>
       </CheckButton>
@@ -869,7 +869,7 @@
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTab">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTab">
               <Size>
                 <AbsDimension x="64" y="64"/>
               </Size>
@@ -883,7 +883,7 @@
             </Texture>
           </Layer>
           <Layer level="BORDER">
-            <Texture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\Settings">
+            <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\Settings">
               <Size>
                 <AbsDimension x="32" y="32"/>
               </Size>
@@ -893,7 +893,7 @@
             </Texture>
           </Layer>
           <Layer level="HIGHLIGHT">
-            <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
+            <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabHighlight" alphaMode="ADD">
               <Anchors>
                 <Anchor point="TOPLEFT"/>
                 <Anchor point="BOTTOMRIGHT"/>
@@ -902,17 +902,17 @@
           </Layer>
         </Layers>
         <NormalTexture/>
-        <PushedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabClick"/>
-        <CheckedTexture file="Interface\AddOns\AutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
+        <PushedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabClick"/>
+        <CheckedTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\Tabs\SideTabActive" alphaMode="ADD"/>
         <Scripts>
           <OnClick>
-            AutoLFM.Logic.MainFrame.SelectSideTab(5, "Settings")
+            TeronAutoLFM.Logic.MainFrame.SelectSideTab(5, "Settings")
           </OnClick>
           <OnEnter>
-            AutoLFM.UI.MainFrame.ShowTooltip(this, "Settings")
+            TeronAutoLFM.UI.MainFrame.ShowTooltip(this, "Settings")
           </OnEnter>
           <OnLeave>
-            AutoLFM.UI.MainFrame.HideTooltip()
+            TeronAutoLFM.UI.MainFrame.HideTooltip()
           </OnLeave>
         </Scripts>
       </CheckButton>
@@ -920,20 +920,20 @@
     <!-- Event Handlers -->
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.MainFrame.OnLoad(this)
+        TeronAutoLFM.UI.MainFrame.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.MainFrame.OnShow(this)
+        TeronAutoLFM.UI.MainFrame.OnShow(this)
       </OnShow>
       <OnHide>
-        AutoLFM.UI.MainFrame.OnHide(this)
+        TeronAutoLFM.UI.MainFrame.OnHide(this)
       </OnHide>
     </Scripts>
   </Frame>
   <!--==========================================================================
-    AutoLFM Minimap Button
+    TeronAutoLFM Minimap Button
     ==========================================================================-->
-  <Button name="AutoLFM_MinimapButton" parent="Minimap" hidden="false" movable="true" frameStrata="MEDIUM">
+  <Button name="TeronAutoLFM_MinimapButton" parent="Minimap" hidden="false" movable="true" frameStrata="MEDIUM">
     <Size>
       <AbsDimension x="32" y="32"/>
     </Size>
@@ -946,7 +946,7 @@
     </Anchors>
     <Layers>
       <Layer level="BACKGROUND">
-        <Texture name="$parent_Icon" file="Interface\AddOns\AutoLFM\UI\Textures\Eye\Eye00">
+        <Texture name="$parent_Icon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Eye\Eye00">
           <Size>
             <AbsDimension x="36" y="36"/>
           </Size>
@@ -961,7 +961,7 @@
         </Texture>
       </Layer>
       <Layer level="OVERLAY">
-        <Texture file="Interface\AddOns\AutoLFM\UI\Textures\MinimapBorder">
+        <Texture file="Interface\AddOns\TeronAutoLFM\UI\Textures\MinimapBorder">
           <Size>
             <AbsDimension x="52" y="52"/>
           </Size>
@@ -971,25 +971,25 @@
         </Texture>
       </Layer>
     </Layers>
-    <HighlightTexture file="Interface\AddOns\AutoLFM\UI\Textures\MinimapHighlight" alphaMode="ADD"/>
+    <HighlightTexture file="Interface\AddOns\TeronAutoLFM\UI\Textures\MinimapHighlight" alphaMode="ADD"/>
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.MainFrame.OnMinimapButtonLoad(this)
+        TeronAutoLFM.UI.MainFrame.OnMinimapButtonLoad(this)
       </OnLoad>
       <OnClick>
-        AutoLFM.Components.MinimapButton.OnClick(this, arg1)
+        TeronAutoLFM.Components.MinimapButton.OnClick(this, arg1)
       </OnClick>
       <OnDragStart>
-        AutoLFM.UI.MainFrame.OnMinimapDragStart(this)
+        TeronAutoLFM.UI.MainFrame.OnMinimapDragStart(this)
       </OnDragStart>
       <OnDragStop>
-        AutoLFM.UI.MainFrame.OnMinimapDragStop(this)
+        TeronAutoLFM.UI.MainFrame.OnMinimapDragStop(this)
       </OnDragStop>
       <OnEnter>
-        AutoLFM.Components.MinimapButton.OnEnter(this)
+        TeronAutoLFM.Components.MinimapButton.OnEnter(this)
       </OnEnter>
       <OnLeave>
-        AutoLFM.UI.MainFrame.HideTooltip()
+        TeronAutoLFM.UI.MainFrame.HideTooltip()
       </OnLeave>
     </Scripts>
   </Button>

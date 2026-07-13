@@ -2,7 +2,7 @@
   <!--==========================================================================
     Messaging Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_Messaging" parent="AutoLFM_MainFrame_ContentContainer" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Messaging" parent="TeronAutoLFM_MainFrame_ContentContainer" hidden="true">
     <Size>
       <AbsDimension x="298" y="252"/>
     </Size>
@@ -57,7 +57,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnModeRadioClick("details")
+                    TeronAutoLFM.UI.Content.Messaging.OnModeRadioClick("details")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -87,7 +87,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnModeRadioClick("custom")
+                    TeronAutoLFM.UI.Content.Messaging.OnModeRadioClick("custom")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -127,7 +127,7 @@
                     </Offset>
                   </Anchor>
                 </Anchors>
-                <Backdrop edgeFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBorder" tile="false">
+                <Backdrop edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="false">
                   <EdgeSize>
                     <AbsValue val="12"/>
                   </EdgeSize>
@@ -183,7 +183,7 @@
                         this:EnableMouse(true)
                       </OnLoad>
                       <OnTextChanged>
-                        AutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(this)
+                        TeronAutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(this)
                       </OnTextChanged>
                       <OnMouseUp>
                         this:SetFocus()
@@ -209,7 +209,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Message">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Message">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -236,7 +236,7 @@
                   <AbsDimension x="18" y="18"/>
                 </Size>
                 <Anchors>
-                  <Anchor point="TOPRIGHT" relativeTo="AutoLFM_Content_Messaging_ScrollFrame_ScrollChild" relativePoint="TOPRIGHT">
+                  <Anchor point="TOPRIGHT" relativeTo="TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild" relativePoint="TOPRIGHT">
                     <Offset>
                       <AbsDimension x="-5" y="-35"/>
                     </Offset>
@@ -244,7 +244,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Var">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Var">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -254,7 +254,7 @@
                     </Texture>
                   </Layer>
                   <Layer level="OVERLAY">
-                    <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
+                    <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -266,10 +266,10 @@
                 </Layers>
                 <Scripts>
                   <OnEnter>
-                    AutoLFM.UI.Content.Messaging.OnUsageIconEnter(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnUsageIconEnter(this)
                   </OnEnter>
                   <OnLeave>
-                    AutoLFM.UI.Content.Messaging.OnUsageIconLeave(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnUsageIconLeave(this)
                   </OnLeave>
                 </Scripts>
               </Frame>
@@ -288,7 +288,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarM">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarM">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -298,7 +298,7 @@
                     </Texture>
                   </Layer>
                   <Layer level="OVERLAY">
-                    <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
+                    <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -318,13 +318,13 @@
                 </Layers>
                 <Scripts>
                   <OnEnter>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
                   </OnEnter>
                   <OnLeave>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
                   </OnLeave>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
                   </OnClick>
                 </Scripts>
               </Button>
@@ -342,7 +342,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarT">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarT">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -352,7 +352,7 @@
                     </Texture>
                   </Layer>
                   <Layer level="OVERLAY">
-                    <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
+                    <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -364,13 +364,13 @@
                 </Layers>
                 <Scripts>
                   <OnEnter>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
                   </OnEnter>
                   <OnLeave>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
                   </OnLeave>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
                   </OnClick>
                 </Scripts>
               </Button>
@@ -388,7 +388,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarC">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarC">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -398,7 +398,7 @@
                     </Texture>
                   </Layer>
                   <Layer level="OVERLAY">
-                    <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
+                    <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -410,13 +410,13 @@
                 </Layers>
                 <Scripts>
                   <OnEnter>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
                   </OnEnter>
                   <OnLeave>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
                   </OnLeave>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
                   </OnClick>
                 </Scripts>
               </Button>
@@ -434,7 +434,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarR">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarR">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -444,7 +444,7 @@
                     </Texture>
                   </Layer>
                   <Layer level="OVERLAY">
-                    <Texture name="$parent_Highlight" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
+                    <Texture name="$parent_Highlight" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\VarHighlight" hidden="true">
                       <Size>
                         <AbsDimension x="16" y="16"/>
                       </Size>
@@ -456,13 +456,13 @@
                 </Layers>
                 <Scripts>
                   <OnEnter>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonEnter(this)
                   </OnEnter>
                   <OnLeave>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonLeave(this)
                   </OnLeave>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
+                    TeronAutoLFM.UI.Content.Messaging.OnVarButtonClick(this)
                   </OnClick>
                 </Scripts>
               </Button>
@@ -475,7 +475,7 @@
                 <Layers>
                   <Layer level="ARTWORK">
                     <!-- Battle Icon -->
-                    <Texture name="$parent_Icon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Group">
+                    <Texture name="$parent_Icon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Group">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
@@ -513,7 +513,7 @@
                       </Anchor>
                     </Anchors>
                     <FontString inherits="GameFontNormal"/>
-                    <Backdrop edgeFile="Interface\AddOns\AutoLFM\UI\Textures\TooltipBorder" tile="false">
+                    <Backdrop edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="false">
                       <BackgroundInsets>
                         <AbsInset left="2" right="2" top="2" bottom="2"/>
                       </BackgroundInsets>
@@ -531,14 +531,14 @@
                         this:HighlightText()
                       </OnMouseDown>
                       <OnEnterPressed>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(this)
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(this)
                         this:ClearFocus()
                       </OnEnterPressed>
                       <OnEscapePressed>
                         this:ClearFocus()
                       </OnEscapePressed>
                       <OnEditFocusLost>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(this)
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(this)
                       </OnEditFocusLost>
                     </Scripts>
                   </EditBox>
@@ -561,16 +561,16 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(this)
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(this)
                       </OnLoad>
                       <OnValueChanged>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeSliderChanged(arg1)
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderChanged(arg1)
                       </OnValueChanged>
                       <OnEnter>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
                       </OnEnter>
                       <OnMouseWheel>
-                        AutoLFM.UI.Content.Messaging.OnGroupSizeSliderMouseWheel(this, arg1)
+                        TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderMouseWheel(this, arg1)
                       </OnMouseWheel>
                     </Scripts>
                   </Slider>
@@ -583,7 +583,7 @@
                 </Size>
                 <Layers>
                   <Layer level="ARTWORK">
-                    <Texture name="$parent_Texture" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Channels">
+                    <Texture name="$parent_Texture" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Channels">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
@@ -604,7 +604,7 @@
                   </Layer>
                   <Layer level="OVERLAY">
                     <!-- Stats Icon -->
-                    <Texture name="$parent_StatsIcon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Stats">
+                    <Texture name="$parent_StatsIcon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Stats">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
@@ -656,12 +656,12 @@
                   </Layer>
                   <Layer level="OVERLAY">
                     <!-- Interval Icon -->
-                    <Texture name="$parent_IntervalIcon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Interval">
+                    <Texture name="$parent_IntervalIcon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Interval">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
                       <Anchors>
-                        <Anchor point="LEFT" relativeTo="AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
+                        <Anchor point="LEFT" relativeTo="TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
                           <Offset>
                             <AbsDimension x="-6" y="0"/>
                           </Offset>
@@ -698,7 +698,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("General")
+                    TeronAutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("General")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -728,12 +728,12 @@
                   </Layer>
                   <Layer level="OVERLAY">
                     <!-- Duration Icon -->
-                    <Texture name="$parent_DurationIcon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Duration">
+                    <Texture name="$parent_DurationIcon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Duration">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
                       <Anchors>
-                        <Anchor point="LEFT" relativeTo="AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
+                        <Anchor point="LEFT" relativeTo="TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
                           <Offset>
                             <AbsDimension x="-6" y="0"/>
                           </Offset>
@@ -770,7 +770,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("World")
+                    TeronAutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("World")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -799,12 +799,12 @@
                   </Layer>
                   <Layer level="OVERLAY">
                     <!-- Sent Icon -->
-                    <Texture name="$parent_SentIcon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Sent">
+                    <Texture name="$parent_SentIcon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Sent">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
                       <Anchors>
-                        <Anchor point="LEFT" relativeTo="AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
+                        <Anchor point="LEFT" relativeTo="TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
                           <Offset>
                             <AbsDimension x="-6" y="0"/>
                           </Offset>
@@ -841,7 +841,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("LookingForGroup")
+                    TeronAutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("LookingForGroup")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -870,12 +870,12 @@
                   </Layer>
                   <Layer level="OVERLAY">
                     <!-- Next Icon -->
-                    <Texture name="$parent_NextIcon" file="Interface\AddOns\AutoLFM\UI\Textures\Icons\Next">
+                    <Texture name="$parent_NextIcon" file="Interface\AddOns\TeronAutoLFM\UI\Textures\Icons\Next">
                       <Size>
                         <AbsDimension x="14" y="14"/>
                       </Size>
                       <Anchors>
-                        <Anchor point="LEFT" relativeTo="AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
+                        <Anchor point="LEFT" relativeTo="TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle" relativePoint="LEFT">
                           <Offset>
                             <AbsDimension x="-6" y="0"/>
                           </Offset>
@@ -912,7 +912,7 @@
                 </Layers>
                 <Scripts>
                   <OnClick>
-                    AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("Hardcore")
+                    TeronAutoLFM.UI.Content.Messaging.OnChannelCheckboxClick("Hardcore")
                   </OnClick>
                 </Scripts>
               </CheckButton>
@@ -923,10 +923,10 @@
     </Frames>
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Messaging.OnLoad(this)
+        TeronAutoLFM.UI.Content.Messaging.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Messaging.OnShow(this)
+        TeronAutoLFM.UI.Content.Messaging.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>

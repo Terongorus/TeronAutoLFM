@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Cache Manager
+-- TeronAutoLFM: Cache Manager
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Cache = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Cache = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -45,14 +45,14 @@ end
 --- Registers a new cache with a builder function
 --- @param name string - Cache name (e.g., "Dungeons", "Quests")
 --- @param builder function - Function that builds the cached data
-function AutoLFM.Core.Cache.Register(name, builder)
+function TeronAutoLFM.Core.Cache.Register(name, builder)
   if not name or type(name) ~= "string" then
-    AutoLFM.Core.Utils.LogError("Cache.Register: name must be a string")
+    TeronAutoLFM.Core.Utils.LogError("Cache.Register: name must be a string")
     return
   end
 
   if not builder or type(builder) ~= "function" then
-    AutoLFM.Core.Utils.LogError("Cache.Register: builder must be a function")
+    TeronAutoLFM.Core.Utils.LogError("Cache.Register: builder must be a function")
     return
   end
 
@@ -67,16 +67,16 @@ end
 --- @param name string - Cache name
 --- @param ... any - Optional arguments to pass to builder function
 --- @return any - Cached data
-function AutoLFM.Core.Cache.Get(name, ...)
+function TeronAutoLFM.Core.Cache.Get(name, ...)
   -- Validate name parameter
   if type(name) ~= "string" then
-    AutoLFM.Core.Utils.LogError("Cache.Get: name must be string, got " .. type(name))
+    TeronAutoLFM.Core.Utils.LogError("Cache.Get: name must be string, got " .. type(name))
     return nil
   end
 
   local cache = caches[name]
   if not cache then
-    AutoLFM.Core.Utils.LogError("Cache not found: " .. tostring(name))
+    TeronAutoLFM.Core.Utils.LogError("Cache not found: " .. tostring(name))
     return nil
   end
 
@@ -99,10 +99,10 @@ end
 
 --- Clears a specific cache
 --- @param name string - Cache name
-function AutoLFM.Core.Cache.Clear(name)
+function TeronAutoLFM.Core.Cache.Clear(name)
   -- Validate name parameter
   if type(name) ~= "string" then
-    AutoLFM.Core.Utils.LogError("Cache.Clear: name must be string, got " .. type(name))
+    TeronAutoLFM.Core.Utils.LogError("Cache.Clear: name must be string, got " .. type(name))
     return false
   end
 
@@ -113,12 +113,12 @@ function AutoLFM.Core.Cache.Clear(name)
     return true
   end
 
-  AutoLFM.Core.Utils.LogWarning("Cache.Clear: cache not found: " .. name)
+  TeronAutoLFM.Core.Utils.LogWarning("Cache.Clear: cache not found: " .. name)
   return false
 end
 
 --- Clears all caches
-function AutoLFM.Core.Cache.ClearAll()
+function TeronAutoLFM.Core.Cache.ClearAll()
   for name, cache in pairs(caches) do
     cache.data = nil
     cache.lastArgsKey = nil
@@ -128,7 +128,7 @@ end
 --- Checks if a cache exists and has data
 --- @param name string - Cache name
 --- @return boolean - True if cache exists and has data
-function AutoLFM.Core.Cache.Has(name)
+function TeronAutoLFM.Core.Cache.Has(name)
   local cache = caches[name]
   return cache and cache.data ~= nil
 end

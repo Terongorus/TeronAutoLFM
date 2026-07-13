@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Event Handling
+-- TeronAutoLFM: Event Handling
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Events = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Events = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -34,12 +34,12 @@ end
 --=============================================================================
 --- Handles QUEST_LOG_UPDATE event - clears cache and refreshes quest UI
 local function onQuestLogUpdate()
-  if AutoLFM.Logic.Content.Quests then
-    AutoLFM.Logic.Content.Quests.ClearCache()
+  if TeronAutoLFM.Logic.Content.Quests then
+    TeronAutoLFM.Logic.Content.Quests.ClearCache()
   end
 
-  if AutoLFM_MainFrame and AutoLFM_MainFrame:IsVisible() then
-    AutoLFM.Core.Maestro.Dispatch("QuestsList.Refresh")
+  if TeronAutoLFM_MainFrame and TeronAutoLFM_MainFrame:IsVisible() then
+    TeronAutoLFM.Core.Maestro.Dispatch("QuestsList.Refresh")
   end
 end
 
@@ -47,23 +47,23 @@ end
 local function onPlayerLevelUp()
   local newLevel = arg1
   if not newLevel then
-    AutoLFM.Core.Utils.LogWarning("PLAYER_LEVEL_UP: arg1 (newLevel) is nil")
+    TeronAutoLFM.Core.Utils.LogWarning("PLAYER_LEVEL_UP: arg1 (newLevel) is nil")
     return
   end
 
-  if AutoLFM.Logic.Content.Quests then
-    AutoLFM.Logic.Content.Quests.ClearCache()
+  if TeronAutoLFM.Logic.Content.Quests then
+    TeronAutoLFM.Logic.Content.Quests.ClearCache()
   end
 
-  if AutoLFM.Logic.Content.Dungeons then
-    AutoLFM.Logic.Content.Dungeons.ClearCache()
+  if TeronAutoLFM.Logic.Content.Dungeons then
+    TeronAutoLFM.Logic.Content.Dungeons.ClearCache()
   end
 
-  if AutoLFM_MainFrame and AutoLFM_MainFrame:IsVisible() then
-    AutoLFM.Core.Maestro.Dispatch("QuestsList.Refresh")
+  if TeronAutoLFM_MainFrame and TeronAutoLFM_MainFrame:IsVisible() then
+    TeronAutoLFM.Core.Maestro.Dispatch("QuestsList.Refresh")
   end
 
-  AutoLFM.Core.Utils.LogInfo("Level up! New level: " .. tostring(newLevel))
+  TeronAutoLFM.Core.Utils.LogInfo("Level up! New level: " .. tostring(newLevel))
 end
 
 --- Handles group roster change events - tracks group size and dispatches events
@@ -71,14 +71,14 @@ local function onGroupRosterChange()
   local currentSize, groupType = getGroupInfo()
 
   if currentSize ~= lastGroupSize then
-    AutoLFM.Core.Utils.LogAction("Group size: " .. lastGroupSize .. " -> " .. currentSize)
+    TeronAutoLFM.Core.Utils.LogAction("Group size: " .. lastGroupSize .. " -> " .. currentSize)
 
     lastGroupSize = currentSize
 
     -- Update Maestro states and dispatch event
-    AutoLFM.Core.Maestro.SetState("Group.Type", groupType)
-    AutoLFM.Core.Maestro.SetState("Group.Size", currentSize)
-    AutoLFM.Core.Maestro.Dispatch("Group.SizeChanged", { size = currentSize })
+    TeronAutoLFM.Core.Maestro.SetState("Group.Type", groupType)
+    TeronAutoLFM.Core.Maestro.SetState("Group.Size", currentSize)
+    TeronAutoLFM.Core.Maestro.Dispatch("Group.SizeChanged", { size = currentSize })
   end
 end
 
@@ -103,8 +103,8 @@ end
 --- Handles PARTY_LEADER_CHANGED event - dispatches event
 local function onPartyLeaderChanged()
   local isLeader = canPlayerLead()
-  AutoLFM.Core.Maestro.SetState("Group.IsLeader", isLeader)
-  AutoLFM.Core.Maestro.Dispatch("Group.LeaderChanged", { isLeader = isLeader })
+  TeronAutoLFM.Core.Maestro.SetState("Group.IsLeader", isLeader)
+  TeronAutoLFM.Core.Maestro.Dispatch("Group.LeaderChanged", { isLeader = isLeader })
 end
 
 --- Handles CHAT_MSG_WHISPER event - dispatches whisper data to modules
@@ -113,11 +113,11 @@ local function onChatMsgWhisper()
   local sender = arg2
 
   if not message or not sender then
-    AutoLFM.Core.Utils.LogWarning("CHAT_MSG_WHISPER: arg1 or arg2 is nil")
+    TeronAutoLFM.Core.Utils.LogWarning("CHAT_MSG_WHISPER: arg1 or arg2 is nil")
     return
   end
 
-  AutoLFM.Core.Maestro.Dispatch("Chat.WhisperReceived", {
+  TeronAutoLFM.Core.Maestro.Dispatch("Chat.WhisperReceived", {
     message = message,
     sender = sender
   })
@@ -125,7 +125,7 @@ end
 
 --- Handles SPELLS_CHANGED event - detects hardcore status when spellbook is loaded
 local function onSpellsChanged()
-  AutoLFM.Core.Storage.DetectAndPersistHardcore()
+  TeronAutoLFM.Core.Storage.DetectAndPersistHardcore()
   -- Unregister: spellbook is loaded, detection is done
   if eventFrame then
     eventFrame:UnregisterEvent("SPELLS_CHANGED")
@@ -159,9 +159,9 @@ end
 -- PUBLIC API
 --=============================================================================
 --- Initializes the WoW event system and registers all required event listeners
-function AutoLFM.Core.Events.Init()
+function TeronAutoLFM.Core.Events.Init()
   if not eventFrame then
-    eventFrame = CreateFrame("Frame", "AutoLFM_EventFrame")
+    eventFrame = CreateFrame("Frame", "TeronAutoLFM_EventFrame")
     eventFrame:SetScript("OnEvent", function()
       onEvent(event)
     end)
@@ -180,15 +180,15 @@ function AutoLFM.Core.Events.Init()
   local initialSize, initialType = getGroupInfo()
   lastGroupSize = initialSize
 
-  AutoLFM.Core.Maestro.SetState("Group.Type", initialType)
-  AutoLFM.Core.Maestro.SetState("Group.Size", initialSize)
-  AutoLFM.Core.Maestro.SetState("Group.IsLeader", canPlayerLead())
+  TeronAutoLFM.Core.Maestro.SetState("Group.Type", initialType)
+  TeronAutoLFM.Core.Maestro.SetState("Group.Size", initialSize)
+  TeronAutoLFM.Core.Maestro.SetState("Group.IsLeader", canPlayerLead())
 
-  AutoLFM.Core.Utils.LogInfo("Event system initialized (7 WoW events monitored)")
+  TeronAutoLFM.Core.Utils.LogInfo("Event system initialized (7 WoW events monitored)")
 end
 
 --- Forces a refresh of the group size (useful when starting broadcaster)
-function AutoLFM.Core.Events.RefreshGroupSize()
+function TeronAutoLFM.Core.Events.RefreshGroupSize()
   onGroupRosterChange()
 end
 
@@ -202,39 +202,39 @@ local function handleSlashCommand(msg)
   local cmd = string.lower(string.sub(msg, 1, string.find(msg .. " ", " ") - 1))
 
   if cmd == "" then
-    AutoLFM.Core.Maestro.Dispatch("MainFrame.Toggle")
+    TeronAutoLFM.Core.Maestro.Dispatch("MainFrame.Toggle")
   elseif cmd == "debug" then
-    AutoLFM.Core.Maestro.Dispatch("Debug.Toggle")
+    TeronAutoLFM.Core.Maestro.Dispatch("Debug.Toggle")
   else
-    AutoLFM.Core.Utils.PrintTitle("=== AutoLFM Commands ===")
-    AutoLFM.Core.Utils.Print("  /lfm - Toggle main window")
-    AutoLFM.Core.Utils.Print("  /lfm debug - Toggle debug window")
+    TeronAutoLFM.Core.Utils.PrintTitle("=== TeronAutoLFM Commands ===")
+    TeronAutoLFM.Core.Utils.Print("  /lfm - Toggle main window")
+    TeronAutoLFM.Core.Utils.Print("  /lfm debug - Toggle debug window")
   end
 end
 
 --=============================================================================
 -- STATE DECLARATIONS
 --=============================================================================
-AutoLFM.Core.SafeRegisterState("Group.Type", "solo", { id = "S11" })
-AutoLFM.Core.SafeRegisterState("Group.Size", 1, { id = "S10" })
-AutoLFM.Core.SafeRegisterState("Group.IsLeader", false, { id = "S09" })
+TeronAutoLFM.Core.SafeRegisterState("Group.Type", "solo", { id = "S11" })
+TeronAutoLFM.Core.SafeRegisterState("Group.Size", 1, { id = "S10" })
+TeronAutoLFM.Core.SafeRegisterState("Group.IsLeader", false, { id = "S09" })
 
 --=============================================================================
 -- EVENT DECLARATIONS
 --=============================================================================
-AutoLFM.Core.Maestro.RegisterEvent("Group.SizeChanged", { id = "E02" })
-AutoLFM.Core.Maestro.RegisterEvent("Group.LeaderChanged", { id = "E03" })
-AutoLFM.Core.Maestro.RegisterEvent("Chat.WhisperReceived", { id = "E08" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Group.SizeChanged", { id = "E02" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Group.LeaderChanged", { id = "E03" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Chat.WhisperReceived", { id = "E08" })
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Core.Events", function()
-  AutoLFM.Core.Events.Init()
+TeronAutoLFM.Core.SafeRegisterInit("Core.Events", function()
+  TeronAutoLFM.Core.Events.Init()
 end, { id = "I01" })
 
 --=============================================================================
 -- SLASH COMMAND REGISTRATION
 --=============================================================================
-SLASH_AUTOLFM1 = "/lfm"
-SlashCmdList["AUTOLFM"] = handleSlashCommand
+SLASH_TERONAUTOLFM1 = "/lfm"
+SlashCmdList["TERONAUTOLFM"] = handleSlashCommand

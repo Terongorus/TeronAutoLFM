@@ -1,10 +1,10 @@
-# AutoLFM - Installation & Usage Guide
+# TeronAutoLFM - Installation & Usage Guide
 
 ## Quick Links
 
 - **Getting Started**: [Installation](#-installation) | [Basic Usage](#-basic-usage)
 - **Developers**: [Dev Guide](Developer-Guide.md)
-- **Support**: [Troubleshooting](#-troubleshooting) | [GitHub Issues](https://github.com/FSuhas/AutoLFM/issues)
+- **Support**: [Troubleshooting](#-troubleshooting) | [GitHub Issues](https://github.com/Terongorus/TeronAutoLFM/issues)
 
 ---
 
@@ -16,23 +16,23 @@
 
 ### Method 1: Manual Installation
 
-1. **Download** the AutoLFM addon from [GitHub](https://github.com/FSuhas/AutoLFM)
+1. **Download** the TeronAutoLFM addon from [GitHub](https://github.com/Terongorus/TeronAutoLFM)
 2. **Extract** the folder to your World of Warcraft `Interface/AddOns/` directory
 3. **Restart** World of Warcraft
-4. **Verify**: You should see "AutoLFM" in your AddOns list at login
+4. **Verify**: You should see "TeronAutoLFM" in your AddOns list at login
 
 ### Method 2: TurtleWoW Launcher
 
 1. Open the **TurtleWoW Launcher**
 2. Navigate to the **AddOns** section
-3. Add new addon and paste the repository URL: `https://github.com/FSuhas/AutoLFM`
+3. Add new addon and paste the repository URL: `https://github.com/Terongorus/TeronAutoLFM`
 4. Click **Install**
 
 ### Directory Structure
 ```
 World of Warcraft/Interface/AddOns/
-├── AutoLFM/
-│   ├── AutoLFM.toc
+├── TeronAutoLFM/
+│   ├── TeronAutoLFM.toc
 │   ├── Core/
 │   ├── Components/
 │   ├── Logic/
@@ -44,13 +44,13 @@ World of Warcraft/Interface/AddOns/
 
 ## 🎮 Basic Usage
 
-### Opening AutoLFM
+### Opening TeronAutoLFM
 Type in chat:
 ```
 /lfm
 ```
 
-This opens the main AutoLFM interface.
+This opens the main TeronAutoLFM interface.
 
 ### Main Features
 
@@ -99,9 +99,9 @@ All settings are automatically saved to your WoW SavedVariables.
 
 ## 🆘 Troubleshooting
 
-### AutoLFM doesn't appear
+### TeronAutoLFM doesn't appear
 - Verify addon is enabled in AddOns list
-- Check addon folder is named exactly "AutoLFM"
+- Check addon folder is named exactly "TeronAutoLFM"
 - Restart WoW completely
 
 ### Broadcast not sending
@@ -132,7 +132,7 @@ Start here: This guide covers installation, basic usage, configuration, and trou
 
 **Project Structure:**
 ```
-AutoLFM/
+TeronAutoLFM/
 ├── README.md                          (Project overview)
 ├── _wiki/
 │   ├── Home.md                        (Documentation hub)
@@ -153,6 +153,6 @@ AutoLFM/
 ## 📞 Support
 
 Found a bug or have suggestions? Please report at:
-[GitHub Issues - AutoLFM](https://github.com/FSuhas/AutoLFM/issues)
+[GitHub Issues - TeronAutoLFM](https://github.com/Terongorus/TeronAutoLFM/issues)
 
 For development questions, see [Developer-Guide.md](Developer-Guide.md)

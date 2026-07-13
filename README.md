@@ -1,19 +1,21 @@
-# AutoLFM - Automated LFM Broadcaster for Turtle WoW
+# TeronAutoLFM - Automated LFM Broadcaster for Turtle WoW
 <p align="center">
-  <img src="_assets/AutoLFM.gif" alt="AutoLFM Illustration"/>
+  <img src="_assets/TeronAutoLFM.gif" alt="TeronAutoLFM Illustration"/>
 </p>
 
 ## 📜 Description
-AutoLFM is a Turtle WoW addon that automates the process of broadcasting "Looking For More" (LFM) messages for dungeons, raids, quests and more. This addon helps group leaders efficiently recruit party members without manual spam.
+TeronAutoLFM is a Turtle WoW addon that automates the process of broadcasting "Looking For More" (LFM) messages for dungeons, raids, quests and more. This addon helps group leaders efficiently recruit party members without manual spam.
+
+This is a rebrand and continuation of [AutoLFM](https://github.com/FSuhas/AutoLFM) by Gondoleon, NSO73, and FSuhas, now maintained independently under the Teron* addon family.
 
 **🐢 Turtle WoW**
 - Developed for Turtle WoW: includes all custom dungeons and raids from the server
 - Interface design matches Turtle WoW's native LFG system
 - Should also work on any WoW 1.12 (Vanilla) client, but custom Turtle WoW instances will appear regardless
 
-<!-- TODO: When GitHub Wiki is activated, replace _wiki/*.md links with https://github.com/FSuhas/AutoLFM/wiki/* -->
+<!-- TODO: When GitHub Wiki is activated, replace _wiki/*.md links with https://github.com/Terongorus/TeronAutoLFM/wiki/* -->
 ## 📖 Documentation
-- **Users**: [Installation & Usage Guide](_wiki/Installation-Usage.md) - How to install and use AutoLFM
+- **Users**: [Installation & Usage Guide](_wiki/Installation-Usage.md) - How to install and use TeronAutoLFM
 - **Developers**: [Developer Guide](_wiki/Developer-Guide.md) - Architecture, best practices, and component registry
 
 ## ✨ Features
@@ -71,7 +73,7 @@ AutoLFM is a Turtle WoW addon that automates the process of broadcasting "Lookin
 For detailed instructions, see [Installation & Usage Guide](_wiki/Installation-Usage.md).
 
 ## 🏗️ Architecture
-AutoLFM uses the **Maestro CQRS command bus system** for clean architecture:
+TeronAutoLFM uses the **Maestro CQRS command bus system** for clean architecture:
 - **Core/**: Framework (Maestro command bus, Events, Utils, Storage)
 - **Components/**: System components
 - **Logic/**: Business logic (Broadcaster, Content, Selection, State management)
@@ -80,7 +82,7 @@ AutoLFM uses the **Maestro CQRS command bus system** for clean architecture:
 For detailed architecture, see [Developer Guide](_wiki/Developer-Guide.md).
 
 ## 💾 Configuration
-Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
+Settings are automatically saved per character in `SavedVariables/TeronAutoLFM.lua`:
 - **Broadcasting:** Interval (30-120s), chat channels, General channel index
 - **Content:** Dungeon filters (GRAY/GREEN/YELLOW/ORANGE/RED), default panel
 - **Interface:** Minimap position, dark mode, message preview lines
@@ -111,4 +113,4 @@ Settings are automatically saved per character in `SavedVariables/AutoLFM.lua`:
 
 ## 📋 Project Status
 
-The main contributor has moved on to other projects. The community is welcome to submit pull requests, report issues, or take over maintenance of the project.
+TeronAutoLFM is a rebrand and continuation of AutoLFM, whose original maintainer moved on to other projects. It is now maintained by Terongorus as part of the Teron* addon family. Pull requests and issue reports are welcome.

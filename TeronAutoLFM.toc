@@ -1,13 +1,14 @@
 ## Interface: 11200
-## Title: Auto|cff0070ddL|r|cffffffffF|cffff0000M|r
+## Title: TeronAuto|cff0070ddL|r|cffffffffF|cffff0000M|r
 ## Notes: Automated LFM Broadcaster for Turtle WoW
-## Author: Gondoleon, NSO73
+## Author: Gondoleon, NSO73, Terongorus
 ## SavedVariables: V3_Settings, V3_Presets
 ## OptionalDeps: pfQuest, ShaguTweaks
-## Version: 3.15
+## Version: 4.0.0
 
 #=============================================================================
-# Github Repository: https://github.com/FSuhas/AutoLFM
+# Github Repository: https://github.com/Terongorus/TeronAutoLFM
+# Originally forked from: https://github.com/FSuhas/AutoLFM
 #=============================================================================
 
 #=============================================================================

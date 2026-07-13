@@ -1,4 +1,4 @@
-# AutoLFM Development Best Practices
+# TeronAutoLFM Development Best Practices
 
 ## 🎨 Code Style Conventions
 
@@ -223,9 +223,9 @@ local message = "LF" .. tostring(needed) .. "M " .. dungeonName
 ### Use Core.Ticker for Timers
 ```lua
 -- ✅ DO - Use centralized Ticker system for periodic tasks
-AutoLFM.Core.SafeRegisterInit("MyModule", function()
+TeronAutoLFM.Core.SafeRegisterInit("MyModule", function()
     -- Register ticker with interval and callback
-    AutoLFM.Core.Ticker.Register(
+    TeronAutoLFM.Core.Ticker.Register(
         "my_ticker_id",           -- Unique ID
         5,                        -- Interval in seconds
         function(elapsed)         -- Callback receives elapsed time
@@ -236,8 +236,8 @@ AutoLFM.Core.SafeRegisterInit("MyModule", function()
 end, { id = "I##", dependencies = { "Core.Ticker" } })
 
 -- Start/stop as needed
-AutoLFM.Core.Ticker.Start("my_ticker_id")
-AutoLFM.Core.Ticker.Stop("my_ticker_id")
+TeronAutoLFM.Core.Ticker.Start("my_ticker_id")
+TeronAutoLFM.Core.Ticker.Stop("my_ticker_id")
 
 -- ❌ DON'T - Create dedicated OnUpdate frames
 local myFrame = CreateFrame("Frame")
@@ -252,7 +252,7 @@ end)
 ### File Structure
 ```lua
 --[[
-    AutoLFM - Selection Logic
+    TeronAutoLFM - Selection Logic
     Handles dungeon/raid selection with FIFO limits
     Dependencies: Core.Events, Core.Maestro
 ]]
@@ -285,7 +285,7 @@ SafeRegisterInit("Logic.Selection", function()
 end, { id = "I05" })
 
 -- Export
-AutoLFM.Logic.Selection = Selection
+TeronAutoLFM.Logic.Selection = Selection
 ```
 
 ### Naming Conventions
@@ -313,7 +313,7 @@ AutoLFM.Logic.Selection = Selection
 ### Debug Helpers
 ```lua
 -- Add debug helpers for testing
-if AutoLFM.DEBUG then
+if TeronAutoLFM.DEBUG then
     Selection.Debug = {
         GetInternalState = function() return privateData end,
         ResetState = function() privateData = {} end,

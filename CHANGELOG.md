@@ -1,3 +1,10 @@
+## [v4.0.0] 2026/07/13
+- Rebrand: AutoLFM → TeronAutoLFM, now maintained independently as part of the Teron* addon family
+- Rename addon folder and `.toc` to `TeronAutoLFM`
+- Rename global namespace table `AutoLFM` → `TeronAutoLFM` across all Lua/XML files (frame names, texture paths, slash command registration)
+- Update README, wiki docs, and asset filenames to match the new name
+- No functional changes — behavior is identical to v3.15
+
 ## [v3.15] 2026/04/09
 - Fix `Utils.ROW_HEIGHT` → `Constants.ROW_HEIGHT` in Raids UI (scroll height was nil)
 - Fix `LogWarn` → `LogWarning` in AutoInvite UI, remove duplicate `OnShow` in Settings UI

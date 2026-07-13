@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: RowList
+-- TeronAutoLFM: RowList
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.RowList = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.RowList = {}
 
 --=============================================================================
 -- ROW CACHE
@@ -11,9 +11,9 @@ AutoLFM.UI.RowList = {}
 local rowCache = {}  -- { [prefix] = { row1, row2, ... } }
 
 --- Registers a row in the cache for faster iteration
---- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")
+--- @param rowPrefix string - Prefix for row names (e.g., "TeronAutoLFM_DungeonRow")
 --- @param row frame - The row frame to cache
-function AutoLFM.UI.RowList.RegisterRow(rowPrefix, row)
+function TeronAutoLFM.UI.RowList.RegisterRow(rowPrefix, row)
   if not rowPrefix or not row then return end
   if not rowCache[rowPrefix] then
     rowCache[rowPrefix] = {}
@@ -30,7 +30,7 @@ end
 
 --- Clears the row cache for a prefix (call when recreating rows)
 --- @param rowPrefix string - Prefix for row names
-function AutoLFM.UI.RowList.ClearRowCache(rowPrefix)
+function TeronAutoLFM.UI.RowList.ClearRowCache(rowPrefix)
   if rowPrefix then
     rowCache[rowPrefix] = {}
   end
@@ -41,13 +41,13 @@ end
 --=============================================================================
 --- Configures the backdrop for a row to enable hover coloring
 --- @param row frame - The row frame to configure
-function AutoLFM.UI.RowList.SetupRowBackdrop(row)
+function TeronAutoLFM.UI.RowList.SetupRowBackdrop(row)
   if not row then
     return
   end
 
   row:SetBackdrop({
-    bgFile = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\White",
+    bgFile = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\White",
     tile = true,
     tileSize = 8,
     insets = { left = 0, right = 0, top = 0, bottom = 0 }
@@ -66,7 +66,7 @@ end
 --- @param elements table - Array of elements to colorize on hover
 --- @param options table - Optional {tooltipZone=string} for tooltip display
 --- @return nil
-function AutoLFM.UI.RowList.SetupHover(element, row, color, elements, options)
+function TeronAutoLFM.UI.RowList.SetupHover(element, row, color, elements, options)
   if not element or not row then
     return
   end
@@ -81,13 +81,13 @@ function AutoLFM.UI.RowList.SetupHover(element, row, color, elements, options)
   element:SetScript("OnEnter", function()
     -- Set all elements to white
     for _, elem in ipairs(elements) do
-      AutoLFM.Core.Utils.SetTextColorByName(elem, "WHITE")
+      TeronAutoLFM.Core.Utils.SetTextColorByName(elem, "WHITE")
     end
 
     -- Use the provided color for hover background (or fallback to gold)
     local hoverColor = color
     if not hoverColor or type(hoverColor) ~= "table" or not hoverColor.r then
-      hoverColor = AutoLFM.Core.Utils.GetColor("GOLD")
+      hoverColor = TeronAutoLFM.Core.Utils.GetColor("GOLD")
     end
 
     if hoverColor then
@@ -103,7 +103,7 @@ function AutoLFM.UI.RowList.SetupHover(element, row, color, elements, options)
       GameTooltip:SetOwner(this, "ANCHOR_NONE")
       GameTooltip:ClearAllPoints()
       GameTooltip:SetPoint("TOPLEFT", "UIParent", "BOTTOMLEFT", x + 10, y - 10)
-      local whiteColor = AutoLFM.Core.Utils.GetColor("WHITE")
+      local whiteColor = TeronAutoLFM.Core.Utils.GetColor("WHITE")
       if whiteColor then
         GameTooltip:SetText(options.tooltipZone, whiteColor.r, whiteColor.g, whiteColor.b)
       else
@@ -119,7 +119,7 @@ function AutoLFM.UI.RowList.SetupHover(element, row, color, elements, options)
 
     -- Fallback to gold if restoreColor is invalid
     if not restoreColor or type(restoreColor) ~= "table" or not restoreColor.r then
-      restoreColor = AutoLFM.Core.Utils.GetColor("GOLD")
+      restoreColor = TeronAutoLFM.Core.Utils.GetColor("GOLD")
     end
 
     for _, elem in ipairs(elements) do
@@ -145,16 +145,16 @@ end
 --- @param numRows number - Number of rows to display
 --- @param rowHeight number - Optional height per row, defaults to ROW_HEIGHT
 --- @return number - Total height in pixels
-function AutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight)
-  return numRows * (rowHeight or AutoLFM.Core.Constants.ROW_HEIGHT)
+function TeronAutoLFM.UI.RowList.CalculateScrollHeight(numRows, rowHeight)
+  return numRows * (rowHeight or TeronAutoLFM.Core.Constants.ROW_HEIGHT)
 end
 
 --- Calculates vertical offset for a row at given index
 --- @param index number - Row index (1-based)
 --- @param rowHeight number - Optional height per row, defaults to ROW_HEIGHT
 --- @return number - Negative Y offset from top
-function AutoLFM.UI.RowList.CalculateRowOffset(index, rowHeight)
-  return -(index - 1) * (rowHeight or AutoLFM.Core.Constants.ROW_HEIGHT)
+function TeronAutoLFM.UI.RowList.CalculateRowOffset(index, rowHeight)
+  return -(index - 1) * (rowHeight or TeronAutoLFM.Core.Constants.ROW_HEIGHT)
 end
 
 --=============================================================================
@@ -168,12 +168,12 @@ end
 --- @param index number - Row index (1-based) for positioning
 --- @param rowHeight number - Height of each row in pixels
 --- @return frame|nil - The configured row frame, or nil on error
-function AutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, template, index, rowHeight)
+function TeronAutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, template, index, rowHeight)
   if not rowName or not scrollChild or not template then
     return nil
   end
 
-  -- Extract prefix from rowName (e.g., "AutoLFM_DungeonRow1" -> "AutoLFM_DungeonRow")
+  -- Extract prefix from rowName (e.g., "TeronAutoLFM_DungeonRow1" -> "TeronAutoLFM_DungeonRow")
   local prefix = string.gsub(rowName, "%d+$", "")
 
   local row = getglobal(rowName)
@@ -184,12 +184,12 @@ function AutoLFM.UI.RowList.GetOrCreateRow(rowName, scrollChild, template, index
 
   -- Register new rows in cache for faster iteration in hideAllRows/resetAllRowBackdrops
   if isNewRow and prefix ~= "" then
-    AutoLFM.UI.RowList.RegisterRow(prefix, row)
+    TeronAutoLFM.UI.RowList.RegisterRow(prefix, row)
   end
 
   row:ClearAllPoints()
-  row:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, AutoLFM.UI.RowList.CalculateRowOffset(index, rowHeight))
-  AutoLFM.UI.RowList.SetupRowBackdrop(row)
+  row:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, TeronAutoLFM.UI.RowList.CalculateRowOffset(index, rowHeight))
+  TeronAutoLFM.UI.RowList.SetupRowBackdrop(row)
 
   return row
 end
@@ -200,14 +200,14 @@ end
 --- Retrieves the scroll child frame from a content frame
 --- @param frame frame - The content frame containing a scroll frame
 --- @return frame|nil - The scroll child frame, or nil if not found
-function AutoLFM.UI.RowList.GetScrollChild(frame)
+function TeronAutoLFM.UI.RowList.GetScrollChild(frame)
   if not frame then return nil end
   return getglobal(frame:GetName() .. "_ScrollFrame_ScrollChild")
 end
 
 --- Updates the scroll frame's child rectangle to reflect content size changes
 --- @param scrollChild frame - The scroll child frame to update
-function AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+function TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
   if not scrollChild then return end
   local scrollFrame = scrollChild:GetParent()
   if scrollFrame and scrollFrame.UpdateScrollChildRect then
@@ -219,7 +219,7 @@ end
 --- @param parent frame - The parent frame
 --- @param suffix string - The suffix to append (e.g., "_Label", "_CheckButton")
 --- @return frame|nil - The child element, or nil if parent is nil
-function AutoLFM.UI.RowList.GetChildElement(parent, suffix)
+function TeronAutoLFM.UI.RowList.GetChildElement(parent, suffix)
   if not parent then return nil end
   return getglobal(parent:GetName() .. suffix)
 end
@@ -229,7 +229,7 @@ end
 --=============================================================================
 --- Iterates over all rows with a given prefix and applies a callback function
 --- Uses row cache for O(n) iteration, with fallback to getglobal if cache is empty
---- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")
+--- @param rowPrefix string - Prefix for row names (e.g., "TeronAutoLFM_DungeonRow")
 --- @param callback function - Function to call for each row: callback(row)
 local function forEachRow(rowPrefix, callback)
   local cachedRows = getCachedRows(rowPrefix)
@@ -243,7 +243,7 @@ local function forEachRow(rowPrefix, callback)
   else
     -- Fallback to getglobal if cache is empty (first run)
     local index = 1
-    while index <= AutoLFM.Core.Constants.MAX_ROWS_SAFETY do
+    while index <= TeronAutoLFM.Core.Constants.MAX_ROWS_SAFETY do
       local row = getglobal(rowPrefix .. index)
       if not row then
         break
@@ -255,7 +255,7 @@ local function forEachRow(rowPrefix, callback)
 end
 
 --- Hides all existing rows with the given prefix (private helper)
---- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")
+--- @param rowPrefix string - Prefix for row names (e.g., "TeronAutoLFM_DungeonRow")
 local function hideAllRows(rowPrefix)
   forEachRow(rowPrefix, function(row)
     row:Hide()
@@ -264,7 +264,7 @@ end
 
 --- Resets backdrop colors for all rows with the given prefix (private helper)
 --- Ensures rows are transparent after DarkUI may have modified them
---- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")
+--- @param rowPrefix string - Prefix for row names (e.g., "TeronAutoLFM_DungeonRow")
 local function resetAllRowBackdrops(rowPrefix)
   forEachRow(rowPrefix, function(row)
     row:SetBackdropColor(0, 0, 0, 0)
@@ -277,8 +277,8 @@ end
 --- @param frame frame - The content frame being shown
 --- @param createRowsFunc function - Function to create rows (receives scrollChild)
 --- @param clearCacheFunc function - Optional cache clearing function (can be nil)
---- @param rowPrefix string - Prefix for row names (e.g., "AutoLFM_DungeonRow")
-function AutoLFM.UI.RowList.OnShowHandler(frame, createRowsFunc, clearCacheFunc, rowPrefix)
+--- @param rowPrefix string - Prefix for row names (e.g., "TeronAutoLFM_DungeonRow")
+function TeronAutoLFM.UI.RowList.OnShowHandler(frame, createRowsFunc, clearCacheFunc, rowPrefix)
   if not frame or not createRowsFunc or not rowPrefix then
     return
   end
@@ -291,7 +291,7 @@ function AutoLFM.UI.RowList.OnShowHandler(frame, createRowsFunc, clearCacheFunc,
     clearCacheFunc()
   end
 
-  local scrollChild = AutoLFM.UI.RowList.GetScrollChild(frame)
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(frame)
   if scrollChild then
     -- Create/update rows (will reuse existing frames or create new ones)
     createRowsFunc(scrollChild)

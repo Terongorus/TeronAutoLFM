@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Persistent Storage
+-- TeronAutoLFM: Persistent Storage
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Storage = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Storage = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -25,7 +25,7 @@ local function deepCopy(obj, depth)
   depth = depth or 0
   if depth >= MAX_DEEP_COPY_DEPTH then
     -- Return shallow copy at max depth to prevent stack overflow
-    AutoLFM.Core.Utils.LogWarning("deepCopy: max depth reached, returning shallow copy")
+    TeronAutoLFM.Core.Utils.LogWarning("deepCopy: max depth reached, returning shallow copy")
     local shallowCopy = {}
     for k, v in pairs(obj) do
       shallowCopy[k] = v
@@ -101,7 +101,7 @@ end
 --- @param key string - The setting key to retrieve
 --- @param defaultValue any - Value to return if key is not found or nil
 --- @return any - The stored value or defaultValue
-function AutoLFM.Core.Storage.Get(key, defaultValue)
+function TeronAutoLFM.Core.Storage.Get(key, defaultValue)
   local charData = getCharData()
   if not charData then
       return defaultValue
@@ -117,7 +117,7 @@ end
 --- Sets a value in character-specific persistent storage
 --- @param key string - The setting key to store
 --- @param value any - The value to store (will be saved to SavedVariables)
-function AutoLFM.Core.Storage.Set(key, value)
+function TeronAutoLFM.Core.Storage.Set(key, value)
   local charData = getCharData(true)
   if not charData then return end
 
@@ -130,10 +130,10 @@ end
 for i = 1, table.getn(SETTINGS_REGISTRY) do
   local setting = SETTINGS_REGISTRY[i]
   local capitalizedKey = string.upper(string.sub(setting.key, 1, 1)) .. string.sub(setting.key, 2)
-  AutoLFM.Core.Storage["Get" .. capitalizedKey] = function()
-      return AutoLFM.Core.Storage.Get(setting.key, setting.default)
+  TeronAutoLFM.Core.Storage["Get" .. capitalizedKey] = function()
+      return TeronAutoLFM.Core.Storage.Get(setting.key, setting.default)
   end
-  AutoLFM.Core.Storage["Set" .. capitalizedKey] = function(value)
+  TeronAutoLFM.Core.Storage["Set" .. capitalizedKey] = function(value)
       local coerced = value
       if setting.type == "boolean" then
           coerced = value == true
@@ -142,7 +142,7 @@ for i = 1, table.getn(SETTINGS_REGISTRY) do
       elseif setting.type == "number" then
           coerced = tonumber(value)
       end
-      AutoLFM.Core.Storage.Set(setting.key, coerced)
+      TeronAutoLFM.Core.Storage.Set(setting.key, coerced)
   end
 end
 
@@ -152,37 +152,37 @@ end
 --- Sets minimap button position or clears it if nil
 --- @param x number - X coordinate (optional, pass nil to clear position)
 --- @param y number - Y coordinate (optional, pass nil to clear position)
-function AutoLFM.Core.Storage.SetMinimapPos(x, y)
+function TeronAutoLFM.Core.Storage.SetMinimapPos(x, y)
   if x and y then
-      AutoLFM.Core.Storage.Set("minimapPos", { x = x, y = y })
+      TeronAutoLFM.Core.Storage.Set("minimapPos", { x = x, y = y })
   else
-      AutoLFM.Core.Storage.Set("minimapPos", nil)
+      TeronAutoLFM.Core.Storage.Set("minimapPos", nil)
   end
 end
 
 --- Updates a single dungeon color filter state
 --- @param filterId string - Color name (e.g., "RED", "GREEN", "YELLOW")
 --- @param enabled boolean - Whether dungeons of this color should be shown
-function AutoLFM.Core.Storage.SetDungeonFilter(filterId, enabled)
-  local filters = AutoLFM.Core.Storage.GetDungeonFilters()
+function TeronAutoLFM.Core.Storage.SetDungeonFilter(filterId, enabled)
+  local filters = TeronAutoLFM.Core.Storage.GetDungeonFilters()
   filters[filterId] = enabled
-  AutoLFM.Core.Storage.SetDungeonFilters(filters)
+  TeronAutoLFM.Core.Storage.SetDungeonFilters(filters)
 end
 
 --- Deep copy utility for cloning tables recursively
 --- @param tbl table - The table to deep copy
 --- @return table - A new table with all nested tables copied
-AutoLFM.Core.Storage.DeepCopy = deepCopy
+TeronAutoLFM.Core.Storage.DeepCopy = deepCopy
 
 --=============================================================================
 -- ADDITIONAL SPECIALIZED ACCESSORS
 --=============================================================================
 --- Sets the broadcast interval with validation
 --- @param interval number - Interval in seconds (30-7200)
-function AutoLFM.Core.Storage.SetBroadcastInterval(interval)
+function TeronAutoLFM.Core.Storage.SetBroadcastInterval(interval)
   -- Clamp between 30 seconds and 2 hours
   local clamped = math.max(30, math.min(7200, tonumber(interval) or 60))
-  AutoLFM.Core.Storage.Set("broadcastInterval", clamped)
+  TeronAutoLFM.Core.Storage.Set("broadcastInterval", clamped)
 end
 
 --=============================================================================
@@ -233,11 +233,11 @@ end
 --- Initializes persistent storage for current character
 --- Creates character-specific storage and detects hardcore mode
 --- @return boolean - True if initialization succeeded, false otherwise
-function AutoLFM.Core.Storage.Init()
+function TeronAutoLFM.Core.Storage.Init()
   local name = UnitName("player")
   local realm = GetRealmName()
   if not name or not realm then
-    AutoLFM.Core.Utils.LogError("Storage.Init failed: UnitName or GetRealmName returned nil (name=" .. tostring(name) .. ", realm=" .. tostring(realm) .. ")")
+    TeronAutoLFM.Core.Utils.LogError("Storage.Init failed: UnitName or GetRealmName returned nil (name=" .. tostring(name) .. ", realm=" .. tostring(realm) .. ")")
     return false
   end
   characterID = name .. "-" .. realm
@@ -264,7 +264,7 @@ end
 --=============================================================================
 --- Gets all presets for the current character
 --- @return table - Table with 'data' (preset name -> preset data) and 'order' (array of preset names)
-function AutoLFM.Core.Storage.GetPresets()
+function TeronAutoLFM.Core.Storage.GetPresets()
   if not V3_Presets or not characterID then
     return { data = {}, order = {} }
   end
@@ -279,11 +279,11 @@ end
 --- @param presetName string - Name of the preset
 --- @param presetData table - Preset data to save
 --- @return boolean - True if successful
-function AutoLFM.Core.Storage.SavePreset(presetName, presetData)
+function TeronAutoLFM.Core.Storage.SavePreset(presetName, presetData)
   if not presetName or presetName == "" then return false end
   if not V3_Presets or not characterID then return false end
 
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
 
   -- Check if preset already exists
   local exists = false
@@ -309,18 +309,18 @@ end
 --- Checks if a preset exists
 --- @param presetName string - Name of the preset
 --- @return boolean - True if preset exists
-function AutoLFM.Core.Storage.PresetExists(presetName)
+function TeronAutoLFM.Core.Storage.PresetExists(presetName)
   if not presetName or presetName == "" then return false end
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
   return presets.data[presetName] ~= nil
 end
 
 --- Deletes a preset
 --- @param presetName string - Name of the preset to delete
 --- @return boolean - True if successful
-function AutoLFM.Core.Storage.DeletePreset(presetName)
+function TeronAutoLFM.Core.Storage.DeletePreset(presetName)
   if not presetName or presetName == "" then return false end
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
 
   -- Remove from data
   presets.data[presetName] = nil
@@ -340,9 +340,9 @@ end
 --- Moves a preset up in the order
 --- @param presetName string - Name of the preset to move
 --- @return boolean - True if successful
-function AutoLFM.Core.Storage.MovePresetUp(presetName)
+function TeronAutoLFM.Core.Storage.MovePresetUp(presetName)
   if not presetName or presetName == "" then return false end
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
 
   local index
   for i = 1, table.getn(presets.order) do
@@ -360,9 +360,9 @@ end
 --- Moves a preset down in the order
 --- @param presetName string - Name of the preset to move
 --- @return boolean - True if successful
-function AutoLFM.Core.Storage.MovePresetDown(presetName)
+function TeronAutoLFM.Core.Storage.MovePresetDown(presetName)
   if not presetName or presetName == "" then return false end
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
 
   local index
   for i = 1, table.getn(presets.order) do
@@ -384,18 +384,18 @@ end
 --- Must be called when the spellbook is guaranteed to be loaded (SPELLS_CHANGED).
 --- Only runs once: skips if isHardcore is already set.
 --- @return boolean - True if character is hardcore
-function AutoLFM.Core.Storage.DetectAndPersistHardcore()
+function TeronAutoLFM.Core.Storage.DetectAndPersistHardcore()
   local charData = getCharData()
   if not charData or charData.isHardcore ~= nil then return false end
 
   local isHardcore = detectHardcoreCharacter()
-  AutoLFM.Core.Storage.SetIsHardcore(isHardcore)
+  TeronAutoLFM.Core.Storage.SetIsHardcore(isHardcore)
   return isHardcore
 end
 
 --=============================================================================
 -- REGISTRATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Core.Storage", function()
-  AutoLFM.Core.Storage.Init()
+TeronAutoLFM.Core.SafeRegisterInit("Core.Storage", function()
+  TeronAutoLFM.Core.Storage.Init()
 end, { id = "I02" })

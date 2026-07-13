@@ -1,8 +1,8 @@
-# AutoLFM - Developer Guide
+# TeronAutoLFM - Developer Guide
 
 ## 📚 Documentation Overview
 
-This guide provides entry points to AutoLFM's development documentation:
+This guide provides entry points to TeronAutoLFM's development documentation:
 
 | Document | Purpose |
 |----------|----------|
@@ -15,7 +15,7 @@ This guide provides entry points to AutoLFM's development documentation:
 ## 🚀 Quick Start
 
 ### 1. Understanding Maestro
-Read [**Maestro-Architecture.md**](Maestro-Architecture.md) to understand the command bus architecture that powers AutoLFM.
+Read [**Maestro-Architecture.md**](Maestro-Architecture.md) to understand the command bus architecture that powers TeronAutoLFM.
 
 ### 2. Coding Standards
 Read [**Best-Practices.md**](Best-Practices.md) for Lua 5.0 compatibility rules and development guidelines.
@@ -24,7 +24,7 @@ Read [**Best-Practices.md**](Best-Practices.md) for Lua 5.0 compatibility rules 
 Read [**ID-System-Reference.md**](ID-System-Reference.md) to understand component organization, state management patterns, and all 92 IDs.
 
 ### 4. External Integration
-Check [**API.md**](API.md) for the public API documentation to integrate AutoLFM with other addons.
+Check [**API.md**](API.md) for the public API documentation to integrate TeronAutoLFM with other addons.
 
 ## 🎯 Maestro Quick Reference
 
@@ -59,7 +59,7 @@ User Action → Command → State Change → Event → UI Update
 ## 📁 Project Structure
 
 ```
-AutoLFM/
+TeronAutoLFM/
 ├── Core/           # Framework (Maestro, Ticker, Events, Utils)
 ├── Components/     # Reusable components (Debug, MinimapButton)
 ├── Logic/          # Business logic and state management

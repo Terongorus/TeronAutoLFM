@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Ticker
+-- TeronAutoLFM: Ticker
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Core = AutoLFM.Core or {}
-AutoLFM.Core.Ticker = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Core = TeronAutoLFM.Core or {}
+TeronAutoLFM.Core.Ticker = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -38,7 +38,7 @@ local function onUpdate()
         -- Call the ticker callback
         local success, err = pcall(ticker.callback, elapsed)
         if not success then
-          AutoLFM.Core.Utils.LogError("Ticker '" .. id .. "' failed: " .. tostring(err))
+          TeronAutoLFM.Core.Utils.LogError("Ticker '" .. id .. "' failed: " .. tostring(err))
         end
         ticker.lastTick = now
       end
@@ -50,7 +50,7 @@ end
 local function ensureFrame()
   if tickerFrame then return end
 
-  tickerFrame = CreateFrame("Frame", "AutoLFM_TickerFrame")
+  tickerFrame = CreateFrame("Frame", "TeronAutoLFM_TickerFrame")
   tickerFrame:Hide()
   tickerFrame:SetScript("OnUpdate", onUpdate)
 end
@@ -76,24 +76,24 @@ end
 --- @param callback function - Function to call on each tick, receives (elapsed) as argument
 --- @param startImmediately boolean - If true, ticker starts enabled (default: false)
 --- @return boolean - True if registration successful
-function AutoLFM.Core.Ticker.Register(id, interval, callback, startImmediately)
+function TeronAutoLFM.Core.Ticker.Register(id, interval, callback, startImmediately)
   if not id or type(id) ~= "string" then
-    AutoLFM.Core.Utils.LogError("Ticker.Register: id must be a non-empty string")
+    TeronAutoLFM.Core.Utils.LogError("Ticker.Register: id must be a non-empty string")
     return false
   end
 
   if tickers[id] then
-    AutoLFM.Core.Utils.LogWarning("Ticker.Register: ticker '" .. id .. "' already registered, use Update to modify")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.Register: ticker '" .. id .. "' already registered, use Update to modify")
     return false
   end
 
   if not interval or type(interval) ~= "number" or interval <= 0 then
-    AutoLFM.Core.Utils.LogError("Ticker.Register: interval must be a positive number")
+    TeronAutoLFM.Core.Utils.LogError("Ticker.Register: interval must be a positive number")
     return false
   end
 
   if not callback or type(callback) ~= "function" then
-    AutoLFM.Core.Utils.LogError("Ticker.Register: callback must be a function")
+    TeronAutoLFM.Core.Utils.LogError("Ticker.Register: callback must be a function")
     return false
   end
 
@@ -115,17 +115,17 @@ function AutoLFM.Core.Ticker.Register(id, interval, callback, startImmediately)
     updateFrameState()
   end
 
-  AutoLFM.Core.Utils.LogInfo("Ticker registered: " .. id .. " (interval=" .. interval .. "s, enabled=" .. tostring(enabled) .. ")")
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker registered: " .. id .. " (interval=" .. interval .. "s, enabled=" .. tostring(enabled) .. ")")
   return true
 end
 
 --- Starts a registered ticker
 --- @param id string - Ticker identifier
 --- @return boolean - True if ticker was started
-function AutoLFM.Core.Ticker.Start(id)
+function TeronAutoLFM.Core.Ticker.Start(id)
   local ticker = tickers[id]
   if not ticker then
-    AutoLFM.Core.Utils.LogWarning("Ticker.Start: ticker '" .. tostring(id) .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.Start: ticker '" .. tostring(id) .. "' not found")
     return false
   end
 
@@ -138,17 +138,17 @@ function AutoLFM.Core.Ticker.Start(id)
   activeTickers = activeTickers + 1
   updateFrameState()
 
-  AutoLFM.Core.Utils.LogInfo("Ticker started: " .. id)
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker started: " .. id)
   return true
 end
 
 --- Stops a registered ticker
 --- @param id string - Ticker identifier
 --- @return boolean - True if ticker was stopped
-function AutoLFM.Core.Ticker.Stop(id)
+function TeronAutoLFM.Core.Ticker.Stop(id)
   local ticker = tickers[id]
   if not ticker then
-    AutoLFM.Core.Utils.LogWarning("Ticker.Stop: ticker '" .. tostring(id) .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.Stop: ticker '" .. tostring(id) .. "' not found")
     return false
   end
 
@@ -160,14 +160,14 @@ function AutoLFM.Core.Ticker.Stop(id)
   activeTickers = activeTickers - 1
   updateFrameState()
 
-  AutoLFM.Core.Utils.LogInfo("Ticker stopped: " .. id)
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker stopped: " .. id)
   return true
 end
 
 --- Checks if a ticker is currently running
 --- @param id string - Ticker identifier
 --- @return boolean - True if ticker exists and is enabled
-function AutoLFM.Core.Ticker.IsRunning(id)
+function TeronAutoLFM.Core.Ticker.IsRunning(id)
   local ticker = tickers[id]
   return ticker and ticker.enabled or false
 end
@@ -175,10 +175,10 @@ end
 --- Unregisters a ticker completely
 --- @param id string - Ticker identifier
 --- @return boolean - True if ticker was unregistered
-function AutoLFM.Core.Ticker.Unregister(id)
+function TeronAutoLFM.Core.Ticker.Unregister(id)
   local ticker = tickers[id]
   if not ticker then
-    AutoLFM.Core.Utils.LogWarning("Ticker.Unregister: ticker '" .. tostring(id) .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.Unregister: ticker '" .. tostring(id) .. "' not found")
     return false
   end
 
@@ -190,7 +190,7 @@ function AutoLFM.Core.Ticker.Unregister(id)
   tickerCount = tickerCount - 1
   updateFrameState()
 
-  AutoLFM.Core.Utils.LogInfo("Ticker unregistered: " .. id)
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker unregistered: " .. id)
   return true
 end
 
@@ -198,27 +198,27 @@ end
 --- @param id string - Ticker identifier
 --- @param newInterval number - New interval in seconds
 --- @return boolean - True if interval was updated
-function AutoLFM.Core.Ticker.SetInterval(id, newInterval)
+function TeronAutoLFM.Core.Ticker.SetInterval(id, newInterval)
   local ticker = tickers[id]
   if not ticker then
-    AutoLFM.Core.Utils.LogWarning("Ticker.SetInterval: ticker '" .. tostring(id) .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.SetInterval: ticker '" .. tostring(id) .. "' not found")
     return false
   end
 
   if not newInterval or type(newInterval) ~= "number" or newInterval <= 0 then
-    AutoLFM.Core.Utils.LogError("Ticker.SetInterval: interval must be a positive number")
+    TeronAutoLFM.Core.Utils.LogError("Ticker.SetInterval: interval must be a positive number")
     return false
   end
 
   ticker.interval = newInterval
-  AutoLFM.Core.Utils.LogInfo("Ticker interval updated: " .. id .. " = " .. newInterval .. "s")
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker interval updated: " .. id .. " = " .. newInterval .. "s")
   return true
 end
 
 --- Gets the current interval of a ticker
 --- @param id string - Ticker identifier
 --- @return number|nil - Interval in seconds, or nil if ticker not found
-function AutoLFM.Core.Ticker.GetInterval(id)
+function TeronAutoLFM.Core.Ticker.GetInterval(id)
   local ticker = tickers[id]
   return ticker and ticker.interval
 end
@@ -227,10 +227,10 @@ end
 --- Useful for immediate execution without waiting for interval
 --- @param id string - Ticker identifier
 --- @return boolean - True if callback was executed
-function AutoLFM.Core.Ticker.TriggerNow(id)
+function TeronAutoLFM.Core.Ticker.TriggerNow(id)
   local ticker = tickers[id]
   if not ticker then
-    AutoLFM.Core.Utils.LogWarning("Ticker.TriggerNow: ticker '" .. tostring(id) .. "' not found")
+    TeronAutoLFM.Core.Utils.LogWarning("Ticker.TriggerNow: ticker '" .. tostring(id) .. "' not found")
     return false
   end
 
@@ -239,7 +239,7 @@ function AutoLFM.Core.Ticker.TriggerNow(id)
 
   local success, err = pcall(ticker.callback, elapsed)
   if not success then
-    AutoLFM.Core.Utils.LogError("Ticker '" .. id .. "' failed: " .. tostring(err))
+    TeronAutoLFM.Core.Utils.LogError("Ticker '" .. id .. "' failed: " .. tostring(err))
     return false
   end
 
@@ -249,7 +249,7 @@ end
 
 --- Gets statistics about the ticker system
 --- @return table - Stats object with count, active, and ids fields
-function AutoLFM.Core.Ticker.GetStats()
+function TeronAutoLFM.Core.Ticker.GetStats()
   local ids = {}
   for id, ticker in pairs(tickers) do
     table.insert(ids, {
@@ -269,7 +269,7 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Core.Ticker", function()
+TeronAutoLFM.Core.SafeRegisterInit("Core.Ticker", function()
   -- Frame is created on-demand when first ticker is registered
-  AutoLFM.Core.Utils.LogInfo("Ticker system initialized")
+  TeronAutoLFM.Core.Utils.LogInfo("Ticker system initialized")
 end, { id = "I24", dependencies = {} })

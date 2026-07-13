@@ -323,7 +323,7 @@ Ticker IDs are defined in `Core/Constants.lua` under `TICKER_IDS`. They identify
 
 ```lua
 -- Determine next available ID (C24 is current max, so use C25)
-AutoLFM.Core.Maestro.RegisterCommand("MyFeature.DoAction", function()
+TeronAutoLFM.Core.Maestro.RegisterCommand("MyFeature.DoAction", function()
     -- Implementation
 end, { id = "C25" })
 ```
@@ -332,7 +332,7 @@ end, { id = "C25" })
 
 ```lua
 -- Determine next available ID (S20 is current max, so use S21)
-AutoLFM.Core.SafeRegisterState("MyFeature.Config", defaultValue, { id = "S21" })
+TeronAutoLFM.Core.SafeRegisterState("MyFeature.Config", defaultValue, { id = "S21" })
 ```
 
 ### Example: New Static Init Handler
@@ -340,7 +340,7 @@ AutoLFM.Core.SafeRegisterState("MyFeature.Config", defaultValue, { id = "S21" })
 ```lua
 -- For static handlers, insert before dynamic IDs (I24+)
 -- Current max explicit is I23, next would be to shift dynamic IDs
-AutoLFM.Core.SafeRegisterInit("MyFeature.Init", function()
+TeronAutoLFM.Core.SafeRegisterInit("MyFeature.Init", function()
     -- Initialization
 end, {
     id = "I27",  -- Next available static ID (shifts dynamic to I27+)
@@ -353,9 +353,9 @@ end, {
 ```lua
 -- ContentPanel factory automatically assigns IDs starting at I25
 -- No need to specify listenerInitHandler - it's auto-assigned
-AutoLFM.UI.Content.MyPanel = AutoLFM.UI.CreateContentPanel({
+TeronAutoLFM.UI.Content.MyPanel = TeronAutoLFM.UI.CreateContentPanel({
   name = "MyPanel",
-  rowTemplatePrefix = "AutoLFM_MyRow",
+  rowTemplatePrefix = "TeronAutoLFM_MyRow",
   createRowsFunc = function(scrollChild) ... end,
   listeningEvent = "Selection.Changed",
   listenerDependencies = { "Logic.Selection" },

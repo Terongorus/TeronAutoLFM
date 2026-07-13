@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Message Builder
+-- TeronAutoLFM: Message Builder
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Message = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Message = {}
 
 --=============================================================================
 -- PRIVATE HELPERS
@@ -12,7 +12,7 @@ AutoLFM.Logic.Message = {}
 --- @param targetSize number - Target group size
 --- @return number, boolean - Missing count and whether group is full
 local function calculateMissing(targetSize)
-  local currentSize = AutoLFM.Logic.Group.GetSize()
+  local currentSize = TeronAutoLFM.Logic.Group.GetSize()
   local missing = targetSize - currentSize
   return missing, missing <= 0
 end
@@ -70,12 +70,12 @@ end
 --- Builds dungeon message
 --- @return string - Formatted dungeon message
 local function buildDungeonMessage()
-  local dungeonNames = AutoLFM.Core.Maestro.GetState("Selection.DungeonNames")
+  local dungeonNames = TeronAutoLFM.Core.Maestro.GetState("Selection.DungeonNames")
   if not dungeonNames or table.getn(dungeonNames) == 0 then
     return ""
   end
 
-  AutoLFM.Core.Utils.EnsureLookupTables()
+  TeronAutoLFM.Core.Utils.EnsureLookupTables()
 
   local targetSize = 5
   local missing, isFull = calculateMissing(targetSize)
@@ -83,13 +83,13 @@ local function buildDungeonMessage()
     return ""
   end
 
-  local roles = AutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
   local rolesText = formatRolesForMessage(roles)
 
   local dungeonTags = {}
   for i = 1, table.getn(dungeonNames) do
     local dungeonName = dungeonNames[i]
-    local dungeonInfo = AutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeonName]
+    local dungeonInfo = TeronAutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeonName]
     if dungeonInfo then
       table.insert(dungeonTags, dungeonInfo.data.tag)
     end
@@ -110,7 +110,7 @@ local function buildDungeonMessage()
   end
 
   -- Append details text if present
-  local detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+  local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
   if detailsText ~= "" then
     message = message .. " " .. detailsText
   end
@@ -121,16 +121,16 @@ end
 --- Builds raid message
 --- @return string - Formatted raid message
 local function buildRaidMessage()
-  local raidName = AutoLFM.Core.Maestro.GetState("Selection.RaidName")
+  local raidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
   if not raidName then
     return ""
   end
 
   -- Trigger lazy loading of lookup tables
-  AutoLFM.Core.Utils.EnsureLookupTables()
+  TeronAutoLFM.Core.Utils.EnsureLookupTables()
 
   -- Find the raid by name (O(1) lookup)
-  local raidInfo = AutoLFM.Core.Constants.RAIDS_BY_NAME[raidName]
+  local raidInfo = TeronAutoLFM.Core.Constants.RAIDS_BY_NAME[raidName]
   if not raidInfo then
     return ""
   end
@@ -139,7 +139,7 @@ local function buildRaidMessage()
 
   -- Get target size and calculate missing
   -- Selection.RaidSize is already set to raid.raidSizeMin on selection
-  local targetSize = AutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
+  local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
   local missing, isFull = calculateMissing(targetSize)
   
   -- If raid is full, don't show LFM
@@ -147,10 +147,10 @@ local function buildRaidMessage()
     return ""
   end
   
-  local currentSize = AutoLFM.Logic.Group.GetSize()
+  local currentSize = TeronAutoLFM.Logic.Group.GetSize()
 
   -- Get roles
-  local roles = AutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
   local rolesText = formatRolesForMessage(roles)
 
   -- Format message: "MC LF5M Need Tank & Heal 35/40" or "MC LF5M 35/40"
@@ -162,7 +162,7 @@ local function buildRaidMessage()
   end
 
   -- Append details text if present
-  local detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+  local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
   if detailsText ~= "" then
     message = message .. " " .. detailsText
   end
@@ -173,21 +173,21 @@ end
 --- Builds custom message with variable substitution
 --- @return string - Formatted custom message
 local function buildCustomMessage()
-  local customMessage = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+  local customMessage = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
   if customMessage == "" then
     return ""
   end
 
-  local targetSize = AutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
+  local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
   local missing, isFull = calculateMissing(targetSize)
-  local currentSize = AutoLFM.Logic.Group.GetSize()
+  local currentSize = TeronAutoLFM.Logic.Group.GetSize()
 
   if isFull then
     return ""
   end
 
   -- Get roles
-  local roles = AutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
   local rolesText = getRolesText(roles)
 
   -- Replace variables in message
@@ -203,7 +203,7 @@ end
 --- Builds the complete broadcast message based on current selection
 --- @return string - The message to broadcast
 local function buildMessage()
-  local selectionMode = AutoLFM.Core.Maestro.GetState("Selection.Mode")
+  local selectionMode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
 
   if selectionMode == "custom" then
     return buildCustomMessage()
@@ -214,8 +214,8 @@ local function buildMessage()
   end
 
   -- If mode is "none", check for details text or roles
-  local detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
-  local roles = AutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+  local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
   local rolesText = formatRolesForMessage(roles)
 
   -- Combine roles and details text
@@ -239,14 +239,14 @@ end
 --=============================================================================
 --- Gets the current broadcast message
 --- @return string - The message to broadcast
-function AutoLFM.Logic.Message.GetMessage()
-  return AutoLFM.Core.Maestro.GetState("Message.ToBroadcast") or ""
+function TeronAutoLFM.Logic.Message.GetMessage()
+  return TeronAutoLFM.Core.Maestro.GetState("Message.ToBroadcast") or ""
 end
 
 --- Manually rebuilds the message (usually triggered by Selection.Changed)
-function AutoLFM.Logic.Message.RebuildMessage()
+function TeronAutoLFM.Logic.Message.RebuildMessage()
   local message = buildMessage()
-  AutoLFM.Core.Maestro.SetState("Message.ToBroadcast", message)
+  TeronAutoLFM.Core.Maestro.SetState("Message.ToBroadcast", message)
 end
 
 --- Replaces variables in custom message (for preview/presets)
@@ -255,10 +255,10 @@ end
 --- @param targetSize number - Target group size
 --- @param roles table - Array of role strings
 --- @return string - Message with variables replaced
-function AutoLFM.Logic.Message.ReplaceVariables(message, currentSize, targetSize, roles)
+function TeronAutoLFM.Logic.Message.ReplaceVariables(message, currentSize, targetSize, roles)
   -- Validate message parameter
   if type(message) ~= "string" then
-    AutoLFM.Core.Utils.LogError("ReplaceVariables: message must be string, got " .. type(message))
+    TeronAutoLFM.Core.Utils.LogError("ReplaceVariables: message must be string, got " .. type(message))
     return ""
   end
 
@@ -266,18 +266,18 @@ function AutoLFM.Logic.Message.ReplaceVariables(message, currentSize, targetSize
 
   -- Validate numeric parameters
   if type(currentSize) ~= "number" then
-    AutoLFM.Core.Utils.LogError("ReplaceVariables: currentSize must be number, got " .. type(currentSize))
+    TeronAutoLFM.Core.Utils.LogError("ReplaceVariables: currentSize must be number, got " .. type(currentSize))
     return message
   end
 
   if type(targetSize) ~= "number" then
-    AutoLFM.Core.Utils.LogError("ReplaceVariables: targetSize must be number, got " .. type(targetSize))
+    TeronAutoLFM.Core.Utils.LogError("ReplaceVariables: targetSize must be number, got " .. type(targetSize))
     return message
   end
 
   -- Validate roles parameter
   if roles and type(roles) ~= "table" then
-    AutoLFM.Core.Utils.LogError("ReplaceVariables: roles must be table or nil, got " .. type(roles))
+    TeronAutoLFM.Core.Utils.LogError("ReplaceVariables: roles must be table or nil, got " .. type(roles))
     roles = {}
   end
 
@@ -296,45 +296,45 @@ end
 --=============================================================================
 -- STATE DECLARATIONS
 --=============================================================================
-AutoLFM.Core.SafeRegisterState("Message.ToBroadcast", "", { id = "S19" })
+TeronAutoLFM.Core.SafeRegisterState("Message.ToBroadcast", "", { id = "S19" })
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Logic.Message", function()
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Message", function()
   -- Register event listeners (wait for Selection.Changed and Group.SizeChanged to be registered)
 
   --- Rebuilds message when selection changes
-  AutoLFM.Core.Maestro.Listen(
+  TeronAutoLFM.Core.Maestro.Listen(
     "Logic.Message.OnSelectionChanged",
     "Selection.Changed",
     function()
-      AutoLFM.Logic.Message.RebuildMessage()
+      TeronAutoLFM.Logic.Message.RebuildMessage()
     end,
     { id = "L01" }
   )
 
   --- Rebuilds message when group size changes (for LF3M -> LF2M updates)
-  AutoLFM.Core.Maestro.Listen(
+  TeronAutoLFM.Core.Maestro.Listen(
     "Logic.Message.OnGroupSizeChanged",
     "Group.SizeChanged",
     function(payload)
-      local mode = AutoLFM.Core.Maestro.GetState("Selection.Mode")
+      local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
 
       -- Rebuild for dungeons, raid, AND custom (custom can have {MIS}/{CUR} variables)
       if mode == "dungeons" or mode == "raid" or mode == "custom" then
-        AutoLFM.Logic.Message.RebuildMessage()
+        TeronAutoLFM.Logic.Message.RebuildMessage()
 
         -- Log the automatic update
         if payload and payload.size then
-          AutoLFM.Core.Utils.LogAction("Message auto-updated (group size: " .. payload.size .. ")")
+          TeronAutoLFM.Core.Utils.LogAction("Message auto-updated (group size: " .. payload.size .. ")")
         end
       end
     end,
     { id = "L02" }
   )
 
-  AutoLFM.Logic.Message.RebuildMessage()
+  TeronAutoLFM.Logic.Message.RebuildMessage()
 end, {
   id = "I08",
   dependencies = { "Logic.Selection", "Logic.Group", "Core.Events" }

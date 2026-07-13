@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Presets UI
+-- TeronAutoLFM: Presets UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
-AutoLFM.UI.Content.Presets = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
+TeronAutoLFM.UI.Content.Presets = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -39,50 +39,50 @@ end
 --- @return table - Snapshot containing dungeonNames, raidName, raidSize, roles, customMessage, detailsText, customGroupSize, mode
 local function saveSelectionState()
   return {
-    dungeonNames = AutoLFM.Core.Maestro.GetState("Selection.DungeonNames"),
-    raidName = AutoLFM.Core.Maestro.GetState("Selection.RaidName"),
-    raidSize = AutoLFM.Core.Maestro.GetState("Selection.RaidSize"),
-    roles = AutoLFM.Core.Maestro.GetState("Selection.Roles"),
-    customMessage = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage"),
-    detailsText = AutoLFM.Core.Maestro.GetState("Selection.DetailsText"),
-    customGroupSize = AutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize"),
-    mode = AutoLFM.Core.Maestro.GetState("Selection.Mode")
+    dungeonNames = TeronAutoLFM.Core.Maestro.GetState("Selection.DungeonNames"),
+    raidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName"),
+    raidSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize"),
+    roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles"),
+    customMessage = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage"),
+    detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText"),
+    customGroupSize = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize"),
+    mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
   }
 end
 
 --- Restores a previously saved selection state snapshot back into Maestro
 --- @param state table - The snapshot table returned by saveSelectionState
 local function restoreSelectionState(state)
-  AutoLFM.Core.Maestro.SetState("Selection.DungeonNames", state.dungeonNames)
-  AutoLFM.Core.Maestro.SetState("Selection.RaidName", state.raidName)
-  AutoLFM.Core.Maestro.SetState("Selection.RaidSize", state.raidSize)
-  AutoLFM.Core.Maestro.SetState("Selection.Roles", state.roles)
-  AutoLFM.Core.Maestro.SetState("Selection.CustomMessage", state.customMessage)
-  AutoLFM.Core.Maestro.SetState("Selection.DetailsText", state.detailsText)
-  AutoLFM.Core.Maestro.SetState("Selection.CustomGroupSize", state.customGroupSize)
-  AutoLFM.Core.Maestro.SetState("Selection.Mode", state.mode)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.DungeonNames", state.dungeonNames)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", state.raidName)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", state.raidSize)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", state.roles)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.CustomMessage", state.customMessage)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.DetailsText", state.detailsText)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.CustomGroupSize", state.customGroupSize)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.Mode", state.mode)
 end
 
 --- Applies preset data fields to the current Maestro selection state and sets the mode
 --- @param presetData table - The preset's stored data (dungeonNames, raidName, roles, etc.)
 --- @param presetType string - The resolved preset type: "Custom", "Dungeons", or "Raid"
 local function applyPresetData(presetData, presetType)
-  if presetData.dungeonNames then AutoLFM.Core.Maestro.SetState("Selection.DungeonNames", presetData.dungeonNames) end
+  if presetData.dungeonNames then TeronAutoLFM.Core.Maestro.SetState("Selection.DungeonNames", presetData.dungeonNames) end
   if presetData.raidName then 
-    AutoLFM.Core.Maestro.SetState("Selection.RaidName", presetData.raidName)
-    AutoLFM.Core.Maestro.SetState("Selection.RaidSize", presetData.raidSize or 40)
+    TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", presetData.raidName)
+    TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", presetData.raidSize or 40)
   end
-  if presetData.roles then AutoLFM.Core.Maestro.SetState("Selection.Roles", presetData.roles) end
-  if presetData.customMessage then AutoLFM.Core.Maestro.SetState("Selection.CustomMessage", presetData.customMessage) end
-  if presetData.detailsText then AutoLFM.Core.Maestro.SetState("Selection.DetailsText", presetData.detailsText) end
-  if presetData.customGroupSize then AutoLFM.Core.Maestro.SetState("Selection.CustomGroupSize", presetData.customGroupSize) end
+  if presetData.roles then TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", presetData.roles) end
+  if presetData.customMessage then TeronAutoLFM.Core.Maestro.SetState("Selection.CustomMessage", presetData.customMessage) end
+  if presetData.detailsText then TeronAutoLFM.Core.Maestro.SetState("Selection.DetailsText", presetData.detailsText) end
+  if presetData.customGroupSize then TeronAutoLFM.Core.Maestro.SetState("Selection.CustomGroupSize", presetData.customGroupSize) end
   
   if presetType == "Custom" then
-    AutoLFM.Core.Maestro.SetState("Selection.Mode", "custom")
+    TeronAutoLFM.Core.Maestro.SetState("Selection.Mode", "custom")
   elseif presetType == "Dungeons" then
-    AutoLFM.Core.Maestro.SetState("Selection.Mode", "dungeons")
+    TeronAutoLFM.Core.Maestro.SetState("Selection.Mode", "dungeons")
   elseif presetType == "Raid" then
-    AutoLFM.Core.Maestro.SetState("Selection.Mode", "raid")
+    TeronAutoLFM.Core.Maestro.SetState("Selection.Mode", "raid")
   end
 end
 
@@ -91,34 +91,34 @@ end
 --=============================================================================
 --- Initializes the presets content frame, resolves scroll child, and loads condensed preference
 --- @param frame frame - The presets content frame
-function AutoLFM.UI.Content.Presets.OnLoad(frame)
+function TeronAutoLFM.UI.Content.Presets.OnLoad(frame)
   contentFrame = frame
   local scrollFrame = getglobal(frame:GetName() .. "_ScrollFrame")
   if scrollFrame then
     scrollChild = getglobal(scrollFrame:GetName() .. "_ScrollChild")
   end
   
-  isCondensed = AutoLFM.Core.Storage.GetPresetsCondensed()
+  isCondensed = TeronAutoLFM.Core.Storage.GetPresetsCondensed()
 end
 
 --- Handles the presets frame becoming visible; refreshes condensed state and redraws rows
 --- @param frame frame - The presets content frame
-function AutoLFM.UI.Content.Presets.OnShow(frame)
-  isCondensed = AutoLFM.Core.Storage.GetPresetsCondensed()
-  AutoLFM.UI.Content.Presets.Refresh()
+function TeronAutoLFM.UI.Content.Presets.OnShow(frame)
+  isCondensed = TeronAutoLFM.Core.Storage.GetPresetsCondensed()
+  TeronAutoLFM.UI.Content.Presets.Refresh()
 end
 
 --- Handles the presets frame being hidden; clears all preset rows
 --- @param frame frame - The presets content frame
-function AutoLFM.UI.Content.Presets.OnHide(frame)
-  AutoLFM.UI.Content.Presets.ClearRows()
+function TeronAutoLFM.UI.Content.Presets.OnHide(frame)
+  TeronAutoLFM.UI.Content.Presets.ClearRows()
 end
 
 --=============================================================================
 -- ROW MANAGEMENT
 --=============================================================================
 --- Hides and removes all preset row frames from the scroll child
-function AutoLFM.UI.Content.Presets.ClearRows()
+function TeronAutoLFM.UI.Content.Presets.ClearRows()
   for i = 1, table.getn(presetRows) do
     presetRows[i]:Hide()
   end
@@ -135,8 +135,8 @@ end
 --- @return frame - The created preset row button frame
 local function createPresetRow(index, presetName, presetData, isFirst, isLast, yOffset)
   -- Ensure lookup tables are built for dungeon/raid lookups
-  if AutoLFM.Core.Utils then
-    AutoLFM.Core.Utils.EnsureLookupTables()
+  if TeronAutoLFM.Core.Utils then
+    TeronAutoLFM.Core.Utils.EnsureLookupTables()
   end
 
   local presetType = "Custom"
@@ -148,7 +148,7 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
   
   local rowHeight = 38
   
-  local row = CreateFrame("Button", "AutoLFM_PresetRow" .. index, scrollChild)
+  local row = CreateFrame("Button", "TeronAutoLFM_PresetRow" .. index, scrollChild)
   row:SetWidth(295)
   row:SetHeight(rowHeight)
   row:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
@@ -168,10 +168,10 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
   if isCondensed then
     local oldState = saveSelectionState()
     applyPresetData(presetData, presetType)
-    AutoLFM.Logic.Message.RebuildMessage()
-    local previewMsg = AutoLFM.Core.Maestro.GetState("Message.ToBroadcast") or ""
+    TeronAutoLFM.Logic.Message.RebuildMessage()
+    local previewMsg = TeronAutoLFM.Core.Maestro.GetState("Message.ToBroadcast") or ""
     restoreSelectionState(oldState)
-    AutoLFM.Logic.Message.RebuildMessage()
+    TeronAutoLFM.Logic.Message.RebuildMessage()
     
     local msgHeight = measureTextHeight(previewMsg, 230)
     rowHeight = 26 + msgHeight
@@ -207,9 +207,9 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
     
     if presetData.roles and table.getn(presetData.roles) > 0 then
       local roleTextures = {
-        TANK = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Tank",
-        HEAL = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Heal",
-        DPS = "Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Dps"
+        TANK = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Tank",
+        HEAL = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Heal",
+        DPS = "Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Dps"
       }
       for i = 1, table.getn(presetData.roles) do
         local role = presetData.roles[i]
@@ -233,7 +233,7 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
     
     if presetType == "Custom" then
       local groupSize = presetData.customGroupSize or 5
-      local customMsg = AutoLFM.Logic.Message.ReplaceVariables(presetData.customMessage or "", 1, groupSize, presetData.roles)
+      local customMsg = TeronAutoLFM.Logic.Message.ReplaceVariables(presetData.customMessage or "", 1, groupSize, presetData.roles)
       local customHeight = measureTextHeight(customMsg, 200)
       rowHeight = 26 + customHeight
       row:SetHeight(rowHeight)
@@ -248,14 +248,14 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
         local tags = {}
         for i = 1, table.getn(presetData.dungeonNames) do
           local dungeonName = presetData.dungeonNames[i]
-          local dungeonInfo = AutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeonName]
+          local dungeonInfo = TeronAutoLFM.Core.Constants.DUNGEONS_BY_NAME[dungeonName]
           if dungeonInfo then
             table.insert(tags, dungeonInfo.data.tag)
           end
         end
         tagsText = table.concat(tags, ", ")
       elseif presetData.raidName then
-        local raidInfo = AutoLFM.Core.Constants.RAIDS_BY_NAME[presetData.raidName]
+        local raidInfo = TeronAutoLFM.Core.Constants.RAIDS_BY_NAME[presetData.raidName]
         if raidInfo then
           tagsText = raidInfo.data.tag
           if presetData.raidSize then
@@ -293,14 +293,14 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
     upBtn:SetPoint("TOPRIGHT", row, "TOPRIGHT", upBtnOffset, btnY)
     local upIcon = upBtn:CreateTexture(nil, "ARTWORK")
     upIcon:SetAllPoints()
-    upIcon:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Up")
+    upIcon:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Up")
     local upHighlight = upBtn:CreateTexture(nil, "HIGHLIGHT")
     upHighlight:SetAllPoints()
-    upHighlight:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Up")
+    upHighlight:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Up")
     upHighlight:SetBlendMode("ADD")
     upBtn:SetScript("OnClick", function()
-      if AutoLFM.Core.Storage.MovePresetUp(presetName) then
-        AutoLFM.UI.Content.Presets.Refresh()
+      if TeronAutoLFM.Core.Storage.MovePresetUp(presetName) then
+        TeronAutoLFM.UI.Content.Presets.Refresh()
       end
     end)
   end
@@ -312,14 +312,14 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
     downBtn:SetPoint("TOPRIGHT", row, "TOPRIGHT", -1 - btnSpacing, btnY)
     local downIcon = downBtn:CreateTexture(nil, "ARTWORK")
     downIcon:SetAllPoints()
-    downIcon:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Down")
+    downIcon:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Down")
     local downHighlight = downBtn:CreateTexture(nil, "HIGHLIGHT")
     downHighlight:SetAllPoints()
-    downHighlight:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Down")
+    downHighlight:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Down")
     downHighlight:SetBlendMode("ADD")
     downBtn:SetScript("OnClick", function()
-      if AutoLFM.Core.Storage.MovePresetDown(presetName) then
-        AutoLFM.UI.Content.Presets.Refresh()
+      if TeronAutoLFM.Core.Storage.MovePresetDown(presetName) then
+        TeronAutoLFM.UI.Content.Presets.Refresh()
       end
     end)
   end
@@ -330,22 +330,22 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
   deleteBtn:SetPoint("TOPRIGHT", row, "TOPRIGHT", 0, btnY)
   local deleteIcon = deleteBtn:CreateTexture(nil, "ARTWORK")
   deleteIcon:SetAllPoints()
-  deleteIcon:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Close")
+  deleteIcon:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Close")
   local deleteHighlight = deleteBtn:CreateTexture(nil, "HIGHLIGHT")
   deleteHighlight:SetAllPoints()
-  deleteHighlight:SetTexture("Interface\\AddOns\\AutoLFM\\UI\\Textures\\Icons\\Close")
+  deleteHighlight:SetTexture("Interface\\AddOns\\TeronAutoLFM\\UI\\Textures\\Icons\\Close")
   deleteHighlight:SetBlendMode("ADD")
   deleteBtn:SetScript("OnClick", function()
-    AutoLFM.Core.Maestro.Dispatch("Presets.Delete", presetName)
+    TeronAutoLFM.Core.Maestro.Dispatch("Presets.Delete", presetName)
   end)
   
   row:SetScript("OnClick", function()
-    AutoLFM.Core.Maestro.Dispatch("Presets.Load", presetName)
+    TeronAutoLFM.Core.Maestro.Dispatch("Presets.Load", presetName)
   end)
   
   row:SetScript("OnEnter", function()
     bg:SetTexture(0.2, 0.2, 0.2, 0.2)
-    local blueColor = AutoLFM.Core.Utils.GetColor("BLUE")
+    local blueColor = TeronAutoLFM.Core.Utils.GetColor("BLUE")
     if blueColor then
       row.nameLabel:SetTextColor(blueColor.r, blueColor.g, blueColor.b)
     end
@@ -360,10 +360,10 @@ local function createPresetRow(index, presetName, presetData, isFirst, isLast, y
 end
 
 --- Rebuilds the entire preset list by clearing rows and recreating them from storage
-function AutoLFM.UI.Content.Presets.Refresh()
-  AutoLFM.UI.Content.Presets.ClearRows()
+function TeronAutoLFM.UI.Content.Presets.Refresh()
+  TeronAutoLFM.UI.Content.Presets.ClearRows()
   
-  local presets = AutoLFM.Core.Storage.GetPresets()
+  local presets = TeronAutoLFM.Core.Storage.GetPresets()
   if not presets or not presets.order then return end
   
   local totalPresets = table.getn(presets.order)
@@ -381,21 +381,21 @@ function AutoLFM.UI.Content.Presets.Refresh()
   end
   
   scrollChild:SetHeight(yOffset)
-  AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+  TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
 end
 
 --=============================================================================
 -- SAVE POPUP
 --=============================================================================
 --- Opens the save preset popup, clears previous input and error state, and focuses the name field
-function AutoLFM.UI.Content.Presets.ShowSavePopup()
-  local popup = getglobal("AutoLFM_SavePresetPopup")
+function TeronAutoLFM.UI.Content.Presets.ShowSavePopup()
+  local popup = getglobal("TeronAutoLFM_SavePresetPopup")
   if not popup then return end
   
-  local errorText = getglobal("AutoLFM_SavePresetPopup_ErrorText")
+  local errorText = getglobal("TeronAutoLFM_SavePresetPopup_ErrorText")
   if errorText then errorText:Hide() end
   
-  local input = getglobal("AutoLFM_SavePresetPopup_NameInput")
+  local input = getglobal("TeronAutoLFM_SavePresetPopup_NameInput")
   if input then
     input:SetText("")
     input:SetFocus()
@@ -405,42 +405,42 @@ function AutoLFM.UI.Content.Presets.ShowSavePopup()
 end
 
 --- Validates the preset name input and dispatches a save action, or shows an error if the name already exists
-function AutoLFM.UI.Content.Presets.OnSaveConfirm()
-  local input = getglobal("AutoLFM_SavePresetPopup_NameInput")
+function TeronAutoLFM.UI.Content.Presets.OnSaveConfirm()
+  local input = getglobal("TeronAutoLFM_SavePresetPopup_NameInput")
   if not input then return end
 
   local presetName = input:GetText()
   if presetName and presetName ~= "" then
-    local presets = AutoLFM.Core.Storage.GetPresets()
+    local presets = TeronAutoLFM.Core.Storage.GetPresets()
     if presets and presets.data and presets.data[presetName] then
-      local errorText = getglobal("AutoLFM_SavePresetPopup_ErrorText")
+      local errorText = getglobal("TeronAutoLFM_SavePresetPopup_ErrorText")
       if errorText then
         errorText:SetText("Preset already exists")
         errorText:Show()
       end
       return
     end
-    AutoLFM.Core.Maestro.Dispatch("Presets.Save", presetName)
-    getglobal("AutoLFM_SavePresetPopup"):Hide()
+    TeronAutoLFM.Core.Maestro.Dispatch("Presets.Save", presetName)
+    getglobal("TeronAutoLFM_SavePresetPopup"):Hide()
   end
 end
 
 --- Closes the save preset popup without saving
-function AutoLFM.UI.Content.Presets.OnSaveCancel()
-  local popup = getglobal("AutoLFM_SavePresetPopup")
+function TeronAutoLFM.UI.Content.Presets.OnSaveCancel()
+  local popup = getglobal("TeronAutoLFM_SavePresetPopup")
   if popup then popup:Hide() end
 end
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("UI.Content.Presets", function()
-  AutoLFM.Core.Maestro.Listen(
+TeronAutoLFM.Core.SafeRegisterInit("UI.Content.Presets", function()
+  TeronAutoLFM.Core.Maestro.Listen(
     "UI.Presets.OnChanged",
     "Presets.Changed",
     function()
       if contentFrame and contentFrame:IsVisible() then
-        AutoLFM.UI.Content.Presets.Refresh()
+        TeronAutoLFM.UI.Content.Presets.Refresh()
       end
     end,
     { id = "L05" }

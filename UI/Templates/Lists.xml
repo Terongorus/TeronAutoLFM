@@ -3,7 +3,7 @@
     Base Row Template (Virtual)
     Common structure for all row types
     ==========================================================================-->
-  <Frame name="AutoLFM_BaseRow_Template" virtual="true">
+  <Frame name="TeronAutoLFM_BaseRow_Template" virtual="true">
     <Size>
       <AbsDimension x="300" y="20"/>
     </Size>
@@ -52,19 +52,19 @@
   <!--==========================================================================
     Dungeon Row Template
     ==========================================================================-->
-  <Frame name="AutoLFM_DungeonRow_Template" inherits="AutoLFM_BaseRow_Template" virtual="true"/>
+  <Frame name="TeronAutoLFM_DungeonRow_Template" inherits="TeronAutoLFM_BaseRow_Template" virtual="true"/>
   <!--==========================================================================
     Raid Row Template
     ==========================================================================-->
-  <Frame name="AutoLFM_RaidRow_Template" inherits="AutoLFM_BaseRow_Template" virtual="true"/>
+  <Frame name="TeronAutoLFM_RaidRow_Template" inherits="TeronAutoLFM_BaseRow_Template" virtual="true"/>
   <!--==========================================================================
     Quest Row Template
     ==========================================================================-->
-  <Frame name="AutoLFM_QuestRow_Template" inherits="AutoLFM_BaseRow_Template" virtual="true"/>
+  <Frame name="TeronAutoLFM_QuestRow_Template" inherits="TeronAutoLFM_BaseRow_Template" virtual="true"/>
   <!--==========================================================================
     Generic Content Panel Template (Base)
     ==========================================================================-->
-  <Frame name="AutoLFM_ContentPanel_Template" virtual="true">
+  <Frame name="TeronAutoLFM_ContentPanel_Template" virtual="true">
     <Size>
       <AbsDimension x="298" y="252"/>
     </Size>
@@ -99,39 +99,39 @@
   <!--==========================================================================
     Dungeons Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_Dungeons" parent="AutoLFM_MainFrame_ContentContainer" inherits="AutoLFM_ContentPanel_Template" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Dungeons" parent="TeronAutoLFM_MainFrame_ContentContainer" inherits="TeronAutoLFM_ContentPanel_Template" hidden="true">
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Dungeons.OnLoad(this)
+        TeronAutoLFM.UI.Content.Dungeons.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Dungeons.OnShow(this)
+        TeronAutoLFM.UI.Content.Dungeons.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>
   <!--==========================================================================
     Raids Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_Raids" parent="AutoLFM_MainFrame_ContentContainer" inherits="AutoLFM_ContentPanel_Template" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Raids" parent="TeronAutoLFM_MainFrame_ContentContainer" inherits="TeronAutoLFM_ContentPanel_Template" hidden="true">
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Raids.OnLoad(this)
+        TeronAutoLFM.UI.Content.Raids.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Raids.OnShow(this)
+        TeronAutoLFM.UI.Content.Raids.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>
   <!--==========================================================================
     Quests Content Panel
     ==========================================================================-->
-  <Frame name="AutoLFM_Content_Quests" parent="AutoLFM_MainFrame_ContentContainer" inherits="AutoLFM_ContentPanel_Template" hidden="true">
+  <Frame name="TeronAutoLFM_Content_Quests" parent="TeronAutoLFM_MainFrame_ContentContainer" inherits="TeronAutoLFM_ContentPanel_Template" hidden="true">
     <Scripts>
       <OnLoad>
-        AutoLFM.UI.Content.Quests.OnLoad(this)
+        TeronAutoLFM.UI.Content.Quests.OnLoad(this)
       </OnLoad>
       <OnShow>
-        AutoLFM.UI.Content.Quests.OnShow(this)
+        TeronAutoLFM.UI.Content.Quests.OnShow(this)
       </OnShow>
     </Scripts>
   </Frame>

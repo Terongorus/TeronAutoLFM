@@ -1,8 +1,8 @@
-# AutoLFM Public API
+# TeronAutoLFM Public API
 
-The AutoLFM Public API allows external addons to query broadcast state, subscribe to state changes, and integrate with the AutoLFM broadcaster.
+The TeronAutoLFM Public API allows external addons to query broadcast state, subscribe to state changes, and integrate with the TeronAutoLFM broadcaster.
 
-**Access via:** `local api = AutoLFM.API`
+**Access via:** `local api = TeronAutoLFM.API`
 
 ---
 
@@ -12,7 +12,7 @@ The AutoLFM Public API allows external addons to query broadcast state, subscrib
 Returns the current broadcast message being sent to chat.
 
 ```lua
-function AutoLFM.API.GetBroadcastMessage()
+function TeronAutoLFM.API.GetBroadcastMessage()
 ```
 
 **Returns:**
@@ -20,7 +20,7 @@ function AutoLFM.API.GetBroadcastMessage()
 
 **Example:**
 ```lua
-local msg = AutoLFM.API.GetBroadcastMessage()
+local msg = TeronAutoLFM.API.GetBroadcastMessage()
 print("Currently broadcasting: " .. msg)
 ```
 
@@ -30,7 +30,7 @@ print("Currently broadcasting: " .. msg)
 Checks if the broadcaster is currently running.
 
 ```lua
-function AutoLFM.API.IsBroadcasting()
+function TeronAutoLFM.API.IsBroadcasting()
 ```
 
 **Returns:**
@@ -38,8 +38,8 @@ function AutoLFM.API.IsBroadcasting()
 
 **Example:**
 ```lua
-if AutoLFM.API.IsBroadcasting() then
-  print("AutoLFM is broadcasting")
+if TeronAutoLFM.API.IsBroadcasting() then
+  print("TeronAutoLFM is broadcasting")
 end
 ```
 
@@ -49,7 +49,7 @@ end
 Returns the current broadcast interval in seconds.
 
 ```lua
-function AutoLFM.API.GetBroadcastInterval()
+function TeronAutoLFM.API.GetBroadcastInterval()
 ```
 
 **Returns:**
@@ -57,7 +57,7 @@ function AutoLFM.API.GetBroadcastInterval()
 
 **Example:**
 ```lua
-local interval = AutoLFM.API.GetBroadcastInterval()
+local interval = TeronAutoLFM.API.GetBroadcastInterval()
 print("Broadcasting every " .. interval .. " seconds")
 ```
 
@@ -67,7 +67,7 @@ print("Broadcasting every " .. interval .. " seconds")
 Returns the number of messages sent in the current session.
 
 ```lua
-function AutoLFM.API.GetMessagesSent()
+function TeronAutoLFM.API.GetMessagesSent()
 ```
 
 **Returns:**
@@ -75,7 +75,7 @@ function AutoLFM.API.GetMessagesSent()
 
 **Example:**
 ```lua
-local count = AutoLFM.API.GetMessagesSent()
+local count = TeronAutoLFM.API.GetMessagesSent()
 print("Messages sent so far: " .. count)
 ```
 
@@ -87,7 +87,7 @@ print("Messages sent so far: " .. count)
 Returns all currently selected dungeon names.
 
 ```lua
-function AutoLFM.API.GetSelectedDungeons()
+function TeronAutoLFM.API.GetSelectedDungeons()
 ```
 
 **Returns:**
@@ -95,7 +95,7 @@ function AutoLFM.API.GetSelectedDungeons()
 
 **Example:**
 ```lua
-local dungeons = AutoLFM.API.GetSelectedDungeons()
+local dungeons = TeronAutoLFM.API.GetSelectedDungeons()
 for i = 1, #dungeons do
   print("Selected: " .. dungeons[i])
 end
@@ -107,7 +107,7 @@ end
 Returns the currently selected raid name.
 
 ```lua
-function AutoLFM.API.GetSelectedRaid()
+function TeronAutoLFM.API.GetSelectedRaid()
 ```
 
 **Returns:**
@@ -115,7 +115,7 @@ function AutoLFM.API.GetSelectedRaid()
 
 **Example:**
 ```lua
-local raid = AutoLFM.API.GetSelectedRaid()
+local raid = TeronAutoLFM.API.GetSelectedRaid()
 if raid then
   print("Raid selected: " .. raid)
 end
@@ -127,7 +127,7 @@ end
 Returns the selected roles (Tank, Heal, DPS).
 
 ```lua
-function AutoLFM.API.GetSelectedRoles()
+function TeronAutoLFM.API.GetSelectedRoles()
 ```
 
 **Returns:**
@@ -135,7 +135,7 @@ function AutoLFM.API.GetSelectedRoles()
 
 **Example:**
 ```lua
-local roles = AutoLFM.API.GetSelectedRoles()
+local roles = TeronAutoLFM.API.GetSelectedRoles()
 if #roles > 0 then
   print("Selected roles: " .. table.concat(roles, ", "))
 end
@@ -147,7 +147,7 @@ end
 Returns the current selection mode.
 
 ```lua
-function AutoLFM.API.GetSelectionMode()
+function TeronAutoLFM.API.GetSelectionMode()
 ```
 
 **Returns:**
@@ -160,7 +160,7 @@ function AutoLFM.API.GetSelectionMode()
 
 **Example:**
 ```lua
-local mode = AutoLFM.API.GetSelectionMode()
+local mode = TeronAutoLFM.API.GetSelectionMode()
 if mode == "raid" then
   print("Raid mode active")
 end
@@ -174,7 +174,7 @@ end
 Returns the current group size.
 
 ```lua
-function AutoLFM.API.GetGroupSize()
+function TeronAutoLFM.API.GetGroupSize()
 ```
 
 **Returns:**
@@ -182,7 +182,7 @@ function AutoLFM.API.GetGroupSize()
 
 **Example:**
 ```lua
-local size = AutoLFM.API.GetGroupSize()
+local size = TeronAutoLFM.API.GetGroupSize()
 print("Group size: " .. size)
 ```
 
@@ -192,7 +192,7 @@ print("Group size: " .. size)
 Returns the current group type.
 
 ```lua
-function AutoLFM.API.GetGroupType()
+function TeronAutoLFM.API.GetGroupType()
 ```
 
 **Returns:**
@@ -203,7 +203,7 @@ function AutoLFM.API.GetGroupType()
 
 **Example:**
 ```lua
-local groupType = AutoLFM.API.GetGroupType()
+local groupType = TeronAutoLFM.API.GetGroupType()
 print("Group type: " .. groupType)
 ```
 
@@ -213,7 +213,7 @@ print("Group type: " .. groupType)
 Checks if the player is the group leader.
 
 ```lua
-function AutoLFM.API.IsGroupLeader()
+function TeronAutoLFM.API.IsGroupLeader()
 ```
 
 **Returns:**
@@ -221,7 +221,7 @@ function AutoLFM.API.IsGroupLeader()
 
 **Example:**
 ```lua
-if AutoLFM.API.IsGroupLeader() then
+if TeronAutoLFM.API.IsGroupLeader() then
   print("You are the group leader")
 end
 ```
@@ -234,7 +234,7 @@ end
 Checks if dark mode is enabled.
 
 ```lua
-function AutoLFM.API.IsDarkModeEnabled()
+function TeronAutoLFM.API.IsDarkModeEnabled()
 ```
 
 **Returns:**
@@ -242,7 +242,7 @@ function AutoLFM.API.IsDarkModeEnabled()
 
 **Example:**
 ```lua
-if AutoLFM.API.IsDarkModeEnabled() then
+if TeronAutoLFM.API.IsDarkModeEnabled() then
   print("Dark mode is active")
 end
 ```
@@ -253,7 +253,7 @@ end
 Checks if dry run mode is enabled (messages not sent to chat).
 
 ```lua
-function AutoLFM.API.IsDryRunEnabled()
+function TeronAutoLFM.API.IsDryRunEnabled()
 ```
 
 **Returns:**
@@ -261,7 +261,7 @@ function AutoLFM.API.IsDryRunEnabled()
 
 **Example:**
 ```lua
-if AutoLFM.API.IsDryRunEnabled() then
+if TeronAutoLFM.API.IsDryRunEnabled() then
   print("Dry run mode: messages preview only, not sent")
 end
 ```
@@ -272,7 +272,7 @@ end
 Returns the dungeon difficulty filters.
 
 ```lua
-function AutoLFM.API.GetDungeonFilters()
+function TeronAutoLFM.API.GetDungeonFilters()
 ```
 
 **Returns:**
@@ -282,7 +282,7 @@ function AutoLFM.API.GetDungeonFilters()
 
 **Example:**
 ```lua
-local filters = AutoLFM.API.GetDungeonFilters()
+local filters = TeronAutoLFM.API.GetDungeonFilters()
 if filters["RED"] then
   print("Showing red (hardest) dungeons")
 end
@@ -294,7 +294,7 @@ end
 Returns the broadcast interval setting from persistent storage.
 
 ```lua
-function AutoLFM.API.GetBroadcastIntervalSetting()
+function TeronAutoLFM.API.GetBroadcastIntervalSetting()
 ```
 
 **Returns:**
@@ -302,7 +302,7 @@ function AutoLFM.API.GetBroadcastIntervalSetting()
 
 **Example:**
 ```lua
-local interval = AutoLFM.API.GetBroadcastIntervalSetting()
+local interval = TeronAutoLFM.API.GetBroadcastIntervalSetting()
 print("User set interval to: " .. interval .. " seconds")
 ```
 
@@ -314,7 +314,7 @@ print("User set interval to: " .. interval .. " seconds")
 Subscribes to broadcast state changes.
 
 ```lua
-function AutoLFM.API.OnBroadcastStateChanged(listenerId, callback)
+function TeronAutoLFM.API.OnBroadcastStateChanged(listenerId, callback)
 ```
 
 **Parameters:**
@@ -326,7 +326,7 @@ function AutoLFM.API.OnBroadcastStateChanged(listenerId, callback)
 
 **Example:**
 ```lua
-AutoLFM.API.OnBroadcastStateChanged("MyAddon.OnBroadcast", function(newValue)
+TeronAutoLFM.API.OnBroadcastStateChanged("MyAddon.OnBroadcast", function(newValue)
   print("Broadcast state changed!")
 end)
 ```
@@ -337,7 +337,7 @@ end)
 Subscribes to selection state changes (dungeons, raid, roles, custom message).
 
 ```lua
-function AutoLFM.API.OnSelectionChanged(listenerId, callback)
+function TeronAutoLFM.API.OnSelectionChanged(listenerId, callback)
 ```
 
 **Parameters:**
@@ -349,8 +349,8 @@ function AutoLFM.API.OnSelectionChanged(listenerId, callback)
 
 **Example:**
 ```lua
-AutoLFM.API.OnSelectionChanged("MyAddon.OnSelection", function(newValue)
-  print("AutoLFM selection changed!")
+TeronAutoLFM.API.OnSelectionChanged("MyAddon.OnSelection", function(newValue)
+  print("TeronAutoLFM selection changed!")
 end)
 ```
 
@@ -360,7 +360,7 @@ end)
 Subscribes to group state changes (size, type, leader status).
 
 ```lua
-function AutoLFM.API.OnGroupStateChanged(listenerId, callback)
+function TeronAutoLFM.API.OnGroupStateChanged(listenerId, callback)
 ```
 
 **Parameters:**
@@ -372,8 +372,8 @@ function AutoLFM.API.OnGroupStateChanged(listenerId, callback)
 
 **Example:**
 ```lua
-AutoLFM.API.OnGroupStateChanged("MyAddon.OnGroupChange", function(newValue)
-  if AutoLFM.API.GetGroupSize() >= 5 then
+TeronAutoLFM.API.OnGroupStateChanged("MyAddon.OnGroupChange", function(newValue)
+  if TeronAutoLFM.API.GetGroupSize() >= 5 then
     print("Party is now full!")
   end
 end)
@@ -385,7 +385,7 @@ end)
 Unsubscribes from state changes.
 
 ```lua
-function AutoLFM.API.Unsubscribe(listenerId)
+function TeronAutoLFM.API.Unsubscribe(listenerId)
 ```
 
 **Parameters:**
@@ -396,7 +396,7 @@ function AutoLFM.API.Unsubscribe(listenerId)
 
 **Example:**
 ```lua
-AutoLFM.API.Unsubscribe("MyAddon.OnBroadcast")
+TeronAutoLFM.API.Unsubscribe("MyAddon.OnBroadcast")
 ```
 
 ---
@@ -407,7 +407,7 @@ AutoLFM.API.Unsubscribe("MyAddon.OnBroadcast")
 Returns a complete snapshot of all broadcast, selection, group, and settings state.
 
 ```lua
-function AutoLFM.API.GetSnapshot()
+function TeronAutoLFM.API.GetSnapshot()
 ```
 
 **Returns:**
@@ -441,7 +441,7 @@ function AutoLFM.API.GetSnapshot()
 
 **Example:**
 ```lua
-local snapshot = AutoLFM.API.GetSnapshot()
+local snapshot = TeronAutoLFM.API.GetSnapshot()
 print("Broadcasting: " .. snapshot.broadcast.message)
 print("Group size: " .. snapshot.group.size)
 print("Dry run enabled: " .. tostring(snapshot.settings.dryRun))
@@ -452,16 +452,16 @@ print("Dry run enabled: " .. tostring(snapshot.settings.dryRun))
 ## Integration Example
 
 ```lua
--- Example addon integrating with AutoLFM
+-- Example addon integrating with TeronAutoLFM
 
-if not AutoLFM or not AutoLFM.API then
-  return  -- AutoLFM not loaded
+if not TeronAutoLFM or not TeronAutoLFM.API then
+  return  -- TeronAutoLFM not loaded
 end
 
 -- Subscribe to selection changes
-AutoLFM.API.OnSelectionChanged("MyIntegration", function()
-  local dungeons = AutoLFM.API.GetSelectedDungeons()
-  local raid = AutoLFM.API.GetSelectedRaid()
+TeronAutoLFM.API.OnSelectionChanged("MyIntegration", function()
+  local dungeons = TeronAutoLFM.API.GetSelectedDungeons()
+  local raid = TeronAutoLFM.API.GetSelectedRaid()
 
   if raid then
     print("Raiding: " .. raid)
@@ -471,13 +471,13 @@ AutoLFM.API.OnSelectionChanged("MyIntegration", function()
 end)
 
 -- Check if broadcasting before doing something
-if AutoLFM.API.IsBroadcasting() then
-  local msg = AutoLFM.API.GetBroadcastMessage()
-  print("AutoLFM is broadcasting: " .. msg)
+if TeronAutoLFM.API.IsBroadcasting() then
+  local msg = TeronAutoLFM.API.GetBroadcastMessage()
+  print("TeronAutoLFM is broadcasting: " .. msg)
 end
 
 -- Get current snapshot for diagnostics
-local snapshot = AutoLFM.API.GetSnapshot()
+local snapshot = TeronAutoLFM.API.GetSnapshot()
 print("Full state: " .. stringify(snapshot))
 ```
 

@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Welcome Popup
+-- TeronAutoLFM: Welcome Popup
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Components = AutoLFM.Components or {}
-AutoLFM.Components.WelcomePopup = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Components = TeronAutoLFM.Components or {}
+TeronAutoLFM.Components.WelcomePopup = {}
 
 --=============================================================================
 -- CONSTANTS
@@ -100,7 +100,7 @@ local function getPartialTitleText(blockIndex, letterIndex)
   for i = 1, blockIndex do
     local block = titleBlocks[i]
     if block then
-      local colorObj = AutoLFM.Core.Utils.GetColor(block.color)
+      local colorObj = TeronAutoLFM.Core.Utils.GetColor(block.color)
       local color = "|cFF" .. colorObj.hex
       if i < blockIndex then
         text = text .. color .. block.text
@@ -122,7 +122,7 @@ local function getPartialColoredText(msg, letterIndex)
   if not msg.subblocks then return "" end
   
   for _, block in ipairs(msg.subblocks) do
-    local colorObj = AutoLFM.Core.Utils.GetColor(block.color)
+    local colorObj = TeronAutoLFM.Core.Utils.GetColor(block.color)
     local color = "|cFF" .. colorObj.hex
     for i = 1, string.len(block.text) do
       count = count + 1
@@ -170,9 +170,9 @@ end
 --- Creates the welcome popup frame with all UI elements
 --- @return frame - Created popup frame
 local function createPopup()
-  local frame = CreateFrame("Frame", "AutoLFM_WelcomePopup", UIParent)
+  local frame = CreateFrame("Frame", "TeronAutoLFM_WelcomePopup", UIParent)
   frame:SetBackdrop({
-    bgFile = "Interface/AddOns/AutoLFM/UI/Textures/TooltipBackground",
+    bgFile = "Interface/AddOns/TeronAutoLFM/UI/Textures/TooltipBackground",
     tile = true, tileSize = 16,
     insets = {left = 4, right = 4, top = 4, bottom = 4}
   })
@@ -306,7 +306,7 @@ local function onUpdate()
     if state.waitBeforeFade > DISPLAY_DURATION then
       fadeFrame(state.popupFrame, "OUT", FADE_DURATION, function()
         state.popupFrame:Hide()
-        AutoLFM.Core.Storage.SetWelcomeShown(true)
+        TeronAutoLFM.Core.Storage.SetWelcomeShown(true)
         state.popupFrame:SetScript("OnUpdate", nil)
       end)
     end
@@ -317,7 +317,7 @@ end
 -- PUBLIC API
 --=============================================================================
 --- Shows the welcome popup with typing animation
-function AutoLFM.Components.WelcomePopup.Show()
+function TeronAutoLFM.Components.WelcomePopup.Show()
   state.popupFrame = state.popupFrame or createPopup()
   if not state.popupFrame then return end
 
@@ -340,9 +340,9 @@ end
 -- INITIALIZATION
 --=============================================================================
 --- Initializes WelcomePopup and shows it on first launch
-AutoLFM.Core.SafeRegisterInit("Components.WelcomePopup", function()
-  if not AutoLFM.Core.Storage.GetWelcomeShown() then
-    AutoLFM.Components.WelcomePopup.Show()
+TeronAutoLFM.Core.SafeRegisterInit("Components.WelcomePopup", function()
+  if not TeronAutoLFM.Core.Storage.GetWelcomeShown() then
+    TeronAutoLFM.Components.WelcomePopup.Show()
   end
 end, {
   id = "I20",

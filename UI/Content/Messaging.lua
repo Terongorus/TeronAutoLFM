@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Messaging UI
+-- TeronAutoLFM: Messaging UI
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.UI = AutoLFM.UI or {}
-AutoLFM.UI.Content = AutoLFM.UI.Content or {}
-AutoLFM.UI.Content.Messaging = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.UI = TeronAutoLFM.UI or {}
+TeronAutoLFM.UI.Content = TeronAutoLFM.UI.Content or {}
+TeronAutoLFM.UI.Content.Messaging = {}
 
 --=============================================================================
 -- CONSTANTS
@@ -123,10 +123,10 @@ end
 --- @param labelName string - Global name of the label frame
 --- @param colorName string - Color name (e.g., "GOLD", "WHITE")
 local function applyColor(labelName, colorName)
-  if not AutoLFM.Core.Utils then return end
+  if not TeronAutoLFM.Core.Utils then return end
   local label = getUIElement(labelName)
   if label then
-    AutoLFM.Core.Utils.SetTextColorByName(label, colorName)
+    TeronAutoLFM.Core.Utils.SetTextColorByName(label, colorName)
   end
 end
 
@@ -147,7 +147,7 @@ end
 --=============================================================================
 --- XML OnLoad callback for group size slider - initializes slider properties
 --- @param slider frame - The group size slider frame
-function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(slider)
+function TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderLoad(slider)
   if not slider then return end
 
   slider:SetMinMaxValues(GROUP_SIZE_MIN, GROUP_SIZE_MAX)
@@ -160,7 +160,7 @@ end
 
 --- XML OnEnter callback for group size slider - focuses and highlights the editbox
 --- Allows user to directly type a value when hovering over the slider
-function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
+function TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderEnter()
   if groupSizeControlEditBox then
     groupSizeControlEditBox:SetFocus()
     groupSizeControlEditBox:HighlightText()
@@ -170,7 +170,7 @@ end
 --- XML OnMouseWheel callback for group size slider - adjusts value by mouse wheel
 --- @param slider frame - The group size slider frame
 --- @param delta number - Mouse wheel direction (positive = scroll up, negative = scroll down)
-function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderMouseWheel(slider, delta)
+function TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderMouseWheel(slider, delta)
   if not slider then return end
   local value = slider:GetValue()
   local step = delta > 0 and 1 or -1
@@ -180,7 +180,7 @@ end
 --- XML OnEnterPressed/OnEditFocusLost callback for group size editbox - validates and commits value
 --- Ensures value stays within GROUP_SIZE_MIN to GROUP_SIZE_MAX range and syncs with slider
 --- @param editBox frame - The group size editbox frame
-function AutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(editBox)
+function TeronAutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(editBox)
   if not editBox then return end
 
   local text = editBox:GetText()
@@ -194,7 +194,7 @@ function AutoLFM.UI.Content.Messaging.OnGroupSizeEditBoxCommit(editBox)
     value = clamp(value, GROUP_SIZE_MIN, GROUP_SIZE_MAX)
 
     -- Dispatch Command to update Maestro State
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomGroupSize", value)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomGroupSize", value)
 
     if groupSizeSlider then
       groupSizeSlider:SetValue(value)
@@ -215,8 +215,8 @@ local function updatePlaceholder()
   local isCustomMode = (currentMode == MODE_CUSTOM)
 
   -- Get placeholder elements
-  local detailsPlaceholder = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_Placeholder")
-  local customPlaceholder = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_PlaceholderCustom")
+  local detailsPlaceholder = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_Placeholder")
+  local customPlaceholder = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_PlaceholderCustom")
 
   -- Show/hide Details placeholder
   if detailsPlaceholder then
@@ -242,22 +242,22 @@ end
 --- Caches references to all Messaging panel UI elements for quick access
 --- Retrieves and stores references to sliders, icons, radios, editboxes, and labels
 local function initializeUIReferences()
-  usageIcon = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon")
-  usageIconTexture = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon_Texture")
-  usageIconHighlight = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon_Highlight")
-  varRButton = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarRButton")
-  varCButton = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarCButton")
-  varTButton = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarTButton")
-  varMButton = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarMButton")
-  groupSizeControl = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl")
-  groupSizeSlider = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_Slider")
-  groupSizeControlEditBox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_EditBox")
-  detailsRadio = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_DetailsRadio")
-  customRadio = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomRadio")
-  customMessageLabel = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomMessageIcon_Label")
-  customMessageEditBox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_EditBox")
-  customMessagePlaceholder = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_Placeholder")
-  customMessageContainer = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer")
+  usageIcon = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon")
+  usageIconTexture = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon_Texture")
+  usageIconHighlight = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_UsageIcon_Highlight")
+  varRButton = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarRButton")
+  varCButton = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarCButton")
+  varTButton = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarTButton")
+  varMButton = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_VarMButton")
+  groupSizeControl = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl")
+  groupSizeSlider = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_Slider")
+  groupSizeControlEditBox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_EditBox")
+  detailsRadio = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_DetailsRadio")
+  customRadio = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomRadio")
+  customMessageLabel = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomMessageIcon_Label")
+  customMessageEditBox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_EditBox")
+  customMessagePlaceholder = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_Placeholder")
+  customMessageContainer = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer")
 end
 
 --- Sets up group size slider and editbox with default values and positioning
@@ -283,7 +283,7 @@ end
 
 --- Updates ScrollChild height based on content
 local function updateScrollChildHeight()
-  local scrollChild = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild")
+  local scrollChild = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild")
   if not scrollChild then return end
 
   -- Fixed height: ChannelsIcon at y=-150, 4 checkboxes (~84px) + padding
@@ -293,7 +293,7 @@ local function updateScrollChildHeight()
   scrollChild:SetHeight(totalHeight)
 
   -- Force scroll frame update like in Dungeons
-  AutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
+  TeronAutoLFM.UI.RowList.UpdateScrollFrame(scrollChild)
 end
 
 --- Applies color styling to all labels in the Messaging panel
@@ -302,16 +302,16 @@ local function applyLabelColors()
   -- Note: GOLD is the default color in WoW, so we only need to set non-GOLD colors
 
   -- Static labels in white
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomMessageIcon_Label")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_Label")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_Label")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_CustomMessageIcon_Label")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_GroupSizeControl_Label")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_Label")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon_StatsTitle")
 
   -- Stats labels in white
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalLabel")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World_DurationLabel")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup_SentLabel")
-  applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_NextLabel")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalLabel")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World_DurationLabel")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup_SentLabel")
+  applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_NextLabel")
 end
 
 --- Shows or hides a frame based on visibility flag
@@ -349,12 +349,12 @@ end
 --- Always at the same Y position regardless of mode
 --- Calculation: EditBox(y=-58, h=63) + gap(3) + GroupSize(h=20) + gap(6) = y=-150
 local function positionChannelsIcon()
-  local channelsIcon = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon")
+  local channelsIcon = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_ChannelsIcon")
   if not channelsIcon then return end
 
   channelsIcon:ClearAllPoints()
   -- Fixed position: below the GroupSizeControl area
-  local scrollChild = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild")
+  local scrollChild = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild")
   if scrollChild then
     channelsIcon:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 5, -150)
   end
@@ -385,18 +385,18 @@ local function updateModeUI(isCustomMode, clearOnModeSwitch)
       -- Clear the State we're switching FROM
       if isCustomMode then
         -- Switching TO custom → clear details text
-        AutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", "")
+        TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", "")
       else
         -- Switching TO details → clear custom message
-        AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", "")
+        TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", "")
       end
     else
       -- Restore editbox content from State when just refreshing display
       local text = ""
       if isCustomMode then
-        text = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+        text = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
       else
-        text = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+        text = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
       end
 
       isRestoringFromState = true
@@ -423,25 +423,25 @@ end
 --- If player is hardcore: enables checkbox and shows white label
 --- If player is not hardcore: disables checkbox, unchecks it, and shows gray label
 local function updateHardcoreCheckboxState()
-  local hardcoreCheckbox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore")
-  local hardcoreLabel = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
+  local hardcoreCheckbox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore")
+  local hardcoreLabel = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
 
   if not hardcoreCheckbox then return end
 
   local isHardcore = false
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetIsHardcore then
-    isHardcore = AutoLFM.Core.Storage.GetIsHardcore()
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetIsHardcore then
+    isHardcore = TeronAutoLFM.Core.Storage.GetIsHardcore()
   end
 
   if isHardcore then
     -- Player is hardcore: enable checkbox
     hardcoreCheckbox:Enable()
-    applyWhiteColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
+    applyWhiteColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
   else
     -- Player is not hardcore: disable and uncheck checkbox
     hardcoreCheckbox:Disable()
     hardcoreCheckbox:SetChecked(false)
-    applyGrayColor("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
+    applyGrayColor("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_Label")
   end
 end
 
@@ -451,7 +451,7 @@ end
 --- XML OnLoad callback - initializes the Messaging panel UI
 --- Creates editbox, initializes sliders, sets up controls and applies styling
 --- @param frame frame - The Messaging panel frame
-function AutoLFM.UI.Content.Messaging.OnLoad(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnLoad(frame)
   uiFrame = frame
   initializeUIReferences()
   setupGroupSizeControls()
@@ -476,26 +476,26 @@ end
 --- Session mode is initialized from saved preference only at first load (reload/login)
 --- Manual toggles during session persist between tab openings but don't affect saved preference
 --- @param frame frame - The Messaging panel frame
-function AutoLFM.UI.Content.Messaging.OnShow(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnShow(frame)
   -- Re-apply label colors
   applyLabelColors()
 
   -- Initialize sessionMode from saved preference only if not set (first load after reload)
   if not sessionMode then
     sessionMode = MODE_DETAILS
-    if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetCustomInput then
-      local isCustom = AutoLFM.Core.Storage.GetCustomInput()
+    if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetCustomInput then
+      local isCustom = TeronAutoLFM.Core.Storage.GetCustomInput()
       sessionMode = isCustom and MODE_CUSTOM or MODE_DETAILS
     end
   end
 
   -- Use session mode (persists manual toggles between tab openings)
   setRadioButtonStates(sessionMode)
-  AutoLFM.UI.Content.Messaging.UpdateModeDisplay(false)  -- Don't clear on tab display
+  TeronAutoLFM.UI.Content.Messaging.UpdateModeDisplay(false)  -- Don't clear on tab display
   updateHardcoreCheckboxState()
 
   -- Sync channel checkboxes with saved state
-  AutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
+  TeronAutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
 end
 
 --=============================================================================
@@ -503,7 +503,7 @@ end
 --=============================================================================
 --- Handles editbox text changes from XML
 --- @param editBox frame - The editbox frame
-function AutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(editBox)
+function TeronAutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(editBox)
   if not editBox then return end
 
   local text = editBox:GetText()
@@ -523,27 +523,27 @@ function AutoLFM.UI.Content.Messaging.OnEditBoxTextChanged(editBox)
   if not text then text = "" end
   local currentMode = getCurrentMode()
   if currentMode == MODE_CUSTOM then
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", text)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomMessage", text)
   else
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", text)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetDetailsText", text)
   end
 end
 
 --- Handles broadcast mode radio button clicks (Details/Custom)
 --- Updates session mode (does NOT save to persistent storage during session)
 --- @param mode string - The selected mode ("details" or "custom")
-function AutoLFM.UI.Content.Messaging.OnModeRadioClick(mode)
+function TeronAutoLFM.UI.Content.Messaging.OnModeRadioClick(mode)
   -- Update session mode (persists between tab openings, not saved to disk)
   sessionMode = mode
 
   setRadioButtonStates(mode)
-  AutoLFM.UI.Content.Messaging.UpdateModeDisplay(true)  -- Clear on mode switch
+  TeronAutoLFM.UI.Content.Messaging.UpdateModeDisplay(true)  -- Clear on mode switch
 end
 
 --- Updates the UI display based on current broadcast mode (details vs custom)
 --- Shows/hides appropriate UI elements and repositions the channels icon
 --- @param clearOnModeSwitch boolean - If true, clears editbox when switching modes
-function AutoLFM.UI.Content.Messaging.UpdateModeDisplay(clearOnModeSwitch)
+function TeronAutoLFM.UI.Content.Messaging.UpdateModeDisplay(clearOnModeSwitch)
   local currentMode = getCurrentMode()
   local isCustomMode = (currentMode == MODE_CUSTOM)
 
@@ -554,12 +554,12 @@ end
 
 --- Handles group size slider value changes - updates the editbox display
 --- @param value number - The new slider value
-function AutoLFM.UI.Content.Messaging.OnGroupSizeSliderChanged(value)
+function TeronAutoLFM.UI.Content.Messaging.OnGroupSizeSliderChanged(value)
   local size = math.floor(value)
-  local currentSize = AutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
+  local currentSize = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
   
   if size ~= currentSize then
-    AutoLFM.Core.Maestro.Dispatch("Selection.SetCustomGroupSize", size)
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetCustomGroupSize", size)
   end
 
   if groupSizeControlEditBox and groupSizeControlEditBox:GetText() ~= tostring(size) then
@@ -571,17 +571,17 @@ end
 
 --- Handles usage icon mouse enter - shows tooltip with variable examples
 --- @param frame frame - The usage icon frame
-function AutoLFM.UI.Content.Messaging.OnUsageIconEnter(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnUsageIconEnter(frame)
   -- Show highlight texture over the icon
   if usageIconHighlight then
     usageIconHighlight:Show()
   end
 
-  local goldColor = AutoLFM.Core.Utils.GetColor("GOLD")
-  local whiteColor = AutoLFM.Core.Utils.GetColor("WHITE")
+  local goldColor = TeronAutoLFM.Core.Utils.GetColor("GOLD")
+  local whiteColor = TeronAutoLFM.Core.Utils.GetColor("WHITE")
 
   local function colorText(text, colorName)
-    return AutoLFM.Core.Utils.ColorText(text, colorName)
+    return TeronAutoLFM.Core.Utils.ColorText(text, colorName)
   end
 
   GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", 0, 0)
@@ -600,7 +600,7 @@ end
 
 --- Handles usage icon mouse leave - hides tooltip
 --- @param frame frame - The usage icon frame
-function AutoLFM.UI.Content.Messaging.OnUsageIconLeave(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnUsageIconLeave(frame)
   -- Hide highlight texture (keep icon visible)
   if usageIconHighlight then
     usageIconHighlight:Hide()
@@ -611,7 +611,7 @@ end
 
 --- Handles variable button mouse enter - shows highlight
 --- @param frame frame - The variable button frame
-function AutoLFM.UI.Content.Messaging.OnVarButtonEnter(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnVarButtonEnter(frame)
   local highlight = getUIElement(frame:GetName() .. "_Highlight")
   if highlight then
     highlight:Show()
@@ -637,12 +637,12 @@ function AutoLFM.UI.Content.Messaging.OnVarButtonEnter(frame)
   end
 
   if variable ~= "" then
-    local goldColor = AutoLFM.Core.Utils.GetColor("GOLD")
-    local cyanColor = AutoLFM.Core.Utils.GetColor("CYAN")
-    local whiteColor = AutoLFM.Core.Utils.GetColor("WHITE")
+    local goldColor = TeronAutoLFM.Core.Utils.GetColor("GOLD")
+    local cyanColor = TeronAutoLFM.Core.Utils.GetColor("CYAN")
+    local whiteColor = TeronAutoLFM.Core.Utils.GetColor("WHITE")
 
     local function colorText(text, colorName)
-      return AutoLFM.Core.Utils.ColorText(text, colorName)
+      return TeronAutoLFM.Core.Utils.ColorText(text, colorName)
     end
 
     GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", 0, 0)
@@ -654,7 +654,7 @@ end
 
 --- Handles variable button mouse leave - hides highlight and tooltip
 --- @param frame frame - The variable button frame
-function AutoLFM.UI.Content.Messaging.OnVarButtonLeave(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnVarButtonLeave(frame)
   local highlight = getUIElement(frame:GetName() .. "_Highlight")
   if highlight then
     highlight:Hide()
@@ -667,10 +667,10 @@ end
 --- Handles variable button clicks - inserts variable into editbox
 --- Maps button name to corresponding variable
 --- @param frame frame - The variable button frame
-function AutoLFM.UI.Content.Messaging.OnVarButtonClick(frame)
+function TeronAutoLFM.UI.Content.Messaging.OnVarButtonClick(frame)
   -- Ensure customMessageEditBox is initialized
   if not customMessageEditBox then
-    customMessageEditBox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_EditBox")
+    customMessageEditBox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_EditBoxContainer_EditBox")
   end
   
   if not customMessageEditBox then return end
@@ -703,9 +703,9 @@ end
 --=============================================================================
 --- Handles channel checkbox clicks - dispatches Maestro command
 --- @param channelName string - The name of the channel
-function AutoLFM.UI.Content.Messaging.OnChannelCheckboxClick(channelName)
-  if AutoLFM.Core and AutoLFM.Core.Maestro then
-    AutoLFM.Core.Maestro.Dispatch("Channels.ToggleChannel", channelName)
+function TeronAutoLFM.UI.Content.Messaging.OnChannelCheckboxClick(channelName)
+  if TeronAutoLFM.Core and TeronAutoLFM.Core.Maestro then
+    TeronAutoLFM.Core.Maestro.Dispatch("Channels.ToggleChannel", channelName)
   end
 end
 
@@ -713,7 +713,7 @@ end
 --- @param channelName string - The name of the channel to check
 --- @return boolean - True if channel is in active channels list
 local function isChannelSelected(channelName)
-  local activeChannels = AutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
+  local activeChannels = TeronAutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
   for _, name in ipairs(activeChannels) do
     if name == channelName then
       return true
@@ -723,12 +723,12 @@ local function isChannelSelected(channelName)
 end
 
 --- Refreshes channel checkboxes to match current selection state
-function AutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
+function TeronAutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
   -- Get channel checkboxes
-  local GeneralCheckbox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General")
-  local WorldCheckbox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World")
-  local LookingForGroupCheckbox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup")
-  local hardcoreCheckbox = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore")
+  local GeneralCheckbox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General")
+  local WorldCheckbox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World")
+  local LookingForGroupCheckbox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup")
+  local hardcoreCheckbox = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore")
 
   -- Sync checkbox states with Maestro State
   if GeneralCheckbox then
@@ -750,13 +750,13 @@ end
 --=============================================================================
 --- Returns the custom message editbox for external link integration
 --- @return frame - The custom message editbox frame
-function AutoLFM.UI.Content.Messaging.GetCustomMessageEditBox()
+function TeronAutoLFM.UI.Content.Messaging.GetCustomMessageEditBox()
   return customMessageEditBox
 end
 
 --- Returns the current broadcast mode (details or custom)
 --- @return string - "custom" or "details"
-function AutoLFM.UI.Content.Messaging.GetCurrentMode()
+function TeronAutoLFM.UI.Content.Messaging.GetCurrentMode()
   local mode = getCurrentMode()
   -- Convert internal constants to public strings
   if mode == MODE_CUSTOM then
@@ -771,19 +771,19 @@ end
 --=============================================================================
 --- Updates the broadcast statistics display
 --- Called every second while broadcaster is running
-function AutoLFM.UI.Content.Messaging.UpdateStats()
+function TeronAutoLFM.UI.Content.Messaging.UpdateStats()
   -- Get stats from broadcaster
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
-  local messagesSent = AutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0
-  local sessionStartTime = AutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0
-  local timeRemaining = AutoLFM.Core.Maestro.GetState("Broadcaster.TimeRemaining") or 0
-  local interval = AutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
+  local messagesSent = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0
+  local sessionStartTime = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0
+  local timeRemaining = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.TimeRemaining") or 0
+  local interval = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
 
   -- Get UI elements
-  local intervalValue = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalValue")
-  local durationValue = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World_DurationValue")
-  local sentValue = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup_SentValue")
-  local nextValue = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_NextValue")
+  local intervalValue = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalValue")
+  local durationValue = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_World_DurationValue")
+  local sentValue = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_LookingForGroup_SentValue")
+  local nextValue = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_Hardcore_NextValue")
 
   -- Update Interval (from settings)
   if intervalValue then
@@ -835,40 +835,40 @@ end
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-local STATS_TICKER_ID = AutoLFM.Core.Constants.TICKER_IDS.MESSAGING_STATS
+local STATS_TICKER_ID = TeronAutoLFM.Core.Constants.TICKER_IDS.MESSAGING_STATS
 local statsTickerRegistered = false
 
 --- Starts the stats update timer via centralized Ticker
 local function startStatsUpdateTimer()
   if not statsTickerRegistered then
-    AutoLFM.Core.Ticker.Register(STATS_TICKER_ID, 1, function()
-      AutoLFM.UI.Content.Messaging.UpdateStats()
+    TeronAutoLFM.Core.Ticker.Register(STATS_TICKER_ID, 1, function()
+      TeronAutoLFM.UI.Content.Messaging.UpdateStats()
     end)
     statsTickerRegistered = true
   end
-  AutoLFM.Core.Ticker.Start(STATS_TICKER_ID)
+  TeronAutoLFM.Core.Ticker.Start(STATS_TICKER_ID)
 end
 
 --- Stops the stats update timer
 local function stopStatsUpdateTimer()
   if statsTickerRegistered then
-    AutoLFM.Core.Ticker.Stop(STATS_TICKER_ID)
+    TeronAutoLFM.Core.Ticker.Stop(STATS_TICKER_ID)
   end
 end
 
-AutoLFM.Core.SafeRegisterInit("UI.Messaging", function()
+TeronAutoLFM.Core.SafeRegisterInit("UI.Messaging", function()
   --- Listens to Channels.Changed to refresh checkbox states
-  AutoLFM.Core.Maestro.Listen(
+  TeronAutoLFM.Core.Maestro.Listen(
     "UI.Messaging.OnChannelsChanged",
     "Channels.Changed",
     function()
-      AutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
+      TeronAutoLFM.UI.Content.Messaging.RefreshChannelCheckboxes()
     end,
     { id = "L04" }
   )
 
   --- Listens to Selection.Changed to refresh editbox content and group size
-  AutoLFM.Core.Maestro.Listen(
+  TeronAutoLFM.Core.Maestro.Listen(
     "UI.Messaging.OnSelectionChanged",
     "Selection.Changed",
     function()
@@ -876,16 +876,16 @@ AutoLFM.Core.SafeRegisterInit("UI.Messaging", function()
       local currentMode = getCurrentMode()
       local text = ""
       if currentMode == MODE_CUSTOM then
-        text = AutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
+        text = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomMessage") or ""
       else
-        text = AutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
+        text = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
       end
       isRestoringFromState = true
       customMessageEditBox:SetText(text)
       isRestoringFromState = false
 
       -- Update group size slider and editbox (only if changed)
-      local groupSize = AutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
+      local groupSize = TeronAutoLFM.Core.Maestro.GetState("Selection.CustomGroupSize") or 5
       if groupSizeSlider and groupSizeSlider:GetValue() ~= groupSize then
         groupSizeSlider:SetValue(groupSize)
       end
@@ -897,31 +897,31 @@ AutoLFM.Core.SafeRegisterInit("UI.Messaging", function()
   )
 
   --- Listens to Broadcaster state changes to update UI
-  AutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)
+  TeronAutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue, oldValue)
     if newValue then
       startStatsUpdateTimer()
     else
       stopStatsUpdateTimer()
       -- Update stats one last time when stopping
-      AutoLFM.UI.Content.Messaging.UpdateStats()
+      TeronAutoLFM.UI.Content.Messaging.UpdateStats()
     end
   end)
 
   --- Listens to Broadcaster.Interval changes to update Interval stat immediately
-  AutoLFM.Core.Maestro.SubscribeState("Broadcaster.Interval", function(newValue, oldValue)
-    local intervalValue = getUIElement("AutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalValue")
+  TeronAutoLFM.Core.Maestro.SubscribeState("Broadcaster.Interval", function(newValue, oldValue)
+    local intervalValue = getUIElement("TeronAutoLFM_Content_Messaging_ScrollFrame_ScrollChild_General_IntervalValue")
     if intervalValue then
       intervalValue:SetText(tostring(newValue or 60) .. "s")
     end
   end)
 
   -- Start stats timer immediately if broadcaster is already running
-  if AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") then
+  if TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") then
     startStatsUpdateTimer()
   end
 
   -- Initial stats update
-  AutoLFM.UI.Content.Messaging.UpdateStats()
+  TeronAutoLFM.UI.Content.Messaging.UpdateStats()
   
   -- Hook ChatEdit_InsertLink to support shift-click links in editbox
   if ChatEdit_InsertLink then

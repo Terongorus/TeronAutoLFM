@@ -1,6 +1,6 @@
-# AutoLFM Documentation
+# TeronAutoLFM Documentation
 
-Welcome to the complete AutoLFM documentation. This folder contains guides for both users and developers.
+Welcome to the complete TeronAutoLFM documentation. This folder contains guides for both users and developers.
 
 ---
 

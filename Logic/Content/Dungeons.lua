@@ -1,10 +1,10 @@
 --=============================================================================
--- AutoLFM: Dungeons Logic
+-- TeronAutoLFM: Dungeons Logic
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Content = AutoLFM.Logic.Content or {}
-AutoLFM.Logic.Content.Dungeons = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Content = TeronAutoLFM.Logic.Content or {}
+TeronAutoLFM.Logic.Content.Dungeons = {}
 
 --=============================================================================
 -- PRIVATE HELPERS
@@ -15,21 +15,21 @@ AutoLFM.Logic.Content.Dungeons = {}
 --- @return table - Color object with r, g, b, hex, name, priority fields
 local function getDungeonColor(dungeon, playerLevel)
   if not dungeon or not dungeon.levelMin or not playerLevel then
-    return AutoLFM.Core.Utils.GetColorForLevel(1, AutoLFM.Core.Constants.INVALID_LEVEL, AutoLFM.Core.Constants.INVALID_LEVEL)
+    return TeronAutoLFM.Core.Utils.GetColorForLevel(1, TeronAutoLFM.Core.Constants.INVALID_LEVEL, TeronAutoLFM.Core.Constants.INVALID_LEVEL)
   end
-  return AutoLFM.Core.Utils.GetColorForLevel(playerLevel, dungeon.levelMin, dungeon.levelMax)
+  return TeronAutoLFM.Core.Utils.GetColorForLevel(playerLevel, dungeon.levelMin, dungeon.levelMax)
 end
 
 --- Builds a sorted list of dungeons filtered by active color filters
 --- @return table - Array of {index, dungeon, color} sorted by priority then level
 local function buildSortedDungeons()
   local playerLevel = UnitLevel("player") or 1
-  local dungeons = AutoLFM.Core.Constants.DUNGEONS
+  local dungeons = TeronAutoLFM.Core.Constants.DUNGEONS
   local sorted = {}
 
   local activeFilters = {}
-  if AutoLFM.Logic.Content.Settings and AutoLFM.Logic.Content.Settings.GetDungeonFilters then
-    activeFilters = AutoLFM.Logic.Content.Settings.GetDungeonFilters()
+  if TeronAutoLFM.Logic.Content.Settings and TeronAutoLFM.Logic.Content.Settings.GetDungeonFilters then
+    activeFilters = TeronAutoLFM.Logic.Content.Settings.GetDungeonFilters()
   end
 
   for i = 1, table.getn(dungeons) do
@@ -64,7 +64,7 @@ end
 --- @return number - Count of dungeons with that color
 local function countDungeonsByColor(colorId)
   local playerLevel = UnitLevel("player") or 1
-  local dungeons = AutoLFM.Core.Constants.DUNGEONS
+  local dungeons = TeronAutoLFM.Core.Constants.DUNGEONS
   local count = 0
 
   for i = 1, table.getn(dungeons) do
@@ -83,43 +83,43 @@ end
 --=============================================================================
 --- Returns dungeons sorted by difficulty color and level (uses cache)
 --- @return table - Array of {index, dungeon, color} sorted by priority and level
-function AutoLFM.Logic.Content.Dungeons.GetSortedDungeons()
-  return AutoLFM.Core.Cache.Get("Dungeons")
+function TeronAutoLFM.Logic.Content.Dungeons.GetSortedDungeons()
+  return TeronAutoLFM.Core.Cache.Get("Dungeons")
 end
 
 --- Clears the cached sorted dungeon list
 --- Call this when player level changes or filters are updated
-function AutoLFM.Logic.Content.Dungeons.ClearCache()
-  AutoLFM.Core.Cache.Clear("Dungeons")
+function TeronAutoLFM.Logic.Content.Dungeons.ClearCache()
+  TeronAutoLFM.Core.Cache.Clear("Dungeons")
 end
 
 --- Refreshes the dungeon list and UI after a filter change
 --- @param changedColorId string - Color filter that changed (for logging)
 --- @param changedState boolean - New state of the filter (for logging)
-function AutoLFM.Logic.Content.Dungeons.RefreshList(changedColorId, changedState)
+function TeronAutoLFM.Logic.Content.Dungeons.RefreshList(changedColorId, changedState)
   -- Log the filter change
   if changedColorId then
     if changedState then
-      AutoLFM.Core.Utils.LogAction("Show dungeons " .. changedColorId)
+      TeronAutoLFM.Core.Utils.LogAction("Show dungeons " .. changedColorId)
     else
       local count = countDungeonsByColor(changedColorId)
-      AutoLFM.Core.Utils.LogAction("Hide dungeons " .. changedColorId .. " (" .. count .. ")")
+      TeronAutoLFM.Core.Utils.LogAction("Hide dungeons " .. changedColorId .. " (" .. count .. ")")
     end
   else
-    AutoLFM.Core.Utils.LogAction("Refresh Dungeons list")
+    TeronAutoLFM.Core.Utils.LogAction("Refresh Dungeons list")
   end
 
   -- Clear cache and refresh UI
-  AutoLFM.Core.Cache.Clear("Dungeons")
+  TeronAutoLFM.Core.Cache.Clear("Dungeons")
 
-  if AutoLFM.UI.Content.Dungeons and AutoLFM.UI.Content.Dungeons.Refresh then
-    AutoLFM.UI.Content.Dungeons.Refresh()
+  if TeronAutoLFM.UI.Content.Dungeons and TeronAutoLFM.UI.Content.Dungeons.Refresh then
+    TeronAutoLFM.UI.Content.Dungeons.Refresh()
   end
 end
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Logic.Content.Dungeons", function()
-  AutoLFM.Core.Cache.Register("Dungeons", buildSortedDungeons)
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Content.Dungeons", function()
+  TeronAutoLFM.Core.Cache.Register("Dungeons", buildSortedDungeons)
 end, { id = "I06" })

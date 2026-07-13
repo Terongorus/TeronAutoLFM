@@ -1,9 +1,9 @@
 --=============================================================================
--- AutoLFM: Broadcaster
+-- TeronAutoLFM: Broadcaster
 --=============================================================================
-AutoLFM = AutoLFM or {}
-AutoLFM.Logic = AutoLFM.Logic or {}
-AutoLFM.Logic.Broadcaster = {}
+TeronAutoLFM = TeronAutoLFM or {}
+TeronAutoLFM.Logic = TeronAutoLFM.Logic or {}
+TeronAutoLFM.Logic.Broadcaster = {}
 
 --=============================================================================
 -- PRIVATE STATE
@@ -30,7 +30,7 @@ local retryState = {
 --- Gets the current broadcast interval from state
 --- @return number - Broadcast interval in seconds
 local function getBroadcastInterval()
-  return AutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or AutoLFM.Core.Constants.DEFAULT_BROADCAST_INTERVAL or 60
+  return TeronAutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or TeronAutoLFM.Core.Constants.DEFAULT_BROADCAST_INTERVAL or 60
 end
 
 --=============================================================================
@@ -38,20 +38,20 @@ end
 --=============================================================================
 --- Resets broadcast statistics to zero
 local function resetStats()
-  AutoLFM.Core.Maestro.SetState("Broadcaster.MessagesSent", 0)
-  AutoLFM.Core.Maestro.SetState("Broadcaster.SessionStartTime", GetTime())
-  AutoLFM.Core.Maestro.SetState("Broadcaster.LastBroadcastTime", 0)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.MessagesSent", 0)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.SessionStartTime", GetTime())
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.LastBroadcastTime", 0)
 end
 
 --- Increments the message counter
 local function incrementMessageCount()
-  local count = (AutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0) + 1
-  AutoLFM.Core.Maestro.SetState("Broadcaster.MessagesSent", count)
+  local count = (TeronAutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0) + 1
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.MessagesSent", count)
 end
 
 --- Updates the last broadcast timestamp
 local function updateLastBroadcastTime()
-  AutoLFM.Core.Maestro.SetState("Broadcaster.LastBroadcastTime", GetTime())
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.LastBroadcastTime", GetTime())
 end
 
 --=============================================================================
@@ -60,24 +60,24 @@ end
 --- Handles group changes: convert to raid if needed, stop if full
 local function onGroupChange()
   -- Convert to raid if needed (regardless of broadcaster state)
-  AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
+  TeronAutoLFM.Logic.Group.ConvertToRaidIfNeeded()
 
   -- Only check for full group if broadcaster is running
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
   if not isRunning then
     return
   end
 
   -- If group is full, stop broadcasting
-  local groupSize = AutoLFM.Logic.Group.GetSize()
-  local targetSize = AutoLFM.Logic.Group.GetTargetSize()
+  local groupSize = TeronAutoLFM.Logic.Group.GetSize()
+  local targetSize = TeronAutoLFM.Logic.Group.GetTargetSize()
 
   if groupSize >= targetSize then
-    AutoLFM.Core.Utils.PrintSuccess("Group is full! Stopping broadcast.")
+    TeronAutoLFM.Core.Utils.PrintSuccess("Group is full! Stopping broadcast.")
     -- NOTE: pcall used intentionally - sound files are optional and may not exist
     -- Failure to play sound should not interrupt broadcast functionality
-    pcall(PlaySoundFile, AutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.FULL)
-    AutoLFM.Logic.Broadcaster.Toggle()
+    pcall(PlaySoundFile, TeronAutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.FULL)
+    TeronAutoLFM.Logic.Broadcaster.Toggle()
   end
 end
 
@@ -91,14 +91,14 @@ local sendToChannel
 --- Processes pending retry if delay has elapsed
 local function onRetryTick()
   if not retryState.pending then
-    AutoLFM.Core.Ticker.Stop(AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
+    TeronAutoLFM.Core.Ticker.Stop(TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
     return
   end
 
   local now = GetTime()
   if now - retryState.startTime >= retryState.delay then
     retryState.pending = false
-    AutoLFM.Core.Ticker.Stop(AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
+    TeronAutoLFM.Core.Ticker.Stop(TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
     sendToChannel(retryState.channelName, retryState.message, retryState.retriesLeft - 1)
   end
 end
@@ -111,14 +111,14 @@ end
 local function scheduleRetry(channelName, message, retriesLeft)
   if retriesLeft <= 0 then return end
 
-  local baseDelay = AutoLFM.Core.Constants.BROADCAST_RETRY_DELAY or 1
-  local maxRetries = AutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
+  local baseDelay = TeronAutoLFM.Core.Constants.BROADCAST_RETRY_DELAY or 1
+  local maxRetries = TeronAutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
 
   -- Exponential backoff: delay = baseDelay * 2^(attempt-1)
   local attemptNumber = maxRetries - retriesLeft + 1
   local delay = baseDelay * math.pow(2, attemptNumber - 1)
 
-  AutoLFM.Core.Utils.LogInfo("Retry scheduled in " .. delay .. "s (attempt " .. attemptNumber .. "/" .. maxRetries .. ")")
+  TeronAutoLFM.Core.Utils.LogInfo("Retry scheduled in " .. delay .. "s (attempt " .. attemptNumber .. "/" .. maxRetries .. ")")
 
   -- Store retry state
   retryState.pending = true
@@ -129,7 +129,7 @@ local function scheduleRetry(channelName, message, retriesLeft)
   retryState.delay = delay
 
   -- Start retry ticker (checks every 0.5 seconds)
-  AutoLFM.Core.Ticker.Start(AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
+  TeronAutoLFM.Core.Ticker.Start(TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY)
 end
 
 --- Sends a message to a specific channel with retry support
@@ -139,7 +139,7 @@ end
 --- @return boolean - True if message was sent successfully
 sendToChannel = function(channelName, message, retries)
   if retries == nil then
-    retries = AutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
+    retries = TeronAutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
   end
 
   local channelID = GetChannelName(channelName)
@@ -147,18 +147,18 @@ sendToChannel = function(channelName, message, retries)
   if channelID > 0 then
     local success, err = pcall(SendChatMessage, message, "CHANNEL", nil, channelID)
     if success then
-      AutoLFM.Core.Utils.LogAction("Broadcast to " .. channelName .. ": " .. message)
+      TeronAutoLFM.Core.Utils.LogAction("Broadcast to " .. channelName .. ": " .. message)
       return true
     else
-      AutoLFM.Core.Utils.LogWarning("Failed to send to " .. channelName .. ": " .. tostring(err))
+      TeronAutoLFM.Core.Utils.LogWarning("Failed to send to " .. channelName .. ": " .. tostring(err))
       if retries > 0 then
-        AutoLFM.Core.Utils.LogInfo("Retrying broadcast to " .. channelName .. " (" .. retries .. " attempts left)")
+        TeronAutoLFM.Core.Utils.LogInfo("Retrying broadcast to " .. channelName .. " (" .. retries .. " attempts left)")
         scheduleRetry(channelName, message, retries)
       end
       return false
     end
   else
-    AutoLFM.Core.Utils.LogWarning("Not in channel: " .. channelName)
+    TeronAutoLFM.Core.Utils.LogWarning("Not in channel: " .. channelName)
     return false
   end
 end
@@ -169,21 +169,21 @@ end
 --- @return boolean - True if message was sent successfully
 local function sendToGeneralChannel(message)
   local channelIndex = 1
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetGeneralChannelIndex then
-    channelIndex = AutoLFM.Core.Storage.GetGeneralChannelIndex() or 1
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetGeneralChannelIndex then
+    channelIndex = TeronAutoLFM.Core.Storage.GetGeneralChannelIndex() or 1
   end
   local channelID, channelName = GetChannelName(channelIndex)
   if channelID and channelID > 0 then
     local success, err = pcall(SendChatMessage, message, "CHANNEL", nil, channelID)
     if success then
-      AutoLFM.Core.Utils.LogAction("Broadcast to General /" .. channelIndex .. " (" .. (channelName or tostring(channelIndex)) .. "): " .. message)
+      TeronAutoLFM.Core.Utils.LogAction("Broadcast to General /" .. channelIndex .. " (" .. (channelName or tostring(channelIndex)) .. "): " .. message)
       return true
     else
-      AutoLFM.Core.Utils.LogWarning("Failed to send to General /" .. channelIndex .. ": " .. tostring(err))
+      TeronAutoLFM.Core.Utils.LogWarning("Failed to send to General /" .. channelIndex .. ": " .. tostring(err))
       return false
     end
   else
-    AutoLFM.Core.Utils.LogWarning("Not in General channel /" .. channelIndex)
+    TeronAutoLFM.Core.Utils.LogWarning("Not in General channel /" .. channelIndex)
     return false
   end
 end
@@ -194,10 +194,10 @@ end
 local function sendToHardcoreChannel(message)
   local success, err = pcall(SendChatMessage, message, "Hardcore")
   if success then
-    AutoLFM.Core.Utils.LogAction("Broadcast to Hardcore: " .. message)
+    TeronAutoLFM.Core.Utils.LogAction("Broadcast to Hardcore: " .. message)
     return true
   else
-    AutoLFM.Core.Utils.LogWarning("Failed to send to Hardcore: " .. tostring(err))
+    TeronAutoLFM.Core.Utils.LogWarning("Failed to send to Hardcore: " .. tostring(err))
     return false
   end
 end
@@ -205,25 +205,25 @@ end
 --- Sends the broadcast message to all selected channels
 --- @return boolean - True if message was sent successfully
 local function broadcastMessage()
-  local message = AutoLFM.Logic.Message.GetMessage()
+  local message = TeronAutoLFM.Logic.Message.GetMessage()
 
   if not message or message == "" then
-    AutoLFM.Core.Utils.LogWarning("No message to broadcast (empty selection)")
+    TeronAutoLFM.Core.Utils.LogWarning("No message to broadcast (empty selection)")
     return false
   end
 
-  local isDryRun = AutoLFM.Core.Maestro.GetState("Settings.DryRun") or false
-  local channels = AutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
+  local isDryRun = TeronAutoLFM.Core.Maestro.GetState("Settings.DryRun") or false
+  local channels = TeronAutoLFM.Core.Maestro.GetState("Channels.ActiveChannels") or {}
 
   if table.getn(channels) == 0 and not isDryRun then
-    AutoLFM.Core.Utils.LogWarning("No channels selected for broadcast")
+    TeronAutoLFM.Core.Utils.LogWarning("No channels selected for broadcast")
     return false
   end
 
   if isDryRun then
-    local dryRunPrefix = AutoLFM.Core.Utils.ColorText("[DRY RUN]", "YELLOW")
-    AutoLFM.Core.Utils.Print(dryRunPrefix .. " " .. message)
-    AutoLFM.Core.Utils.LogAction("Dry run broadcast: " .. message)
+    local dryRunPrefix = TeronAutoLFM.Core.Utils.ColorText("[DRY RUN]", "YELLOW")
+    TeronAutoLFM.Core.Utils.Print(dryRunPrefix .. " " .. message)
+    TeronAutoLFM.Core.Utils.LogAction("Dry run broadcast: " .. message)
   else
     for i = 1, table.getn(channels) do
       local channelName = channels[i]
@@ -249,13 +249,13 @@ end
 --- Called by the Ticker system every second
 --- @param elapsed number - Time elapsed since last tick (provided by Ticker)
 local function onTimerTick(elapsed)
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
   if not isRunning then
     return
   end
 
   local currentTime = GetTime()
-  local lastBroadcastTime = AutoLFM.Core.Maestro.GetState("Broadcaster.LastBroadcastTime") or 0
+  local lastBroadcastTime = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.LastBroadcastTime") or 0
   local timeSinceLastBroadcast = currentTime - lastBroadcastTime
   local interval = getBroadcastInterval()
 
@@ -265,19 +265,19 @@ local function onTimerTick(elapsed)
 
   local timeRemaining = interval - timeSinceLastBroadcast
   if timeRemaining < 0 then timeRemaining = 0 end
-  AutoLFM.Core.Maestro.SetState("Broadcaster.TimeRemaining", timeRemaining)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.TimeRemaining", timeRemaining)
 end
 
 --- Starts the broadcast timer using the centralized Ticker system
 --- Performance: Uses shared OnUpdate frame instead of dedicated frame
 local function startTimer()
-  AutoLFM.Core.Ticker.Start(AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER)
+  TeronAutoLFM.Core.Ticker.Start(TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER)
 end
 
 --- Stops the broadcast timer
 --- Performance: Ticker system handles frame visibility automatically
 local function stopTimer()
-  AutoLFM.Core.Ticker.Stop(AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER)
+  TeronAutoLFM.Core.Ticker.Stop(TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER)
 end
 
 --=============================================================================
@@ -285,28 +285,28 @@ end
 --=============================================================================
 --- Starts broadcasting
 local function start()
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
   if isRunning then
-    AutoLFM.Core.Utils.LogWarning("Broadcaster already running")
+    TeronAutoLFM.Core.Utils.LogWarning("Broadcaster already running")
     return
   end
 
-  local isDryRun = AutoLFM.Core.Maestro.GetState("Settings.DryRun") or false
+  local isDryRun = TeronAutoLFM.Core.Maestro.GetState("Settings.DryRun") or false
 
   resetStats()
-  AutoLFM.Core.Maestro.SetState("Broadcaster.IsRunning", true)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.IsRunning", true)
   -- NOTE: pcall used intentionally - sound files are optional and may not exist
   -- Failure to play sound should not interrupt broadcast functionality
-  pcall(PlaySoundFile, AutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.START)
+  pcall(PlaySoundFile, TeronAutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.START)
 
   if isDryRun then
-    AutoLFM.Core.Utils.PrintSuccess("Broadcast started in DRY RUN mode (messages will print to chat)")
+    TeronAutoLFM.Core.Utils.PrintSuccess("Broadcast started in DRY RUN mode (messages will print to chat)")
   else
-    AutoLFM.Core.Utils.PrintSuccess("Broadcast started")
+    TeronAutoLFM.Core.Utils.PrintSuccess("Broadcast started")
   end
 
   -- Convert to raid if needed
-  AutoLFM.Logic.Group.ConvertToRaidIfNeeded()
+  TeronAutoLFM.Logic.Group.ConvertToRaidIfNeeded()
 
   broadcastMessage()
   startTimer()
@@ -314,34 +314,34 @@ end
 
 --- Stops broadcasting
 local function stop()
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
   if not isRunning then
-    AutoLFM.Core.Utils.LogWarning("Broadcaster not running")
+    TeronAutoLFM.Core.Utils.LogWarning("Broadcaster not running")
     return
   end
 
   stopTimer()
-  AutoLFM.Core.Maestro.SetState("Broadcaster.IsRunning", false)
-  AutoLFM.Core.Maestro.SetState("Broadcaster.TimeRemaining", 0)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.IsRunning", false)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.TimeRemaining", 0)
   -- NOTE: pcall used intentionally - sound files are optional and may not exist
   -- Failure to play sound should not interrupt broadcast functionality
-  pcall(PlaySoundFile, AutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.STOP)
+  pcall(PlaySoundFile, TeronAutoLFM.Core.Constants.SOUND_PATH .. SOUNDS.STOP)
 
-  AutoLFM.Core.Utils.PrintSuccess("Broadcast stopped")
+  TeronAutoLFM.Core.Utils.PrintSuccess("Broadcast stopped")
 
-  local sessionStartTime = AutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0
-  local messagesSent = AutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0
+  local sessionStartTime = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0
+  local messagesSent = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0
   local sessionDuration = GetTime() - sessionStartTime
   local minutes = math.floor(sessionDuration / 60)
-  AutoLFM.Core.Utils.Print(string.format("Session stats: %d messages in %d minutes", messagesSent, minutes))
+  TeronAutoLFM.Core.Utils.Print(string.format("Session stats: %d messages in %d minutes", messagesSent, minutes))
 end
 
 --=============================================================================
 -- PUBLIC API
 --=============================================================================
 --- Toggles broadcasting on/off
-function AutoLFM.Logic.Broadcaster.Toggle()
-  local isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
+function TeronAutoLFM.Logic.Broadcaster.Toggle()
+  local isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning")
   if isRunning then
     stop()
   else
@@ -351,102 +351,102 @@ end
 
 --- Returns whether broadcaster is currently running
 --- @return boolean - True if broadcasting is active
-function AutoLFM.Logic.Broadcaster.IsRunning()
-  return AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
+function TeronAutoLFM.Logic.Broadcaster.IsRunning()
+  return TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
 end
 
 --- Gets current broadcast statistics
 --- @return table - Statistics object
-function AutoLFM.Logic.Broadcaster.GetStats()
+function TeronAutoLFM.Logic.Broadcaster.GetStats()
   return {
-    messagesSent = AutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0,
-    sessionStartTime = AutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0,
-    lastBroadcastTime = AutoLFM.Core.Maestro.GetState("Broadcaster.LastBroadcastTime") or 0,
-    isRunning = AutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
+    messagesSent = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.MessagesSent") or 0,
+    sessionStartTime = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.SessionStartTime") or 0,
+    lastBroadcastTime = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.LastBroadcastTime") or 0,
+    isRunning = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.IsRunning") or false
   }
 end
 
 --- Sets the broadcast interval
 --- @param interval number - Interval in seconds (30-120)
-function AutoLFM.Logic.Broadcaster.SetInterval(interval)
+function TeronAutoLFM.Logic.Broadcaster.SetInterval(interval)
   -- Validate interval parameter
   if type(interval) ~= "number" then
-    AutoLFM.Core.Utils.LogError("SetInterval: interval must be number, got " .. type(interval))
+    TeronAutoLFM.Core.Utils.LogError("SetInterval: interval must be number, got " .. type(interval))
     return false
   end
 
   -- Validate interval is within acceptable range
-  if interval < AutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL or interval > AutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL then
-    AutoLFM.Core.Utils.LogWarning("SetInterval: interval out of range [" .. AutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL .. "-" .. AutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL .. "], got " .. interval)
+  if interval < TeronAutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL or interval > TeronAutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL then
+    TeronAutoLFM.Core.Utils.LogWarning("SetInterval: interval out of range [" .. TeronAutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL .. "-" .. TeronAutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL .. "], got " .. interval)
   end
 
-  local clampedInterval = math.max(AutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL, math.min(AutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL, interval))
-  local oldInterval = AutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
+  local clampedInterval = math.max(TeronAutoLFM.Core.Constants.MIN_BROADCAST_INTERVAL, math.min(TeronAutoLFM.Core.Constants.MAX_BROADCAST_INTERVAL, interval))
+  local oldInterval = TeronAutoLFM.Core.Maestro.GetState("Broadcaster.Interval") or 60
 
   if oldInterval == clampedInterval then return end
 
-  AutoLFM.Core.Maestro.SetState("Broadcaster.Interval", clampedInterval)
+  TeronAutoLFM.Core.Maestro.SetState("Broadcaster.Interval", clampedInterval)
 
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.SetBroadcastInterval then
-    AutoLFM.Core.Storage.SetBroadcastInterval(clampedInterval)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetBroadcastInterval then
+    TeronAutoLFM.Core.Storage.SetBroadcastInterval(clampedInterval)
   end
 end
 
 --- Gets the current broadcast interval
 --- @return number - Interval in seconds
-function AutoLFM.Logic.Broadcaster.GetInterval()
+function TeronAutoLFM.Logic.Broadcaster.GetInterval()
   return getBroadcastInterval()
 end
 
 --=============================================================================
 -- STATE DECLARATIONS
 --=============================================================================
-AutoLFM.Core.SafeRegisterState("Broadcaster.IsRunning", false, { id = "S13" })
-AutoLFM.Core.SafeRegisterState("Broadcaster.Interval", 60, { id = "S12" })
-AutoLFM.Core.SafeRegisterState("Broadcaster.MessagesSent", 0, { id = "S15" })
-AutoLFM.Core.SafeRegisterState("Broadcaster.SessionStartTime", 0, { id = "S16" })
-AutoLFM.Core.SafeRegisterState("Broadcaster.LastBroadcastTime", 0, { id = "S14" })
-AutoLFM.Core.SafeRegisterState("Broadcaster.TimeRemaining", 0, { id = "S17" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.IsRunning", false, { id = "S13" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.Interval", 60, { id = "S12" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.MessagesSent", 0, { id = "S15" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.SessionStartTime", 0, { id = "S16" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.LastBroadcastTime", 0, { id = "S14" })
+TeronAutoLFM.Core.SafeRegisterState("Broadcaster.TimeRemaining", 0, { id = "S17" })
 
 --=============================================================================
 -- COMMAND DECLARATIONS
 --=============================================================================
-AutoLFM.Core.Maestro.RegisterCommand("Broadcaster.Toggle", function()
-  AutoLFM.Logic.Broadcaster.Toggle()
+TeronAutoLFM.Core.Maestro.RegisterCommand("Broadcaster.Toggle", function()
+  TeronAutoLFM.Logic.Broadcaster.Toggle()
 end, { id = "C15" })
 
 --=============================================================================
 -- INITIALIZATION
 --=============================================================================
-AutoLFM.Core.SafeRegisterInit("Logic.Broadcaster", function()
+TeronAutoLFM.Core.SafeRegisterInit("Logic.Broadcaster", function()
   -- Register broadcast timer ticker (1 second interval, starts stopped)
-  AutoLFM.Core.Ticker.Register(
-    AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER,
-    AutoLFM.Core.Constants.BROADCASTER_TIMER_INTERVAL or 1,
+  TeronAutoLFM.Core.Ticker.Register(
+    TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER,
+    TeronAutoLFM.Core.Constants.BROADCASTER_TIMER_INTERVAL or 1,
     onTimerTick,
     false  -- Don't start immediately
   )
 
   -- Register retry ticker (0.5 second interval for responsive retries, starts stopped)
-  AutoLFM.Core.Ticker.Register(
-    AutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY,
+  TeronAutoLFM.Core.Ticker.Register(
+    TeronAutoLFM.Core.Constants.TICKER_IDS.BROADCASTER_RETRY,
     0.5,
     onRetryTick,
     false  -- Don't start immediately
   )
 
-  AutoLFM.Core.Maestro.Listen(
+  TeronAutoLFM.Core.Maestro.Listen(
     "Broadcaster.OnGroupSizeChanged",
     "Group.SizeChanged",
     onGroupChange,
     { id = "L03" }
   )
 
-  if AutoLFM.Core.Storage and AutoLFM.Core.Storage.GetBroadcastInterval then
-    local savedInterval = AutoLFM.Core.Storage.GetBroadcastInterval()
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetBroadcastInterval then
+    local savedInterval = TeronAutoLFM.Core.Storage.GetBroadcastInterval()
     -- NOTE: Use explicit nil check instead of 'if savedInterval' to handle interval = 0 correctly
     if savedInterval ~= nil then
-      AutoLFM.Core.Maestro.SetState("Broadcaster.Interval", savedInterval)
+      TeronAutoLFM.Core.Maestro.SetState("Broadcaster.Interval", savedInterval)
     end
   end
 end, {

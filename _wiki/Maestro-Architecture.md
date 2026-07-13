@@ -2,7 +2,7 @@
 
 ## 🎯 What is Maestro?
 
-Maestro is a **command bus architecture** that implements the **CQRS pattern** (Command Query Responsibility Segregation) for AutoLFM. It provides centralized state management with event-driven communication between components.
+Maestro is a **command bus architecture** that implements the **CQRS pattern** (Command Query Responsibility Segregation) for TeronAutoLFM. It provides centralized state management with event-driven communication between components.
 
 ## 🏗️ Core Concepts
 
@@ -256,7 +256,7 @@ end, { id = "L06" })
 ### ❌ Direct Module Access
 ```lua
 -- BAD: Direct function call
-AutoLFM.Logic.Selection.ToggleDungeon("Deadmines")
+TeronAutoLFM.Logic.Selection.ToggleDungeon("Deadmines")
 
 -- GOOD: Command dispatch
 Dispatch("Selection.ToggleDungeon", "Deadmines")
@@ -289,7 +289,7 @@ end, { id = "I##" })
 ### ❌ Synchronous Dependencies
 ```lua
 -- BAD: Direct module dependency
-local otherModuleData = AutoLFM.OtherModule.GetData()
+local otherModuleData = TeronAutoLFM.OtherModule.GetData()
 
 -- GOOD: Event-driven communication
 EmitEvent("DataRequested")
