@@ -20,6 +20,7 @@ TeronAutoLFM.Core.SafeRegisterState("Selection.Roles", {}, { id = "S08" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.DungeonNames", {}, { id = "S04" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RaidName", nil, { id = "S06" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RaidSize", 40, { id = "S07" })
+TeronAutoLFM.Core.SafeRegisterState("Selection.RoleCounts", {}, { id = "S21" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.DetailsText", "", { id = "S03" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomMessage", "", { id = "S02" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomGroupSize", 5, { id = "S01" })
@@ -57,6 +58,7 @@ local function setSelectionMode(newMode)
   if newMode ~= MODES.RAID then
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", nil)
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", 40)
+    TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", {})
   end
 
   if newMode ~= MODES.CUSTOM then
@@ -177,7 +179,8 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRaid", function(index
 
   -- Toggle selection
   if selectedRaidName == raidName then
-    -- Deselect: clear raid and switch to none mode
+    -- Deselect: clear raid and switch to none mode (setSelectionMode also
+    -- resets Selection.RoleCounts since it's leaving raid mode)
     setSelectionMode(MODES.NONE)
     TeronAutoLFM.Core.Utils.LogAction("Deselected raid " .. raidName)
   else
@@ -197,6 +200,17 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRaid", function(index
 
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", raidName)
     TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", raidSize)
+
+    -- Restore this raid's saved per-role headcounts for whichever roles
+    -- are currently selected (defaulting to 1 for roles never configured)
+    local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+    local roleCounts = {}
+    for i = 1, table.getn(currentRoles) do
+      local r = currentRoles[i]
+      local savedCount = TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount(raidName, r)
+      roleCounts[r] = savedCount or 1
+    end
+    TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
 
     TeronAutoLFM.Core.Utils.LogAction("Selected raid " .. raidName .. " (size: " .. raidSize .. ")")
   end
@@ -271,6 +285,7 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ClearRaid", function()
 
   TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", nil)
   TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", 40)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", {})
 
   TeronAutoLFM.Core.Utils.LogAction("Cleared raid")
 
@@ -295,24 +310,69 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
 
   -- Read current roles and create a copy to avoid mutation
   local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
 
   local newRoles
   if TeronAutoLFM.Core.Utils.ArrayContains(currentRoles, role) then
     newRoles = TeronAutoLFM.Core.Utils.RemoveFromArray(currentRoles, role)
+    roleCounts[role] = nil
     TeronAutoLFM.Core.Utils.LogAction("Deselected role " .. role)
   else
     -- Create a copy and add new role
     newRoles = TeronAutoLFM.Core.Utils.ShallowCopy(currentRoles)
     table.insert(newRoles, role)
     TeronAutoLFM.Core.Utils.LogAction("Selected role " .. role)
+
+    -- Only raids show a per-role headcount; default to the size last
+    -- configured for this raid+role, or 1 if never configured before
+    local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+    if mode == MODES.RAID then
+      local raidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
+      local savedCount = raidName and TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount(raidName, role)
+      roleCounts[role] = savedCount or 1
+    end
   end
 
   -- Update state
   TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", newRoles)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
 
   -- Emit event
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.Changed")
 end, { id = "C14" })
+
+--- Sets how many of a specific role are still needed (raid mode only)
+--- @param role string - The role to set a count for ("TANK", "HEAL", or "DPS")
+--- @param count number - The headcount needed for this role
+TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.SetRoleCount", function(role, count)
+  if not role or not VALID_ROLES[role] then
+    TeronAutoLFM.Core.Utils.LogError("Selection.SetRoleCount: Invalid role '" .. tostring(role) .. "' (valid: TANK, HEAL, DPS)")
+    return
+  end
+
+  local newCount = tonumber(count)
+  if not newCount then
+    TeronAutoLFM.Core.Utils.LogError("Selection.SetRoleCount: Invalid count value " .. tostring(count) .. " (expected number)")
+    return
+  end
+
+  -- Clamp to a sane range (1-40, matching the largest raid size)
+  newCount = math.max(1, math.min(40, math.floor(newCount)))
+
+  local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
+  roleCounts[role] = newCount
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
+
+  TeronAutoLFM.Core.Utils.LogAction("Set " .. role .. " count to " .. newCount)
+
+  -- Remember this count for the currently selected raid
+  local raidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
+  if raidName and TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.SetRaidInstanceRoleCount then
+    TeronAutoLFM.Core.Storage.SetRaidInstanceRoleCount(raidName, role, newCount)
+  end
+
+  TeronAutoLFM.Core.Maestro.Dispatch("Selection.Changed")
+end, { id = "C25" })
 
 --- Clears all role selections
 TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ClearRoles", function()
@@ -434,6 +494,7 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ClearAll", function()
   TeronAutoLFM.Core.Maestro.SetState("Selection.DungeonNames", {})
   TeronAutoLFM.Core.Maestro.SetState("Selection.RaidName", nil)
   TeronAutoLFM.Core.Maestro.SetState("Selection.RaidSize", 40)
+  TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", {})
   TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", {})
   TeronAutoLFM.Core.Maestro.SetState("Selection.CustomMessage", "")
   TeronAutoLFM.Core.Maestro.SetState("Selection.DetailsText", "")

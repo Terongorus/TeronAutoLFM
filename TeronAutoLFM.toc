@@ -4,7 +4,7 @@
 ## Author: Gondoleon, NSO73, Terongorus
 ## SavedVariables: V3_Settings, V3_Presets
 ## OptionalDeps: pfQuest, ShaguTweaks
-## Version: 4.2.2
+## Version: 4.3.0
 
 #=============================================================================
 # Github Repository: https://github.com/Terongorus/TeronAutoLFM

@@ -63,7 +63,8 @@ local SETTINGS_REGISTRY = {
   {key = "welcomeShown", type = "boolean", default = false},
   {key = "generalChannelIndex", type = "number", default = 1},
   {key = "showCustomInstances", type = "boolean", default = false},
-  {key = "raidSizes", type = "table", default = {}}
+  {key = "raidSizes", type = "table", default = {}},
+  {key = "raidRoleCounts", type = "table", default = {}}
 }
 
 --=============================================================================
@@ -186,6 +187,27 @@ end
 function TeronAutoLFM.Core.Storage.GetRaidInstanceSize(raidName)
   local sizes = TeronAutoLFM.Core.Storage.GetRaidSizes()
   return sizes[raidName]
+end
+
+--- Remembers the last-configured headcount for a specific role on a specific raid
+--- @param raidName string - Name of the raid
+--- @param role string - Role name ("TANK", "HEAL", or "DPS")
+--- @param count number - Headcount to remember for this raid+role
+function TeronAutoLFM.Core.Storage.SetRaidInstanceRoleCount(raidName, role, count)
+  local allCounts = TeronAutoLFM.Core.Storage.GetRaidRoleCounts()
+  allCounts[raidName] = allCounts[raidName] or {}
+  allCounts[raidName][role] = count
+  TeronAutoLFM.Core.Storage.SetRaidRoleCounts(allCounts)
+end
+
+--- Retrieves the last-configured headcount for a specific role on a specific raid
+--- @param raidName string - Name of the raid
+--- @param role string - Role name ("TANK", "HEAL", or "DPS")
+--- @return number|nil - Previously saved headcount, or nil if never configured
+function TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount(raidName, role)
+  local allCounts = TeronAutoLFM.Core.Storage.GetRaidRoleCounts()
+  local raidCounts = allCounts[raidName]
+  return raidCounts and raidCounts[role]
 end
 
 --- Deep copy utility for cloning tables recursively

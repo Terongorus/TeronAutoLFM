@@ -17,7 +17,7 @@ local function calculateMissing(targetSize)
   return missing, missing <= 0
 end
 
---- Gets formatted roles text (e.g., "Tank & Heal", "All")
+--- Gets formatted roles text (e.g., "Tank & Healer", "All")
 --- @param roles table - Array of role strings ("TANK", "HEAL", "DPS")
 --- @return string - Role text without "Need" prefix
 local function getRolesText(roles)
@@ -36,9 +36,9 @@ local function getRolesText(roles)
     roleMap[roles[i]] = true
   end
 
-  -- Build ordered list of role names (always Tank -> Heal -> DPS)
+  -- Build ordered list of role names (always Tank -> Healer -> DPS)
   local roleOrder = {"TANK", "HEAL", "DPS"}
-  local roleNames = {TANK = "Tank", HEAL = "Heal", DPS = "DPS"}
+  local roleNames = {TANK = "Tank", HEAL = "Healer", DPS = "DPS"}
   local parts = {}
 
   -- Check roles in order (now O(n) instead of O(n²))
@@ -56,7 +56,7 @@ local function getRolesText(roles)
   return table.concat(parts, " & ")
 end
 
---- Formats roles text for broadcast message (e.g., "Need Tank & Heal", "Need All")
+--- Formats roles text for broadcast message (e.g., "Need Tank & Healer", "Need All")
 --- @param roles table - Array of role strings ("TANK", "HEAL", "DPS")
 --- @return string - Role text with "Need" prefix
 local function formatRolesForMessage(roles)
@@ -65,6 +65,60 @@ local function formatRolesForMessage(roles)
     return ""
   end
   return "Need " .. rolesText
+end
+
+local ROLE_DISPLAY_NAMES = {
+  TANK = { singular = "Tank", plural = "Tanks" },
+  HEAL = { singular = "Healer", plural = "Healers" },
+  DPS = { singular = "DPS", plural = "DPS" }
+}
+
+--- Returns the singular or plural display name for a role based on count
+--- @param role string - Role key ("TANK", "HEAL", "DPS")
+--- @param count number - Headcount, used to pick singular vs plural
+--- @return string - Display name (e.g. "Tank"/"Tanks", "Healer"/"Healers", "DPS")
+local function getRoleDisplayName(role, count)
+  local names = ROLE_DISPLAY_NAMES[role]
+  if not names then return role end
+  if count == 1 then
+    return names.singular
+  end
+  return names.plural
+end
+
+--- Formats roles with a per-role headcount for raid messages (e.g. "2 Tanks & 3 Healers")
+--- Unlike getRolesText, this never collapses to "All" since each role carries
+--- its own distinct count
+--- @param roles table - Array of role strings ("TANK", "HEAL", "DPS")
+--- @param roleCounts table - Map of role -> headcount (e.g. {TANK = 2, HEAL = 3})
+--- @return string - Role text with counts, or "" if no roles selected
+local function formatRoleCounts(roles, roleCounts)
+  if not roles or table.getn(roles) == 0 then
+    return ""
+  end
+
+  roleCounts = roleCounts or {}
+
+  local roleOrder = {"TANK", "HEAL", "DPS"}
+  local roleSet = {}
+  for i = 1, table.getn(roles) do
+    roleSet[roles[i]] = true
+  end
+
+  local parts = {}
+  for i = 1, table.getn(roleOrder) do
+    local roleKey = roleOrder[i]
+    if roleSet[roleKey] then
+      local count = roleCounts[roleKey] or 1
+      table.insert(parts, count .. " " .. getRoleDisplayName(roleKey, count))
+    end
+  end
+
+  if table.getn(parts) == 0 then
+    return ""
+  end
+
+  return table.concat(parts, " & ")
 end
 
 --- Builds dungeon message
@@ -84,7 +138,7 @@ local function buildDungeonMessage()
   end
 
   local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
-  local rolesText = formatRolesForMessage(roles)
+  local rolesText = getRolesText(roles)
 
   local dungeonTags = {}
   for i = 1, table.getn(dungeonNames) do
@@ -99,12 +153,12 @@ local function buildDungeonMessage()
     return ""
   end
 
-  -- Format message: "LF3M for RFC or SFK Need Tank & Heal" or "LF3M for RFC"
+  -- Format message: "LF3M for RFC or SFK - need Tank & Healer" or "LF3M for RFC"
   local dungeonList = table.concat(dungeonTags, " or ")
 
   local message
   if rolesText ~= "" then
-    message = string.format("LF%dM for %s %s", missing, dungeonList, rolesText)
+    message = string.format("LF%dM for %s - need %s", missing, dungeonList, rolesText)
   else
     message = string.format("LF%dM for %s", missing, dungeonList)
   end
@@ -150,16 +204,17 @@ local function buildRaidMessage()
   
   local currentSize = TeronAutoLFM.Logic.Group.GetSize()
 
-  -- Get roles
+  -- Get roles with their per-role headcounts
   local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
-  local rolesText = formatRolesForMessage(roles)
+  local roleCounts = TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {}
+  local rolesText = formatRoleCounts(roles, roleCounts)
 
-  -- Format message: "MC LF5M Need Tank & Heal 35/40" or "MC LF5M 35/40"
+  -- Format message: "LF5M for MC - need Tank2 & Heal3 35/40" or "LF5M for MC 35/40"
   local message
   if rolesText ~= "" then
-    message = string.format("%s LF%dM %s %d/%d", raid.tag, missing, rolesText, currentSize, targetSize)
+    message = string.format("LF%dM for %s - need %s %d/%d", missing, raid.tag, rolesText, currentSize, targetSize)
   else
-    message = string.format("%s LF%dM %d/%d", raid.tag, missing, currentSize, targetSize)
+    message = string.format("LF%dM for %s %d/%d", missing, raid.tag, currentSize, targetSize)
   end
 
   -- Append details text if present
@@ -230,22 +285,23 @@ local function buildMessage()
     return buildRaidMessage()
   end
 
-  -- If mode is "none", check for details text or roles
+  -- Mode "none" is typically a quest-only broadcast (quest links added via
+  -- Shift+Click populate DetailsText): "LFM <quest link> - need Tank & Healer"
   local detailsText = TeronAutoLFM.Core.Maestro.GetState("Selection.DetailsText") or ""
   local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
-  local rolesText = formatRolesForMessage(roles)
+  local rolesText = getRolesText(roles)
 
-  -- Combine roles and details text
-  local parts = {}
-  if rolesText ~= "" then
-    table.insert(parts, rolesText)
-  end
   if detailsText ~= "" then
-    table.insert(parts, detailsText)
+    local message = "LFM " .. detailsText
+    if rolesText ~= "" then
+      message = message .. " - need " .. rolesText
+    end
+    return message
   end
 
-  if table.getn(parts) > 0 then
-    return table.concat(parts, " ")
+  -- No details text - fall back to a bare role request, if any
+  if rolesText ~= "" then
+    return formatRolesForMessage(roles)
   end
 
   return ""

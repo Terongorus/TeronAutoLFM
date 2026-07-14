@@ -143,6 +143,42 @@
           </OnClick>
         </Scripts>
       </CheckButton>
+      <!-- Tank role count (raid mode only) -->
+      <EditBox name="$parent_RoleTankCount" autoFocus="false" hidden="true">
+        <Size>
+          <AbsDimension x="22" y="18"/>
+        </Size>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parent_RoleTankCheckbox" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="4" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <FontString inherits="GameFontNormal"/>
+        <Backdrop edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="false">
+          <EdgeSize>
+            <AbsValue val="8"/>
+          </EdgeSize>
+        </Backdrop>
+        <Scripts>
+          <OnLoad>
+            this:SetNumeric(true)
+            this:SetMaxLetters(2)
+            this:SetJustifyH("CENTER")
+            this:SetTextInsets(1, 1, 1, 1)
+          </OnLoad>
+          <OnEnterPressed>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "TANK")
+          </OnEnterPressed>
+          <OnEditFocusLost>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "TANK")
+          </OnEditFocusLost>
+          <OnEditFocusGained>
+            this:HighlightText()
+          </OnEditFocusGained>
+        </Scripts>
+      </EditBox>
       <Button name="$parent_RoleHeal">
         <Size>
           <AbsDimension x="54" y="54"/>
@@ -206,6 +242,42 @@
           </OnClick>
         </Scripts>
       </CheckButton>
+      <!-- Heal role count (raid mode only) -->
+      <EditBox name="$parent_RoleHealCount" autoFocus="false" hidden="true">
+        <Size>
+          <AbsDimension x="22" y="18"/>
+        </Size>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parent_RoleHealCheckbox" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="4" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <FontString inherits="GameFontNormal"/>
+        <Backdrop edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="false">
+          <EdgeSize>
+            <AbsValue val="8"/>
+          </EdgeSize>
+        </Backdrop>
+        <Scripts>
+          <OnLoad>
+            this:SetNumeric(true)
+            this:SetMaxLetters(2)
+            this:SetJustifyH("CENTER")
+            this:SetTextInsets(1, 1, 1, 1)
+          </OnLoad>
+          <OnEnterPressed>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "HEAL")
+          </OnEnterPressed>
+          <OnEditFocusLost>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "HEAL")
+          </OnEditFocusLost>
+          <OnEditFocusGained>
+            this:HighlightText()
+          </OnEditFocusGained>
+        </Scripts>
+      </EditBox>
       <Button name="$parent_RoleDPS">
         <Size>
           <AbsDimension x="54" y="54"/>
@@ -269,6 +341,42 @@
           </OnClick>
         </Scripts>
       </CheckButton>
+      <!-- DPS role count (raid mode only) -->
+      <EditBox name="$parent_RoleDPSCount" autoFocus="false" hidden="true">
+        <Size>
+          <AbsDimension x="22" y="18"/>
+        </Size>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parent_RoleDPSCheckbox" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="4" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <FontString inherits="GameFontNormal"/>
+        <Backdrop edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\TooltipBorder" tile="false">
+          <EdgeSize>
+            <AbsValue val="8"/>
+          </EdgeSize>
+        </Backdrop>
+        <Scripts>
+          <OnLoad>
+            this:SetNumeric(true)
+            this:SetMaxLetters(2)
+            this:SetJustifyH("CENTER")
+            this:SetTextInsets(1, 1, 1, 1)
+          </OnLoad>
+          <OnEnterPressed>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "DPS")
+          </OnEnterPressed>
+          <OnEditFocusLost>
+            TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "DPS")
+          </OnEditFocusLost>
+          <OnEditFocusGained>
+            this:HighlightText()
+          </OnEditFocusGained>
+        </Scripts>
+      </EditBox>
       <!--==================================================================
         Message Preview
         ==================================================================-->

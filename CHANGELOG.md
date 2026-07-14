@@ -1,3 +1,12 @@
+## [v4.3.0] 2026/07/14
+- Restructure broadcast message formats:
+  - Dungeons: "LF#M for X - need Tank & Healer" (dash before, lowercase "need")
+  - Quests: "LFM [Quest Name] - need Tank & Healer" (previously had no "LFM" prefix at all)
+  - Raids: "LF#M for X - need 2 Tanks & 3 Healers 35/40" — role text now shows a per-role headcount (with pluralization, e.g. "1 Tank" vs "2 Tanks") instead of a flat role list, since raid comps vary by raid size (unlike dungeons, which are always a fixed 1 tank / 1 heal / 3 DPS)
+- Rename the "Heal" role display text to "Healer"/"Healers" everywhere it appears in broadcast messages (dungeons, quests, raids, and the custom message {ROL} variable)
+- Add per-role headcount inputs next to the Tank/Heal/DPS role icons, shown only in raid mode for currently-selected roles
+- Remember the headcount configured for each role, per raid, so it's restored automatically next time that raid+role combination is selected (same behavior as the existing per-raid group size memory)
+
 ## [v4.2.2] 2026/07/14
 - Fix quest links breaking broadcast messages on pure vanilla 1.12.1 clients (Turtle WoW's own client supports them, but stock 1.12.1 doesn't parse quest hyperlinks in chat) — quest links added via Shift+Click are now converted to plain "[Quest Name]" text right before the message is broadcast or previewed, while still using the real clickable link internally so adding/removing a quest from the message still works normally
 

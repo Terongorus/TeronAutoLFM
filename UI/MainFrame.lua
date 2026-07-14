@@ -193,6 +193,49 @@ function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxes()
   end
 end
 
+--- XML OnEnterPressed/OnEditFocusLost callback for role count edit boxes
+--- @param editBox frame - The role count edit box
+--- @param role string - The role this count belongs to ("TANK", "HEAL", or "DPS")
+function TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(editBox, role)
+  local value = tonumber(editBox:GetText())
+  if not value then
+    value = 1
+  end
+  TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetRoleCount", role, value)
+  editBox:ClearFocus()
+end
+
+--- Shows/hides and syncs the per-role count edit boxes (raid mode only,
+--- one box per currently-selected role) with Selection.RoleCounts state
+function TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
+  local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+  local roles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  local counts = TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {}
+  local isRaidMode = (mode == "raid")
+
+  local roleSet = {}
+  for i = 1, table.getn(roles) do
+    roleSet[roles[i]] = true
+  end
+
+  local roleBoxes = {
+    TANK = getglobal("TeronAutoLFM_MainFrame_RoleTankCount"),
+    HEAL = getglobal("TeronAutoLFM_MainFrame_RoleHealCount"),
+    DPS = getglobal("TeronAutoLFM_MainFrame_RoleDPSCount")
+  }
+
+  for role, box in pairs(roleBoxes) do
+    if box then
+      if isRaidMode and roleSet[role] then
+        box:SetText(tostring(counts[role] or 1))
+        box:Show()
+      else
+        box:Hide()
+      end
+    end
+  end
+end
+
 --- XML OnClick callback for close button - dispatches MainFrame.Toggle command
 function TeronAutoLFM.UI.MainFrame.OnCloseButtonClick()
   TeronAutoLFM.Core.Maestro.Dispatch("MainFrame.Toggle")
@@ -453,6 +496,13 @@ TeronAutoLFM.Core.SafeRegisterInit("UI.MainFrame", function()
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.Roles", function(newValue, oldValue)
     updateSelectionButtons()
     TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxes()
+    TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
+  end)
+  TeronAutoLFM.Core.Maestro.SubscribeState("Selection.Mode", function(newValue, oldValue)
+    TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
+  end)
+  TeronAutoLFM.Core.Maestro.SubscribeState("Selection.RoleCounts", function(newValue, oldValue)
+    TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
   end)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.CustomMessage", updateSelectionButtons)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.DetailsText", updateSelectionButtons)
