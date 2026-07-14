@@ -1,3 +1,8 @@
+## [v4.5.1] 2026/07/14
+- Fix "My Role" not persisting through `/reload`: `Selection.MyRole` state was declared but never actually loaded from saved settings at startup, so it silently reset to unset every reload (which also made the dungeon checkbox-disable logic look broken, since it correctly re-enabled once the role was "forgotten").
+- Fix the Settings "My Role" checkboxes not being mutually exclusive: clicking a role dispatched the change correctly, but the checkboxes' visuals were never resynced afterward, so WoW's native per-checkbox toggle let all three end up checked at once even though only one role was actually stored.
+- Add: a dungeon role checkbox (and its icon, dimmed) now stays disabled once that role has been filled by a player who joined - not just when it's the leader's own role. Tracked separately from the live headcount so it survives the role being auto-removed from selection, and clears again if that player later leaves.
+
 ## [v4.5.0] 2026/07/14
 - Add "My Role": pick your own role (Tank/Healer/DPS) in Settings, or from a one-time prompt shown when a dungeon/raid is first selected without one set. Once picked, it's automatically accounted for in what still needs recruiting - re-clicking the same role clears it back to unspecified.
   - Dungeons (fixed 1 tank/1 healer/3 DPS): the leader's own role directly reduces that role's quota - Tank or Healer becomes fully covered (0 needed, checkbox disabled) since a standard 5-man only wants one of each; DPS reduces from 3 to 2 since there's room for more.

@@ -198,11 +198,12 @@ function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxes()
   TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
 end
 
---- Disables a role checkbox when it's the leader's own role (Selection.MyRole)
---- and a standard dungeon has nothing left to recruit for that role (the
---- leader already fills its only slot). Only dungeons enforce this - raids
---- let the leader manually configure counts, so their checkboxes are never
---- disabled by this.
+--- Disables a role checkbox (and dims its icon) when a standard dungeon has
+--- nothing left to recruit for that role - either because it's the
+--- leader's own role (Selection.MyRole) or because a player who joined
+--- already filled it (Selection.FilledDungeonRoles). Only dungeons enforce
+--- this - raids let the leader manually configure counts, so their
+--- checkboxes/icons are never disabled or dimmed by this.
 function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
   local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
   local isDungeonMode = (mode == "dungeons")
@@ -212,15 +213,26 @@ function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
     HEAL = getglobal("TeronAutoLFM_MainFrame_RoleHealCheckbox"),
     DPS = getglobal("TeronAutoLFM_MainFrame_RoleDPSCheckbox")
   }
+  local roleIcons = {
+    TANK = getglobal("TeronAutoLFM_MainFrame_RoleTank"),
+    HEAL = getglobal("TeronAutoLFM_MainFrame_RoleHeal"),
+    DPS = getglobal("TeronAutoLFM_MainFrame_RoleDPS")
+  }
 
   for role, box in pairs(roleBoxes) do
+    local disable = isDungeonMode and (TeronAutoLFM.Logic.Selection.GetEffectiveDungeonQuota(role) <= 0 or TeronAutoLFM.Logic.Selection.IsDungeonRoleFilled(role))
+
     if box then
-      local disable = isDungeonMode and TeronAutoLFM.Logic.Selection.GetEffectiveDungeonQuota(role) <= 0
       if disable then
         box:Disable()
       else
         box:Enable()
       end
+    end
+
+    local icon = roleIcons[role]
+    if icon then
+      icon:SetAlpha(disable and 0.4 or 1)
     end
   end
 end

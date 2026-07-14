@@ -409,6 +409,7 @@ end
 function TeronAutoLFM.UI.Content.Settings.OnMyRoleClick(role)
   if isRestoringState then return end
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetMyRole", role)
+  TeronAutoLFM.UI.Content.Settings.UpdateMyRoleCheckboxes()
 end
 
 --- Syncs the three "My Role" checkboxes with Selection.MyRole state

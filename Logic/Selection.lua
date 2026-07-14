@@ -26,6 +26,7 @@ TeronAutoLFM.Core.SafeRegisterState("Selection.RaidName", nil, { id = "S06" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RaidSize", 40, { id = "S07" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RoleCounts", {}, { id = "S21" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.MyRole", nil, { id = "S22" })
+TeronAutoLFM.Core.SafeRegisterState("Selection.FilledDungeonRoles", {}, { id = "S23" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.DetailsText", "", { id = "S03" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomMessage", "", { id = "S02" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomGroupSize", 5, { id = "S01" })
@@ -112,6 +113,8 @@ end
 --- Ensures mutual exclusivity between dungeons, raids, custom, and quests modes
 --- @param newMode string - The new mode to switch to (use MODES constants)
 local function setSelectionMode(newMode)
+  local previousMode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+
   -- Clear all modes except the new one (atomic operation)
   if newMode ~= MODES.DUNGEONS then
     TeronAutoLFM.Core.Maestro.SetState("Selection.DungeonNames", {})
@@ -125,6 +128,15 @@ local function setSelectionMode(newMode)
 
   if newMode ~= MODES.CUSTOM then
     TeronAutoLFM.Core.Maestro.SetState("Selection.CustomMessage", "")
+  end
+
+  -- Fresh dungeon-recruiting session: reset which roles have already been
+  -- filled (Selection.FilledDungeonRoles) whenever entering or leaving
+  -- dungeon mode, but not when merely changing which dungeons are
+  -- advertised while staying in dungeon mode - the actual party
+  -- composition doesn't change just because the dungeon list did
+  if newMode ~= previousMode and (newMode == MODES.DUNGEONS or previousMode == MODES.DUNGEONS) then
+    TeronAutoLFM.Core.Maestro.SetState("Selection.FilledDungeonRoles", {})
   end
 
   -- Set the new mode
@@ -417,12 +429,15 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
   -- Dungeons have no manual override for role counts (always the fixed
   -- 1/1/3 minus whatever the leader plays themselves - Selection.MyRole),
   -- so refuse to select a role that's already fully covered by the leader
+  -- or has already been filled by a player who joined (see
+  -- Selection.FilledDungeonRoles, set by Selection.DecrementRoleCount)
   if not isCurrentlySelected then
     local currentMode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
     if currentMode == MODES.DUNGEONS then
       local effective = applySelfRoleAdjustment(role, DUNGEON_ROLE_QUOTAS[role] or 1)
-      if effective <= 0 then
-        TeronAutoLFM.Core.Utils.LogWarning("Cannot select " .. role .. ": that's already your own role")
+      local filledRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.FilledDungeonRoles") or {}
+      if effective <= 0 or filledRoles[role] then
+        TeronAutoLFM.Core.Utils.LogWarning("Cannot select " .. role .. ": already covered for this dungeon")
         return
       end
     end
@@ -585,6 +600,18 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.DecrementRoleCount", functi
     local newRoles = TeronAutoLFM.Core.Utils.RemoveFromArray(currentRoles, role)
     TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", newRoles)
 
+    -- Dungeons have no manual override, so remember this role is fully
+    -- filled (distinct from "never selected") so the UI can keep its
+    -- checkbox disabled even though it's no longer in Selection.Roles -
+    -- see Selection.IncrementRoleCount, which clears this if the player
+    -- filling it later leaves
+    local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+    if mode == MODES.DUNGEONS then
+      local filled = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.FilledDungeonRoles") or {})
+      filled[role] = true
+      TeronAutoLFM.Core.Maestro.SetState("Selection.FilledDungeonRoles", filled)
+    end
+
     TeronAutoLFM.Core.Utils.LogAction(role .. " fully filled - removed from selection")
   else
     roleCounts[role] = newCount
@@ -646,6 +673,17 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.IncrementRoleCount", functi
       TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", newRoles)
     end
     newCount = 1
+
+    -- Clear the dungeon "fully filled" marker (see DecrementRoleCount) -
+    -- the checkbox becomes selectable/enabled again
+    if mode == MODES.DUNGEONS then
+      local filled = TeronAutoLFM.Core.Maestro.GetState("Selection.FilledDungeonRoles")
+      if filled and filled[role] then
+        filled = TeronAutoLFM.Core.Utils.ShallowCopy(filled)
+        filled[role] = nil
+        TeronAutoLFM.Core.Maestro.SetState("Selection.FilledDungeonRoles", filled)
+      end
+    end
   end
 
   roleCounts[role] = newCount
@@ -786,6 +824,17 @@ function TeronAutoLFM.Logic.Selection.GetEffectiveDungeonQuota(role)
   return applySelfRoleAdjustment(role, DUNGEON_ROLE_QUOTAS[role] or 1)
 end
 
+--- Returns whether a dungeon role has already been fully filled by a
+--- player who joined this session (distinct from never having been
+--- selected). Used by the UI to keep a role's checkbox disabled even
+--- after it's been auto-removed from Selection.Roles.
+--- @param role string - "TANK", "HEAL", or "DPS"
+--- @return boolean - True if this role is already covered for this dungeon
+function TeronAutoLFM.Logic.Selection.IsDungeonRoleFilled(role)
+  local filled = TeronAutoLFM.Core.Maestro.GetState("Selection.FilledDungeonRoles") or {}
+  return filled[role] == true
+end
+
 --- Clears all selections (dungeons, raids, roles, custom, details text, group size)
 --- NOTE: Does NOT clear channels and intervals
 TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ClearAll", function()
@@ -813,5 +862,15 @@ TeronAutoLFM.Core.Maestro.RegisterEvent("Selection.Changed", { id = "E01" })
 -- INITIALIZATION
 --=============================================================================
 TeronAutoLFM.Core.SafeRegisterInit("Logic.Selection", function()
-  -- No initialization needed - selection state is managed by Maestro
-end, { id = "I05" })
+  -- Load the leader's own role from persistent storage. Uses Storage.Get
+  -- directly rather than an auto-generated accessor, since myRole's
+  -- default/cleared value is nil and the generated string setter would
+  -- coerce that to the literal string "nil" (see Core/Storage.lua)
+  if TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.Get then
+    local savedMyRole = TeronAutoLFM.Core.Storage.Get("myRole", nil)
+    TeronAutoLFM.Core.Maestro.SetState("Selection.MyRole", savedMyRole)
+  end
+end, {
+  id = "I05",
+  dependencies = { "Core.Storage" }
+})
