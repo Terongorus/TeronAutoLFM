@@ -1,3 +1,6 @@
+## [v4.4.4] 2026/07/14
+- Fix confirming a role headcount resetting every *other* role's count to 1: `Core.Utils.ShallowCopy` used `table.getn()` + a numeric loop, which only copies array-style (sequential integer-keyed) tables. `Selection.RoleCounts` is a dictionary (`{TANK = 3, HEAL = 1, DPS = 1}`, string keys), so `table.getn()` returned 0 and every copy silently produced an empty table — meaning every `Selection.SetRoleCount`/`DecrementRoleCount`/`IncrementRoleCount` call was discarding every role except the one just edited. `ShallowCopy` now uses `pairs()`, which correctly handles both array and dictionary tables (and is a strict improvement for its existing array use cases too, not just a special case for this one).
+
 ## [v4.4.3] 2026/07/14
 - Fix the raid group-size edit box getting permanently stuck focused after selecting a raid, unable to be released by clicking elsewhere:
   - The role headcount edit boxes never got the `OnMouseDown` → `SetFocus()` handler the raid size edit box already had (`SizeControl.lua`), so clicking them didn't reliably win focus away from an already-focused edit box. Added the matching handler to all three.

@@ -278,14 +278,19 @@ function TeronAutoLFM.Core.Utils.ArrayContains(array, value)
   return false
 end
 
---- Creates a shallow copy of an array
---- @param array table - The source array
---- @return table - New array with same values
-function TeronAutoLFM.Core.Utils.ShallowCopy(array)
-  if not array then return {} end
+--- Creates a shallow copy of a table (works for both array-style,
+--- sequentially-integer-keyed tables and dictionary-style, string-keyed
+--- tables - uses pairs() rather than table.getn()+numeric loop, since
+--- table.getn() only counts the integer-indexed "array part" and silently
+--- returns 0 for a purely string-keyed table like {TANK = 1, HEAL = 1},
+--- which would make a numeric-only copy loop copy nothing at all)
+--- @param source table - The source table (array or dictionary)
+--- @return table - New table with the same keys/values
+function TeronAutoLFM.Core.Utils.ShallowCopy(source)
+  if not source then return {} end
   local copy = {}
-  for i = 1, table.getn(array) do
-    copy[i] = array[i]
+  for k, v in pairs(source) do
+    copy[k] = v
   end
   return copy
 end
