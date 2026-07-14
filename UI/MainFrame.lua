@@ -133,7 +133,10 @@ end
 --- @param button frame - The role button that was clicked
 function TeronAutoLFM.UI.MainFrame.OnRoleButtonClick(button)
   button._checkbox = button._checkbox or getglobal(button:GetName() .. "Checkbox")
-  if button._checkbox then
+  -- CheckButton:Click() bypasses the disabled state (unlike a real mouse
+  -- click on the checkbox itself), so a disabled checkbox must be guarded
+  -- explicitly here or clicking the icon can still toggle the role.
+  if button._checkbox and button._checkbox:IsEnabled() then
   button._checkbox:Click()
   end
 end

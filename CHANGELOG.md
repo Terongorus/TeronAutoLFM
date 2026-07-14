@@ -1,3 +1,7 @@
+## [v4.5.2] 2026/07/15
+- Fix a disabled dungeon role checkbox still being toggleable by clicking its icon: the icon is a separate button that was never itself disabled, and forcing a click through to the checkbox via `:Click()` bypasses the checkbox's own disabled state (unlike a real mouse click on it). The icon click now checks `IsEnabled()` on the checkbox first.
+- Fix the Settings "My Role" row overflowing the panel: the Healer/DPS checkboxes and labels were positioned with fixed offsets that didn't account for the actual label text width, pushing the DPS checkbox/label partly or fully outside the visible panel. Each checkbox is now anchored off the previous label's real right edge instead.
+
 ## [v4.5.1] 2026/07/14
 - Fix "My Role" not persisting through `/reload`: `Selection.MyRole` state was declared but never actually loaded from saved settings at startup, so it silently reset to unset every reload (which also made the dungeon checkbox-disable logic look broken, since it correctly re-enabled once the role was "forgotten").
 - Fix the Settings "My Role" checkboxes not being mutually exclusive: clicking a role dispatched the change correctly, but the checkboxes' visuals were never resynced afterward, so WoW's native per-checkbox toggle let all three end up checked at once even though only one role was actually stored.

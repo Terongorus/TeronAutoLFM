@@ -919,10 +919,13 @@
             <Layers>
               <Layer level="ARTWORK">
                 <FontString name="$parent_Label" inherits="GameFontNormalSmall" text="Tank">
+                  <Size>
+                    <AbsDimension x="28" y="16"/>
+                  </Size>
                   <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT">
                       <Offset>
-                        <AbsDimension x="0" y="0"/>
+                        <AbsDimension x="2" y="0"/>
                       </Offset>
                     </Anchor>
                   </Anchors>
@@ -940,19 +943,22 @@
               <AbsDimension x="20" y="20"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="$parent_TankCheck" relativePoint="RIGHT">
+              <Anchor point="LEFT" relativeTo="$parent_TankCheck_Label" relativePoint="RIGHT">
                 <Offset>
-                  <AbsDimension x="55" y="0"/>
+                  <AbsDimension x="6" y="0"/>
                 </Offset>
               </Anchor>
             </Anchors>
             <Layers>
               <Layer level="ARTWORK">
                 <FontString name="$parent_Label" inherits="GameFontNormalSmall" text="Healer">
+                  <Size>
+                    <AbsDimension x="40" y="16"/>
+                  </Size>
                   <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT">
                       <Offset>
-                        <AbsDimension x="0" y="0"/>
+                        <AbsDimension x="2" y="0"/>
                       </Offset>
                     </Anchor>
                   </Anchors>
@@ -970,19 +976,22 @@
               <AbsDimension x="20" y="20"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="$parent_HealCheck" relativePoint="RIGHT">
+              <Anchor point="LEFT" relativeTo="$parent_HealCheck_Label" relativePoint="RIGHT">
                 <Offset>
-                  <AbsDimension x="65" y="0"/>
+                  <AbsDimension x="6" y="0"/>
                 </Offset>
               </Anchor>
             </Anchors>
             <Layers>
               <Layer level="ARTWORK">
                 <FontString name="$parent_Label" inherits="GameFontNormalSmall" text="DPS">
+                  <Size>
+                    <AbsDimension x="24" y="16"/>
+                  </Size>
                   <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT">
                       <Offset>
-                        <AbsDimension x="0" y="0"/>
+                        <AbsDimension x="2" y="0"/>
                       </Offset>
                     </Anchor>
                   </Anchors>
