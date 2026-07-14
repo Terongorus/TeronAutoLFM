@@ -156,6 +156,28 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleDungeon", function(in
   TeronAutoLFM.Core.Maestro.SetState("Selection.DungeonNames", dungeonNames)
   setSelectionMode(MODES.DUNGEONS)
 
+  -- Backfill role headcounts for any already-checked roles now that dungeon
+  -- mode is active (fixed 1/1/3 quota). Mirrors the same reconciliation
+  -- ToggleRaid does for raids - without this, roles checked *before*
+  -- picking a dungeon would never get tracked, silently breaking the Role
+  -- Assign popup and auto-decrement (shouldPrompt() requires RoleCounts to
+  -- be non-empty)
+  local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+  if table.getn(currentRoles) > 0 then
+    local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
+    local changed = false
+    for i = 1, table.getn(currentRoles) do
+      local r = currentRoles[i]
+      if not roleCounts[r] then
+        roleCounts[r] = DUNGEON_ROLE_QUOTAS[r] or 1
+        changed = true
+      end
+    end
+    if changed then
+      TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
+    end
+  end
+
   -- Emit event
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.Changed")
 end, { id = "C12" })

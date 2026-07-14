@@ -213,7 +213,7 @@ TeronAutoLFM.Core.SafeRegisterInit("Components.RoleAssignPopup", function()
         TeronAutoLFM.Components.RoleAssignPopup.OnPlayerLeft(payload.name)
       end
     end,
-    { id = "L10" }
+    { id = "L13" }
   )
 
   TeronAutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue)
@@ -222,6 +222,6 @@ TeronAutoLFM.Core.SafeRegisterInit("Components.RoleAssignPopup", function()
     end
   end)
 end, {
-  id = "I25",
+  id = "I28",
   dependencies = { "Core.Events", "Logic.Selection", "Logic.Broadcaster" }
 })
