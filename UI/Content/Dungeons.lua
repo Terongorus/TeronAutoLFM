@@ -72,6 +72,8 @@ local function CreateDungeonRows(scrollChild)
       checkbox:SetChecked(isSelected)
 
       checkbox:SetScript("OnClick", function()
+        -- Clicking a checkbox doesn't naturally release a focused edit box in WoW
+        TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
         TeronAutoLFM.Core.Maestro.Dispatch("Selection.ToggleDungeon", row.dungeonIndex)
       end)
     end

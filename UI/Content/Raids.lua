@@ -125,6 +125,10 @@ local function CreateRaidRows(scrollChild)
         local isChecked = this:GetChecked()
         local parentRow = this:GetParent()
 
+        -- Clicking a checkbox doesn't naturally release a focused edit box
+        -- in WoW (e.g. a role count box left focused from before)
+        TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
+
         -- Dispatch Command to toggle raid selection
         TeronAutoLFM.Core.Maestro.Dispatch("Selection.ToggleRaid", parentRow.raidIndex)
 

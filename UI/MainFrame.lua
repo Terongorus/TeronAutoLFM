@@ -142,6 +142,9 @@ end
 --- @param checkbox frame - The checkbox that was clicked
 --- @param role string - The role being toggled ("TANK", "HEAL", or "DPS")
 function TeronAutoLFM.UI.MainFrame.OnRoleCheckboxClick(checkbox, role)
+  -- Clicking a checkbox doesn't naturally release a focused edit box in WoW
+  TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
+
   -- Dispatch to Maestro (will update state, which will then update UI via subscriber)
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.ToggleRole", role)
 end

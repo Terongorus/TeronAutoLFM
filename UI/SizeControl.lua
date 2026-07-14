@@ -216,9 +216,11 @@ function TeronAutoLFM.UI.SizeControl.Create(config)
 
     editBox:SetScript("OnEditFocusGained", function()
       this:HighlightText()
+      TeronAutoLFM.Core.Utils.SetFocusedEditBox(this)
     end)
 
     editBox:SetScript("OnEditFocusLost", function()
+      TeronAutoLFM.Core.Utils.ClearFocusedEditBoxIfSelf(this)
       if not isUpdatingFromEditBox then
         CommitEditBoxValue(this)
       end

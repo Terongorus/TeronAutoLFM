@@ -55,6 +55,9 @@ function TeronAutoLFM.Logic.MainFrame.SelectBottomTab(tabIndex, tabName)
     return
   end
 
+  -- Switching panels doesn't naturally release a focused edit box in WoW
+  TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
+
   currentBottomTab = tabIndex
   currentSideTab = nil
 
@@ -72,6 +75,9 @@ function TeronAutoLFM.Logic.MainFrame.SelectSideTab(tabIndex, tabName)
   if not SIDE_TABS[tabIndex] then
     return
   end
+
+  -- Switching panels doesn't naturally release a focused edit box in WoW
+  TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
 
   currentSideTab = tabIndex
 

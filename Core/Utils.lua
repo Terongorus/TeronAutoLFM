@@ -605,6 +605,41 @@ function TeronAutoLFM.Core.Utils.ValidateInitialization()
 end
 
 --=============================================================================
+-- EDIT BOX FOCUS TRACKING
+--=============================================================================
+-- WoW only clears an EditBox's keyboard focus via ClearFocus(), Escape, or
+-- another EditBox stealing it - clicking a Button/CheckButton/blank frame
+-- does nothing on its own. This tracker lets any edit box register itself
+-- as "currently focused" so a click elsewhere in the UI (background, a
+-- checkbox, a tab) can explicitly release it.
+local focusedEditBox = nil
+
+--- Marks an edit box as the one currently holding keyboard focus. Call this
+--- from that edit box's own OnEditFocusGained script.
+--- @param editBox frame - The edit box that just gained focus
+function TeronAutoLFM.Core.Utils.SetFocusedEditBox(editBox)
+  focusedEditBox = editBox
+end
+
+--- Clears the tracked reference if this edit box is the one that lost focus.
+--- Call this from that edit box's own OnEditFocusLost script.
+--- @param editBox frame - The edit box that just lost focus
+function TeronAutoLFM.Core.Utils.ClearFocusedEditBoxIfSelf(editBox)
+  if focusedEditBox == editBox then
+    focusedEditBox = nil
+  end
+end
+
+--- Releases keyboard focus from whichever tracked edit box currently has
+--- it, if any. Safe to call unconditionally (no-op if nothing is focused).
+function TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
+  if focusedEditBox then
+    focusedEditBox:ClearFocus()
+    focusedEditBox = nil
+  end
+end
+
+--=============================================================================
 -- INITIALIZATION
 --=============================================================================
 -- Build color lookup table immediately (before any other module loads)
