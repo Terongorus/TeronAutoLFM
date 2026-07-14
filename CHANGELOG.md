@@ -1,3 +1,9 @@
+## [v4.5.0] 2026/07/14
+- Add "My Role": pick your own role (Tank/Healer/DPS) in Settings, or from a one-time prompt shown when a dungeon/raid is first selected without one set. Once picked, it's automatically accounted for in what still needs recruiting - re-clicking the same role clears it back to unspecified.
+  - Dungeons (fixed 1 tank/1 healer/3 DPS): the leader's own role directly reduces that role's quota - Tank or Healer becomes fully covered (0 needed, checkbox disabled) since a standard 5-man only wants one of each; DPS reduces from 3 to 2 since there's room for more.
+  - Raids (dynamic, leader-configured headcounts): the leader's own role doesn't force any specific role's count down - instead the *shared pool* every role's headcount is capped against shrinks by 1 (scaled raid size minus 1), since the leader already occupies one of the raid's slots. Each role still starts at its normal default and the leader remains free to manually recruit more of their own role too.
+  - Quests are unaffected - no fixed comp there, so no self-role accounting applies.
+
 ## [v4.4.5] 2026/07/14
 - Fix clicking a role headcount edit box not selecting its existing text: `SetFocus()` alone doesn't survive the native click-to-place-cursor behavior that also runs on `OnMouseDown`, overriding any highlight set from `OnEditFocusGained`. Added `HighlightText()` to `OnMouseDown` itself (after `SetFocus()`), matching the raid group-size edit box's already-working pattern.
 

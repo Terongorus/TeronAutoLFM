@@ -98,8 +98,14 @@ local function formatRoleCounts(roles, roleCounts)
   for i = 1, table.getn(roleOrder) do
     local roleKey = roleOrder[i]
     if roleSet[roleKey] then
-      local count = roleCounts[roleKey] or 1
-      table.insert(parts, count .. " " .. getRoleDisplayName(roleKey, count))
+      local count = roleCounts[roleKey]
+      if count == nil then count = 1 end
+      -- A role can be checked with a count of exactly 0 (the leader's own
+      -- role fully covers a raid's default headcount) - skip it from the
+      -- message rather than announcing "need 0 Tanks"
+      if count > 0 then
+        table.insert(parts, count .. " " .. getRoleDisplayName(roleKey, count))
+      end
     end
   end
 

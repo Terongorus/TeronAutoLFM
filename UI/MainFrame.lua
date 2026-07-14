@@ -194,6 +194,35 @@ function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxes()
     TeronAutoLFM.Core.Utils.LogInfo("Setting DPS checkbox to: " .. tostring(shouldCheck))
     dpsCheckbox:SetChecked(shouldCheck)
   end
+
+  TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
+end
+
+--- Disables a role checkbox when it's the leader's own role (Selection.MyRole)
+--- and a standard dungeon has nothing left to recruit for that role (the
+--- leader already fills its only slot). Only dungeons enforce this - raids
+--- let the leader manually configure counts, so their checkboxes are never
+--- disabled by this.
+function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
+  local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+  local isDungeonMode = (mode == "dungeons")
+
+  local roleBoxes = {
+    TANK = getglobal("TeronAutoLFM_MainFrame_RoleTankCheckbox"),
+    HEAL = getglobal("TeronAutoLFM_MainFrame_RoleHealCheckbox"),
+    DPS = getglobal("TeronAutoLFM_MainFrame_RoleDPSCheckbox")
+  }
+
+  for role, box in pairs(roleBoxes) do
+    if box then
+      local disable = isDungeonMode and TeronAutoLFM.Logic.Selection.GetEffectiveDungeonQuota(role) <= 0
+      if disable then
+        box:Disable()
+      else
+        box:Enable()
+      end
+    end
+  end
 end
 
 --- XML OnEnterPressed/OnEditFocusLost callback for role count edit boxes.
@@ -507,9 +536,13 @@ TeronAutoLFM.Core.SafeRegisterInit("UI.MainFrame", function()
   end)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.Mode", function(newValue, oldValue)
     TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
+    TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
   end)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.RoleCounts", function(newValue, oldValue)
     TeronAutoLFM.UI.MainFrame.UpdateRoleCounts()
+  end)
+  TeronAutoLFM.Core.Maestro.SubscribeState("Selection.MyRole", function(newValue, oldValue)
+    TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxAvailability()
   end)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.CustomMessage", updateSelectionButtons)
   TeronAutoLFM.Core.Maestro.SubscribeState("Selection.DetailsText", updateSelectionButtons)

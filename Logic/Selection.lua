@@ -25,6 +25,7 @@ TeronAutoLFM.Core.SafeRegisterState("Selection.DungeonNames", {}, { id = "S04" }
 TeronAutoLFM.Core.SafeRegisterState("Selection.RaidName", nil, { id = "S06" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RaidSize", 40, { id = "S07" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.RoleCounts", {}, { id = "S21" })
+TeronAutoLFM.Core.SafeRegisterState("Selection.MyRole", nil, { id = "S22" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.DetailsText", "", { id = "S03" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomMessage", "", { id = "S02" })
 TeronAutoLFM.Core.SafeRegisterState("Selection.CustomGroupSize", 5, { id = "S01" })
@@ -57,7 +58,8 @@ end
 --- @param roleCounts table - Current role counts (role being set may or may not be present)
 --- @param role string - The role being set
 --- @param desiredCount number - The count being requested for this role
---- @param targetSize number - The raid's current target group size
+--- @param targetSize number - The raid's current target group size (pass
+---   through GetEffectiveRaidPool() first if Selection.MyRole is set)
 --- @return number - The clamped count (at least 1)
 local function clampRoleCount(roleCounts, role, desiredCount, targetSize)
   local othersTotal = 0
@@ -69,6 +71,41 @@ local function clampRoleCount(roleCounts, role, desiredCount, targetSize)
 
   local maxAllowed = math.max(1, targetSize - othersTotal)
   return math.max(1, math.min(maxAllowed, math.floor(desiredCount)))
+end
+
+--- Reduces a dungeon role's fixed quota by 1 if the leader has set that as
+--- their own role (Selection.MyRole), since they already fill that slot
+--- themselves without needing to recruit it. Dungeon-specific: a standard
+--- 5-man has an exact fixed composition (1/1/3), so the leader playing a
+--- role directly zeroes out that role's own need. Raids don't use this -
+--- see GetEffectiveRaidPool instead, which reduces the shared pool rather
+--- than any one role's starting count, since raid comps aren't fixed and
+--- the leader should be free to still recruit more of their own role.
+--- @param role string - "TANK", "HEAL", or "DPS"
+--- @param quota number - The base quota (always DUNGEON_ROLE_QUOTAS[role])
+--- @return number - Adjusted quota, 0 or more
+local function applySelfRoleAdjustment(role, quota)
+  local myRole = TeronAutoLFM.Core.Maestro.GetState("Selection.MyRole")
+  if myRole == role then
+    return math.max(0, quota - 1)
+  end
+  return quota
+end
+
+--- Reduces a raid's target size by 1 if the leader has set their own role
+--- (Selection.MyRole), regardless of which role, since they already occupy
+--- one of the raid's slots and shouldn't be counted as still needed. This
+--- shrinks the shared pool that clampRoleCount sums every role's headcount
+--- against - it does NOT reduce any individual role's own starting count,
+--- so the leader remains free to recruit more of their own role too.
+--- @param targetSize number - The raid's current (possibly scaled) target size
+--- @return number - Adjusted target size, at least 1
+local function getEffectiveRaidPool(targetSize)
+  local myRole = TeronAutoLFM.Core.Maestro.GetState("Selection.MyRole")
+  if myRole then
+    return math.max(1, targetSize - 1)
+  end
+  return targetSize
 end
 
 --- Sets the selection mode and clears incompatible selections
@@ -250,14 +287,17 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRaid", function(index
 
     -- Restore this raid's saved per-role headcounts for whichever roles are
     -- currently selected (defaulting to 1 for roles never configured),
-    -- clamped against this raid's scaled size (raidSize, not raid.raidSizeMax)
-    -- so restored counts can never sum past what's actually selectable here
+    -- clamped against this raid's scaled size minus 1 if the leader has set
+    -- their own role (Selection.MyRole) - they already occupy one of the
+    -- raid's slots, shrinking the shared pool every role's headcount sums
+    -- against, without reducing any individual role's own starting count
     local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
     local roleCounts = {}
+    local raidPool = getEffectiveRaidPool(raidSize)
     for i = 1, table.getn(currentRoles) do
       local r = currentRoles[i]
       local savedCount = TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount(raidName, r)
-      roleCounts[r] = clampRoleCount(roleCounts, r, savedCount or 1, raidSize)
+      roleCounts[r] = clampRoleCount(roleCounts, r, savedCount or 1, raidPool)
     end
     TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
 
@@ -372,9 +412,24 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
   -- Read current roles and create a copy to avoid mutation
   local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
   local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
+  local isCurrentlySelected = TeronAutoLFM.Core.Utils.ArrayContains(currentRoles, role)
+
+  -- Dungeons have no manual override for role counts (always the fixed
+  -- 1/1/3 minus whatever the leader plays themselves - Selection.MyRole),
+  -- so refuse to select a role that's already fully covered by the leader
+  if not isCurrentlySelected then
+    local currentMode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+    if currentMode == MODES.DUNGEONS then
+      local effective = applySelfRoleAdjustment(role, DUNGEON_ROLE_QUOTAS[role] or 1)
+      if effective <= 0 then
+        TeronAutoLFM.Core.Utils.LogWarning("Cannot select " .. role .. ": that's already your own role")
+        return
+      end
+    end
+  end
 
   local newRoles
-  if TeronAutoLFM.Core.Utils.ArrayContains(currentRoles, role) then
+  if isCurrentlySelected then
     newRoles = TeronAutoLFM.Core.Utils.RemoveFromArray(currentRoles, role)
     roleCounts[role] = nil
     TeronAutoLFM.Core.Utils.LogAction("Deselected role " .. role)
@@ -388,14 +443,19 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
     -- dungeons always use the fixed 1/1/3 composition. Either way, this
     -- count also drives auto-decrementing as players join (see
     -- Selection.DecrementRoleCount) even though dungeons never display it.
+    -- Raids account for the leader's own role (Selection.MyRole) by
+    -- shrinking the shared pool (GetEffectiveRaidPool), not this role's own
+    -- starting count; dungeons reduce this specific role's fixed quota
+    -- directly, since a standard 5-man has no manual override.
     local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
     if mode == MODES.RAID then
       local raidName = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidName")
       local savedCount = raidName and TeronAutoLFM.Core.Storage and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount and TeronAutoLFM.Core.Storage.GetRaidInstanceRoleCount(raidName, role)
       local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
-      roleCounts[role] = clampRoleCount(roleCounts, role, savedCount or 1, targetSize)
+      local raidPool = getEffectiveRaidPool(targetSize)
+      roleCounts[role] = clampRoleCount(roleCounts, role, savedCount or 1, raidPool)
     elseif mode == MODES.DUNGEONS then
-      roleCounts[role] = DUNGEON_ROLE_QUOTAS[role] or 1
+      roleCounts[role] = applySelfRoleAdjustment(role, DUNGEON_ROLE_QUOTAS[role] or 1)
     end
   end
 
@@ -406,6 +466,53 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.ToggleRole", function(role)
   -- Emit event
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.Changed")
 end, { id = "C14" })
+
+--- Sets (or clears, if it's already set to the same role) the leader's own
+--- role, so it's automatically excluded from what still needs recruiting.
+--- Dungeons have no manual override, so changing this retroactively
+--- rechecks/unchecks already-selected dungeon roles; raids let the leader
+--- configure counts manually, so this only affects roles selected/raids
+--- picked from this point forward.
+--- @param role string|nil - "TANK", "HEAL", "DPS", or nil to clear directly
+TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.SetMyRole", function(role)
+  if role ~= nil and not VALID_ROLES[role] then
+    TeronAutoLFM.Core.Utils.LogError("Selection.SetMyRole: Invalid role '" .. tostring(role) .. "' (valid: TANK, HEAL, DPS, or nil)")
+    return
+  end
+
+  local currentMyRole = TeronAutoLFM.Core.Maestro.GetState("Selection.MyRole")
+  local newMyRole = role
+
+  -- Clicking the already-selected role clears it back to unspecified
+  if role ~= nil and currentMyRole == role then
+    newMyRole = nil
+  end
+
+  TeronAutoLFM.Core.Maestro.SetState("Selection.MyRole", newMyRole)
+  TeronAutoLFM.Core.Storage.Set("myRole", newMyRole)
+  TeronAutoLFM.Core.Utils.LogAction("Set my role to " .. tostring(newMyRole))
+
+  local mode = TeronAutoLFM.Core.Maestro.GetState("Selection.Mode")
+  if mode == MODES.DUNGEONS then
+    local currentRoles = TeronAutoLFM.Core.Maestro.GetState("Selection.Roles") or {}
+    local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
+    local newRoles = {}
+    for i = 1, table.getn(currentRoles) do
+      local r = currentRoles[i]
+      local effective = applySelfRoleAdjustment(r, DUNGEON_ROLE_QUOTAS[r] or 1)
+      if effective > 0 then
+        roleCounts[r] = effective
+        table.insert(newRoles, r)
+      else
+        roleCounts[r] = nil
+      end
+    end
+    TeronAutoLFM.Core.Maestro.SetState("Selection.Roles", newRoles)
+    TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
+  end
+
+  TeronAutoLFM.Core.Maestro.Dispatch("Selection.Changed")
+end, { id = "C28" })
 
 --- Sets how many of a specific role are still needed (raid mode only)
 --- @param role string - The role to set a count for ("TANK", "HEAL", or "DPS")
@@ -428,11 +535,13 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.SetRoleCount", function(rol
   local roleCounts = TeronAutoLFM.Core.Utils.ShallowCopy(TeronAutoLFM.Core.Maestro.GetState("Selection.RoleCounts") or {})
 
   -- Further clamp so this role + every other role's count never exceeds the
-  -- raid's current (possibly scaled) target size. This only limits how role
-  -- counts are allocated between each other - it has no effect on the
-  -- "LF#M ... X/Y" headcount shown in the broadcast message itself.
+  -- raid's current (possibly scaled) target size, minus 1 if the leader has
+  -- set their own role (they occupy one of the raid's slots). This only
+  -- limits how role counts are allocated between each other - it has no
+  -- effect on the "LF#M ... X/Y" headcount shown in the broadcast message.
   local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
-  newCount = clampRoleCount(roleCounts, role, newCount, targetSize)
+  local raidPool = getEffectiveRaidPool(targetSize)
+  newCount = clampRoleCount(roleCounts, role, newCount, raidPool)
 
   roleCounts[role] = newCount
   TeronAutoLFM.Core.Maestro.SetState("Selection.RoleCounts", roleCounts)
@@ -522,7 +631,8 @@ TeronAutoLFM.Core.Maestro.RegisterCommand("Selection.IncrementRoleCount", functi
     newCount = currentCount + 1
     if mode == MODES.RAID then
       local targetSize = TeronAutoLFM.Core.Maestro.GetState("Selection.RaidSize") or 40
-      newCount = clampRoleCount(roleCounts, role, newCount, targetSize)
+      local raidPool = getEffectiveRaidPool(targetSize)
+      newCount = clampRoleCount(roleCounts, role, newCount, raidPool)
     else
       newCount = math.min(newCount, DUNGEON_ROLE_QUOTAS[role] or newCount)
     end
@@ -664,6 +774,16 @@ function TeronAutoLFM.Logic.Selection.HasSelections()
     or table.getn(roles) > 0
     or customMessage ~= ""
     or detailsText ~= ""
+end
+
+--- Returns how many of a role a standard 5-man dungeon still needs after
+--- accounting for the leader's own role (Selection.MyRole). Used by the UI
+--- to decide whether a role checkbox should be disabled (0 = leader already
+--- covers it, nothing to recruit).
+--- @param role string - "TANK", "HEAL", or "DPS"
+--- @return number - Effective quota, 0 or more
+function TeronAutoLFM.Logic.Selection.GetEffectiveDungeonQuota(role)
+  return applySelfRoleAdjustment(role, DUNGEON_ROLE_QUOTAS[role] or 1)
 end
 
 --- Clears all selections (dungeons, raids, roles, custom, details text, group size)

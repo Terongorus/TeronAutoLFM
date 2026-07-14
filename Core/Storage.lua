@@ -64,7 +64,12 @@ local SETTINGS_REGISTRY = {
   {key = "generalChannelIndex", type = "number", default = 1},
   {key = "showCustomInstances", type = "boolean", default = false},
   {key = "raidSizes", type = "table", default = {}},
-  {key = "raidRoleCounts", type = "table", default = {}}
+  {key = "raidRoleCounts", type = "table", default = {}},
+  -- NOTE: intentionally NOT using the auto-generated Get/SetMyRole accessors
+  -- below - the auto-generated string setter coerces via tostring(value),
+  -- which would turn a clear-to-nil call into the literal string "nil".
+  -- Use Storage.Get("myRole", nil) / Storage.Set("myRole", role) directly.
+  {key = "myRole", type = "string", default = nil}
 }
 
 --=============================================================================

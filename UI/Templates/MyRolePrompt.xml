@@ -1,0 +1,126 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+  <!-- My Role Prompt - shown once when a dungeon/raid is first selected with no self-role set -->
+  <Frame name="TeronAutoLFM_MyRolePrompt" parent="UIParent" frameStrata="DIALOG" hidden="true" toplevel="true" enableMouse="true">
+    <Size>
+      <AbsDimension x="280" y="160"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER">
+        <Offset>
+          <AbsDimension x="0" y="120"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBorder" tile="true">
+      <BackgroundInsets>
+        <AbsInset left="11" right="12" top="12" bottom="11"/>
+      </BackgroundInsets>
+      <TileSize>
+        <AbsValue val="32"/>
+      </TileSize>
+      <EdgeSize>
+        <AbsValue val="32"/>
+      </EdgeSize>
+    </Backdrop>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="$parent_Title" inherits="GameFontNormal" text="What's your role?">
+          <Anchors>
+            <Anchor point="TOP">
+              <Offset>
+                <AbsDimension x="0" y="-15"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parent_SubText" inherits="GameFontNormalSmall" text="Pick your role so it's accounted for automatically. You can change this anytime in Settings." nonspacewrap="false">
+          <Size>
+            <AbsDimension x="230" y="0"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOP" relativeTo="$parent_Title" relativePoint="BOTTOM">
+              <Offset>
+                <AbsDimension x="0" y="-10"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Button name="$parent_TankButton" inherits="UIPanelButtonTemplate" text="Tank">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM">
+            <Offset>
+              <AbsDimension x="-76" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.MyRolePrompt.OnRoleClick("TANK")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_HealButton" inherits="UIPanelButtonTemplate" text="Healer">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM">
+            <Offset>
+              <AbsDimension x="0" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.MyRolePrompt.OnRoleClick("HEAL")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_DPSButton" inherits="UIPanelButtonTemplate" text="DPS">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM">
+            <Offset>
+              <AbsDimension x="76" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.MyRolePrompt.OnRoleClick("DPS")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
+        <Size>
+          <AbsDimension x="24" y="24"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-2" y="-2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.MyRolePrompt.OnCloseClick()
+          </OnClick>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad>
+        tinsert(UISpecialFrames, this:GetName())
+      </OnLoad>
+    </Scripts>
+  </Frame>
+</Ui>

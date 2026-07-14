@@ -399,6 +399,41 @@ function TeronAutoLFM.UI.Content.Settings.OnShowCustomInstancesToggle(isEnabled)
   end
 end
 
+--- Handles a "My Role" checkbox click - sets (or clears, if it's already
+--- set to the same role) the leader's own role via Selection.SetMyRole.
+--- The checkbox's own visual state is resynced from Selection.MyRole
+--- afterward (see UpdateMyRoleCheckboxes), rather than trusting WoW's
+--- native toggle, since clicking an already-selected role should visually
+--- uncheck it rather than stay checked.
+--- @param role string - "TANK", "HEAL", or "DPS"
+function TeronAutoLFM.UI.Content.Settings.OnMyRoleClick(role)
+  if isRestoringState then return end
+  TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetMyRole", role)
+end
+
+--- Syncs the three "My Role" checkboxes with Selection.MyRole state
+function TeronAutoLFM.UI.Content.Settings.UpdateMyRoleCheckboxes()
+  if not panel then return end
+
+  local scrollChild = TeronAutoLFM.UI.RowList.GetScrollChild(panel)
+  if not scrollChild then return end
+
+  local myRole = TeronAutoLFM.Core.Maestro.GetState("Selection.MyRole")
+  local prefix = scrollChild:GetName() .. "_MyRoleContainer_"
+
+  local boxes = {
+    TANK = getglobal(prefix .. "TankCheck"),
+    HEAL = getglobal(prefix .. "HealCheck"),
+    DPS = getglobal(prefix .. "DPSCheck")
+  }
+
+  for role, box in pairs(boxes) do
+    if box then
+      box:SetChecked(myRole == role and 1 or nil)
+    end
+  end
+end
+
 --- Handles debug window checkbox toggle - shows/hides the debug console
 --- @param isEnabled boolean - True to show debug window, false to hide
 function TeronAutoLFM.UI.Content.Settings.OnDebugToggle(isEnabled)
@@ -525,6 +560,9 @@ function TeronAutoLFM.UI.Content.Settings.RestoreState()
       local showCustom = TeronAutoLFM.Core.Storage.GetShowCustomInstances()
       local showCustomCheckbox = getglobal(scrollChild:GetName().."_ShowCustomInstances")
       if showCustomCheckbox then showCustomCheckbox:SetChecked(showCustom and 1 or nil) end
+
+      -- Restore my role
+      TeronAutoLFM.UI.Content.Settings.UpdateMyRoleCheckboxes()
 
       -- Restore debug checkbox to reflect actual window state
       TeronAutoLFM.UI.Content.Settings.SyncDebugCheckbox()
