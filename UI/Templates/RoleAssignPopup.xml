@@ -1,0 +1,124 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+  <!-- Role Assign Popup - shown when a new player joins while actively recruiting -->
+  <Frame name="TeronAutoLFM_RoleAssignPopup" parent="UIParent" frameStrata="DIALOG" hidden="true" toplevel="true" enableMouse="true">
+    <Size>
+      <AbsDimension x="260" y="150"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER">
+        <Offset>
+          <AbsDimension x="0" y="150"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBackground" edgeFile="Interface\AddOns\TeronAutoLFM\UI\Textures\DialogBoxBorder" tile="true">
+      <BackgroundInsets>
+        <AbsInset left="11" right="12" top="12" bottom="11"/>
+      </BackgroundInsets>
+      <TileSize>
+        <AbsValue val="32"/>
+      </TileSize>
+      <EdgeSize>
+        <AbsValue val="32"/>
+      </EdgeSize>
+    </Backdrop>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="$parent_Title" inherits="GameFontNormal" text="New player joined!">
+          <Anchors>
+            <Anchor point="TOP">
+              <Offset>
+                <AbsDimension x="0" y="-15"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parent_NameText" inherits="GameFontNormalLarge" text="">
+          <Anchors>
+            <Anchor point="TOP" relativeTo="$parent_Title" relativePoint="BOTTOM">
+              <Offset>
+                <AbsDimension x="0" y="-8"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+          <Color r="1" g="0.82" b="0"/>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Button name="$parent_TankButton" inherits="UIPanelButtonTemplate" text="Tank">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="-76" y="-70"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.RoleAssignPopup.OnRoleClick("TANK")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_HealButton" inherits="UIPanelButtonTemplate" text="Healer">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="0" y="-70"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.RoleAssignPopup.OnRoleClick("HEAL")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_DPSButton" inherits="UIPanelButtonTemplate" text="DPS">
+        <Size>
+          <AbsDimension x="72" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="76" y="-70"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.RoleAssignPopup.OnRoleClick("DPS")
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parent_SkipButton" inherits="UIPanelButtonTemplate" text="Skip">
+        <Size>
+          <AbsDimension x="90" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM">
+            <Offset>
+              <AbsDimension x="0" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            TeronAutoLFM.Components.RoleAssignPopup.OnSkipClick()
+          </OnClick>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad>
+        tinsert(UISpecialFrames, this:GetName())
+      </OnLoad>
+    </Scripts>
+  </Frame>
+</Ui>

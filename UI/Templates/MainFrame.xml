@@ -144,7 +144,7 @@
         </Scripts>
       </CheckButton>
       <!-- Tank role count (raid mode only) -->
-      <EditBox name="$parent_RoleTankCount" autoFocus="false" hidden="true">
+      <EditBox name="$parent_RoleTankCount" autoFocus="false" hidden="true" enableMouse="true">
         <Size>
           <AbsDimension x="22" y="18"/>
         </Size>
@@ -167,6 +167,7 @@
             this:SetMaxLetters(2)
             this:SetJustifyH("CENTER")
             this:SetTextInsets(1, 1, 1, 1)
+            this:SetFrameLevel(this:GetParent():GetFrameLevel() + 5)
           </OnLoad>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "TANK")
@@ -243,7 +244,7 @@
         </Scripts>
       </CheckButton>
       <!-- Heal role count (raid mode only) -->
-      <EditBox name="$parent_RoleHealCount" autoFocus="false" hidden="true">
+      <EditBox name="$parent_RoleHealCount" autoFocus="false" hidden="true" enableMouse="true">
         <Size>
           <AbsDimension x="22" y="18"/>
         </Size>
@@ -266,6 +267,7 @@
             this:SetMaxLetters(2)
             this:SetJustifyH("CENTER")
             this:SetTextInsets(1, 1, 1, 1)
+            this:SetFrameLevel(this:GetParent():GetFrameLevel() + 5)
           </OnLoad>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "HEAL")
@@ -342,7 +344,7 @@
         </Scripts>
       </CheckButton>
       <!-- DPS role count (raid mode only) -->
-      <EditBox name="$parent_RoleDPSCount" autoFocus="false" hidden="true">
+      <EditBox name="$parent_RoleDPSCount" autoFocus="false" hidden="true" enableMouse="true">
         <Size>
           <AbsDimension x="22" y="18"/>
         </Size>
@@ -365,6 +367,7 @@
             this:SetMaxLetters(2)
             this:SetJustifyH("CENTER")
             this:SetTextInsets(1, 1, 1, 1)
+            this:SetFrameLevel(this:GetParent():GetFrameLevel() + 5)
           </OnLoad>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "DPS")

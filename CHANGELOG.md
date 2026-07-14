@@ -1,3 +1,15 @@
+## [v4.4.0] 2026/07/14
+- Add a Role Assign popup: while actively broadcasting as the group leader, a small dialog appears whenever a new player joins, letting you assign their role (Tank/Healer/DPS/Skip) with one click. Assigning a role decrements that role's remaining headcount automatically — no more manually editing counters as your group fills up.
+  - Works for both raids (decrements the configured per-role headcount) and dungeons (uses the fixed 1 tank / 1 healer / 3 DPS composition, but only for roles you've actually checked — nothing is auto-selected)
+  - Once a role's count reaches 0, it's fully filled and automatically dropped from the broadcast message
+  - Handles multiple players joining at nearly the same time via a queue, so simultaneous invites are never missed — the popup processes them one at a time
+  - Only fires for the group leader while a broadcast is running for a dungeon or raid with roles selected; does nothing otherwise
+
+## [v4.3.1] 2026/07/14
+- Fix the new raid role headcount edit boxes being unclickable: they were missing `enableMouse="true"` and sat at the same frame level as the role icon buttons behind them, so clicks never reached the edit box. Matches the fix already used by the existing raid group-size edit box (`SizeControl.lua`).
+- Cap raid role headcounts so Tank + Healer + DPS can never sum past the raid's current (scaled) target size — allocating 3 Tanks on a 20-scaled raid leaves at most 17 for the other roles combined, not 37. Uses the same scaled `Selection.RaidSize` value everywhere (input clamping and role defaults), not the raid's true unscaled maximum, so the cap always matches what the raid is actually scaled to. Purely an input-allocation limit — it doesn't change the broadcast message's own headcount, which was already independent of role counts.
+- Safeguard: if the raid's size is rescaled while role counts are already allocated, reset every role's count back to 1 instead of leaving a now-potentially-over-allocated total from the previous size.
+
 ## [v4.3.0] 2026/07/14
 - Restructure broadcast message formats:
   - Dungeons: "LF#M for X - need Tank & Healer" (dash before, lowercase "need")
