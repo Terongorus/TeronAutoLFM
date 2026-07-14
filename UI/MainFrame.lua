@@ -193,7 +193,12 @@ function TeronAutoLFM.UI.MainFrame.UpdateRoleCheckboxes()
   end
 end
 
---- XML OnEnterPressed/OnEditFocusLost callback for role count edit boxes
+--- XML OnEnterPressed/OnEditFocusLost callback for role count edit boxes.
+--- Does NOT call ClearFocus() itself - OnEditFocusLost already means focus
+--- is gone, and calling ClearFocus() from there re-fires OnEditFocusLost,
+--- which calls this again, forming infinite mutual recursion (C stack
+--- overflow). Only OnEnterPressed's own script calls ClearFocus(), same
+--- pattern as SizeControl.lua's CommitEditBoxValue/OnEnterPressed split.
 --- @param editBox frame - The role count edit box
 --- @param role string - The role this count belongs to ("TANK", "HEAL", or "DPS")
 function TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(editBox, role)
@@ -202,7 +207,6 @@ function TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(editBox, role)
     value = 1
   end
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.SetRoleCount", role, value)
-  editBox:ClearFocus()
 end
 
 --- Shows/hides and syncs the per-role count edit boxes (raid mode only,

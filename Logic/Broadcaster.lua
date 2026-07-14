@@ -308,6 +308,13 @@ local function start()
   -- Convert to raid if needed
   TeronAutoLFM.Logic.Group.ConvertToRaidIfNeeded()
 
+  -- Prompt for role assignment on anyone already in the group - the
+  -- join-diff in Core/Events.lua only fires for players who join *after*
+  -- this point, so pre-existing members need to be queued up separately
+  if TeronAutoLFM.Components.RoleAssignPopup and TeronAutoLFM.Components.RoleAssignPopup.QueueExistingMembers then
+    TeronAutoLFM.Components.RoleAssignPopup.QueueExistingMembers()
+  end
+
   broadcastMessage()
   startTimer()
 end

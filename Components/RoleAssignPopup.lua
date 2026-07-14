@@ -13,6 +13,7 @@ TeronAutoLFM.Components.RoleAssignPopup = {}
 --=============================================================================
 local pendingQueue = {}        -- FIFO array of player names awaiting assignment
 local currentPlayerName = nil  -- Name currently shown in the popup, or nil
+local assignedRoles = {}       -- [playerName] = role, for players already assigned a role
 
 --=============================================================================
 -- PRIVATE HELPERS
@@ -49,6 +50,32 @@ local function updateButtonVisibility()
       end
     end
   end
+end
+
+--- Removes a name from the pending queue, if present (e.g. they left the
+--- group before the leader got around to assigning them a role)
+--- @param playerName string - Name to remove from the queue
+local function removeFromQueue(playerName)
+  local newQueue = {}
+  for i = 1, table.getn(pendingQueue) do
+    if pendingQueue[i] ~= playerName then
+      table.insert(newQueue, pendingQueue[i])
+    end
+  end
+  pendingQueue = newQueue
+end
+
+--- Clears all pending/assigned tracking and hides the popup. Called when
+--- broadcasting stops, since a stale assignment from a finished recruiting
+--- session could otherwise incorrectly restore a role count in a later,
+--- unrelated one if that same player happens to leave afterward
+local function resetTracking()
+  pendingQueue = {}
+  assignedRoles = {}
+  currentPlayerName = nil
+
+  local popup = getglobal("TeronAutoLFM_RoleAssignPopup")
+  if popup then popup:Hide() end
 end
 
 --- Shows the next queued player in the popup, or hides it if the queue is empty
@@ -101,11 +128,34 @@ function TeronAutoLFM.Components.RoleAssignPopup.QueueJoin(playerName)
   end
 end
 
---- XML OnClick callback for a role button - decrements that role's count
---- and advances to the next queued player
+--- Queues every group member already present (besides the leader) for role
+--- assignment. Call this when broadcasting starts - the join-diff in
+--- Core/Events.lua only ever fires for names it hasn't already seen, so
+--- players who were in the group *before* recruiting began would otherwise
+--- never get prompted at all
+function TeronAutoLFM.Components.RoleAssignPopup.QueueExistingMembers()
+  if not TeronAutoLFM.Core.Events or not TeronAutoLFM.Core.Events.GetCurrentMemberList then return end
+
+  local members = TeronAutoLFM.Core.Events.GetCurrentMemberList()
+  local selfName = UnitName("player")
+
+  for i = 1, table.getn(members) do
+    local name = members[i]
+    if name ~= selfName then
+      TeronAutoLFM.Components.RoleAssignPopup.QueueJoin(name)
+    end
+  end
+end
+
+--- XML OnClick callback for a role button - decrements that role's count,
+--- remembers the assignment (so the count can be restored if this player
+--- later leaves), and advances to the next queued player
 --- @param role string - "TANK", "HEAL", or "DPS"
 function TeronAutoLFM.Components.RoleAssignPopup.OnRoleClick(role)
   TeronAutoLFM.Core.Maestro.Dispatch("Selection.DecrementRoleCount", role)
+  if currentPlayerName then
+    assignedRoles[currentPlayerName] = role
+  end
   TeronAutoLFM.Core.Utils.LogAction(tostring(currentPlayerName) .. " assigned as " .. role)
   showNext()
 end
@@ -114,6 +164,30 @@ end
 --- any role count
 function TeronAutoLFM.Components.RoleAssignPopup.OnSkipClick()
   showNext()
+end
+
+--- Handles a group member leaving. If they'd already been assigned a role,
+--- restores that role's headcount (see Selection.IncrementRoleCount).
+--- Otherwise, if they were still waiting in the queue (or are the player
+--- currently shown in the popup), removes them so the leader is never
+--- asked to assign a role to someone who's no longer in the group.
+--- @param playerName string - Name of the player who left
+function TeronAutoLFM.Components.RoleAssignPopup.OnPlayerLeft(playerName)
+  if not playerName then return end
+
+  local role = assignedRoles[playerName]
+  if role then
+    assignedRoles[playerName] = nil
+    TeronAutoLFM.Core.Maestro.Dispatch("Selection.IncrementRoleCount", role)
+    TeronAutoLFM.Core.Utils.LogAction(playerName .. " left - " .. role .. " headcount restored")
+    return
+  end
+
+  removeFromQueue(playerName)
+
+  if currentPlayerName == playerName then
+    showNext()
+  end
 end
 
 --=============================================================================
@@ -130,7 +204,24 @@ TeronAutoLFM.Core.SafeRegisterInit("Components.RoleAssignPopup", function()
     end,
     { id = "L09" }
   )
+
+  TeronAutoLFM.Core.Maestro.Listen(
+    "Components.RoleAssignPopup.OnPlayerLeft",
+    "Group.PlayerLeft",
+    function(payload)
+      if payload and payload.name then
+        TeronAutoLFM.Components.RoleAssignPopup.OnPlayerLeft(payload.name)
+      end
+    end,
+    { id = "L10" }
+  )
+
+  TeronAutoLFM.Core.Maestro.SubscribeState("Broadcaster.IsRunning", function(newValue)
+    if not newValue then
+      resetTracking()
+    end
+  end)
 end, {
   id = "I25",
-  dependencies = { "Core.Events", "Logic.Selection" }
+  dependencies = { "Core.Events", "Logic.Selection", "Logic.Broadcaster" }
 })

@@ -54,17 +54,51 @@ local function getCurrentMemberNames()
   return names
 end
 
+--- Builds an ordered array of every current group member's name (raid/party
+--- slot order, including self). Used to snapshot pre-existing members that
+--- the join-diff in detectRosterChanges() would never catch, since they
+--- were already in the group before it started tracking
+--- @return table - Array of names in roster slot order
+local function getCurrentMemberList()
+  local ordered = {}
+  local raidCount = GetNumRaidMembers() or 0
+
+  if raidCount > 0 then
+    for i = 1, raidCount do
+      local name = UnitName("raid" .. i)
+      if name then table.insert(ordered, name) end
+    end
+  else
+    local partyCount = GetNumPartyMembers() or 0
+    for i = 1, partyCount do
+      local name = UnitName("party" .. i)
+      if name then table.insert(ordered, name) end
+    end
+    local selfName = UnitName("player")
+    if selfName then table.insert(ordered, selfName) end
+  end
+
+  return ordered
+end
+
 --- Diffs the current roster against the last known roster and dispatches
---- Group.PlayerJoined for every name that wasn't there before. Runs
---- unconditionally (not gated behind a group size change) so a simultaneous
---- leave+join that nets to the same size still gets detected, and captures
---- every new name in one pass rather than just the first
-local function detectNewJoins()
+--- Group.PlayerJoined / Group.PlayerLeft for every name that appeared or
+--- disappeared. Runs unconditionally (not gated behind a group size change)
+--- so a simultaneous leave+join that nets to the same size still gets
+--- detected, and captures every changed name in one pass rather than just
+--- the first
+local function detectRosterChanges()
   local currentMembers = getCurrentMemberNames()
 
   for name, _ in pairs(currentMembers) do
     if not knownGroupMembers[name] then
       TeronAutoLFM.Core.Maestro.Dispatch("Group.PlayerJoined", { name = name })
+    end
+  end
+
+  for name, _ in pairs(knownGroupMembers) do
+    if not currentMembers[name] then
+      TeronAutoLFM.Core.Maestro.Dispatch("Group.PlayerLeft", { name = name })
     end
   end
 
@@ -112,7 +146,7 @@ end
 local function onGroupRosterChange()
   local currentSize, groupType = getGroupInfo()
 
-  detectNewJoins()
+  detectRosterChanges()
 
   if currentSize ~= lastGroupSize then
     TeronAutoLFM.Core.Utils.LogAction("Group size: " .. lastGroupSize .. " -> " .. currentSize)
@@ -240,6 +274,13 @@ function TeronAutoLFM.Core.Events.RefreshGroupSize()
   onGroupRosterChange()
 end
 
+--- Returns every current group member's name (raid or party, plus self),
+--- in roster slot order
+--- @return table - Array of names
+function TeronAutoLFM.Core.Events.GetCurrentMemberList()
+  return getCurrentMemberList()
+end
+
 --=============================================================================
 -- SLASH COMMANDS
 --=============================================================================
@@ -274,6 +315,7 @@ TeronAutoLFM.Core.Maestro.RegisterEvent("Group.SizeChanged", { id = "E02" })
 TeronAutoLFM.Core.Maestro.RegisterEvent("Group.LeaderChanged", { id = "E03" })
 TeronAutoLFM.Core.Maestro.RegisterEvent("Chat.WhisperReceived", { id = "E08" })
 TeronAutoLFM.Core.Maestro.RegisterEvent("Group.PlayerJoined", { id = "E10" })
+TeronAutoLFM.Core.Maestro.RegisterEvent("Group.PlayerLeft", { id = "E11" })
 
 --=============================================================================
 -- INITIALIZATION

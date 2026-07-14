@@ -56,17 +56,6 @@ local function getRolesText(roles)
   return table.concat(parts, " & ")
 end
 
---- Formats roles text for broadcast message (e.g., "Need Tank & Healer", "Need All")
---- @param roles table - Array of role strings ("TANK", "HEAL", "DPS")
---- @return string - Role text with "Need" prefix
-local function formatRolesForMessage(roles)
-  local rolesText = getRolesText(roles)
-  if rolesText == "" then
-    return ""
-  end
-  return "Need " .. rolesText
-end
-
 local ROLE_DISPLAY_NAMES = {
   TANK = { singular = "Tank", plural = "Tanks" },
   HEAL = { singular = "Healer", plural = "Healers" },
@@ -299,11 +288,10 @@ local function buildMessage()
     return message
   end
 
-  -- No details text - fall back to a bare role request, if any
-  if rolesText ~= "" then
-    return formatRolesForMessage(roles)
-  end
-
+  -- No dungeon/raid/custom content and no details text (e.g. a quest link)
+  -- to attach roles to - a bare "Need Tank & Healer" with no context on
+  -- what you're actually recruiting for doesn't make sense as a broadcast,
+  -- so produce no message at all rather than something ambiguous
   return ""
 end
 
