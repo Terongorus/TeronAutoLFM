@@ -1,3 +1,6 @@
+## [v4.4.5] 2026/07/14
+- Fix clicking a role headcount edit box not selecting its existing text: `SetFocus()` alone doesn't survive the native click-to-place-cursor behavior that also runs on `OnMouseDown`, overriding any highlight set from `OnEditFocusGained`. Added `HighlightText()` to `OnMouseDown` itself (after `SetFocus()`), matching the raid group-size edit box's already-working pattern.
+
 ## [v4.4.4] 2026/07/14
 - Fix confirming a role headcount resetting every *other* role's count to 1: `Core.Utils.ShallowCopy` used `table.getn()` + a numeric loop, which only copies array-style (sequential integer-keyed) tables. `Selection.RoleCounts` is a dictionary (`{TANK = 3, HEAL = 1, DPS = 1}`, string keys), so `table.getn()` returned 0 and every copy silently produced an empty table — meaning every `Selection.SetRoleCount`/`DecrementRoleCount`/`IncrementRoleCount` call was discarding every role except the one just edited. `ShallowCopy` now uses `pairs()`, which correctly handles both array and dictionary tables (and is a strict improvement for its existing array use cases too, not just a special case for this one).
 

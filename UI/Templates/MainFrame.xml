@@ -171,6 +171,7 @@
           </OnLoad>
           <OnMouseDown>
             this:SetFocus()
+            this:HighlightText()
           </OnMouseDown>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "TANK")
@@ -277,6 +278,7 @@
           </OnLoad>
           <OnMouseDown>
             this:SetFocus()
+            this:HighlightText()
           </OnMouseDown>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "HEAL")
@@ -383,6 +385,7 @@
           </OnLoad>
           <OnMouseDown>
             this:SetFocus()
+            this:HighlightText()
           </OnMouseDown>
           <OnEnterPressed>
             TeronAutoLFM.UI.MainFrame.OnRoleCountChanged(this, "DPS")
