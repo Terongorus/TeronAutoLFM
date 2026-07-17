@@ -1,3 +1,6 @@
+## [v4.5.3] 2026/07/17
+- Fix the addon list Title not following the "Teron's `<Thing>`" branding used by every other addon in the portfolio: was `TeronAutoLFM` (with the LFM lettering colored), now `Teron's Auto LFM` with the same coloring kept on the LFM letters.
+
 ## [v4.5.2] 2026/07/15
 - Fix a disabled dungeon role checkbox still being toggleable by clicking its icon: the icon is a separate button that was never itself disabled, and forcing a click through to the checkbox via `:Click()` bypasses the checkbox's own disabled state (unlike a real mouse click on it). The icon click now checks `IsEnabled()` on the checkbox first.
 - Fix the Settings "My Role" row overflowing the panel: the Healer/DPS checkboxes and labels were positioned with fixed offsets that didn't account for the actual label text width, pushing the DPS checkbox/label partly or fully outside the visible panel. Each checkbox is now anchored off the previous label's real right edge instead.
