@@ -185,8 +185,9 @@ function TeronAutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
     end
   end
 
-  -- GetChannelName returns channelID (> 0) if in channel, 0 if not
-  local channelID = GetChannelName(channelName)
+  -- Matched case-insensitively - different servers use different casing for the same
+  -- global channel (e.g. Turtle WoW's "World" vs Kronos's "world")
+  local channelID = TeronAutoLFM.Core.Utils.FindChannelID(channelName)
 
   if channelID > 0 then
     if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
@@ -201,7 +202,7 @@ function TeronAutoLFM.Logic.Content.Messaging.JoinChannel(channelName)
   JoinChannelByName(channelName, nil, frameId)
 
   -- Verify the join succeeded by checking if we're now in the channel
-  local verifyChannelID = GetChannelName(channelName)
+  local verifyChannelID = TeronAutoLFM.Core.Utils.FindChannelID(channelName)
   if verifyChannelID <= 0 then
     if TeronAutoLFM.Core and TeronAutoLFM.Core.Utils then
       TeronAutoLFM.Core.Utils.LogWarning("Failed to join channel: " .. channelName)

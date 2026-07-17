@@ -645,6 +645,41 @@ function TeronAutoLFM.Core.Utils.ClearFocusedEditBox()
 end
 
 --=============================================================================
+-- CHANNEL LOOKUP
+--=============================================================================
+--- Finds a joined channel's ID by name, matching case-insensitively. Different servers
+--- use different casing for what's otherwise the same global channel (Turtle WoW's
+--- "World" vs Kronos's "world") - GetChannelName() only does an exact, case-sensitive
+--- match against the client's local list of joined channels, so a hardcoded-case channel
+--- name can silently fail to find a channel the player is actually already in.
+--- @param channelName string - The channel name to look up, any case
+--- @return number - The channel ID (> 0) if joined, 0 if not found
+function TeronAutoLFM.Core.Utils.FindChannelID(channelName)
+  if not channelName or channelName == "" then
+    return 0
+  end
+
+  local exactID = GetChannelName(channelName)
+  if exactID and exactID > 0 then
+    return exactID
+  end
+
+  local wantedLower = strlower(channelName)
+  local list = { GetChannelList() }
+  local n = table.getn(list)
+  local i = 1
+  while i < n do
+    local id, name = list[i], list[i + 1]
+    if name and strlower(name) == wantedLower then
+      return id
+    end
+    i = i + 2
+  end
+
+  return 0
+end
+
+--=============================================================================
 -- INITIALIZATION
 --=============================================================================
 -- Build color lookup table immediately (before any other module loads)

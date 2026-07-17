@@ -1,3 +1,6 @@
+## [v4.5.4] 2026/07/17
+- Fix the World channel broadcast silently failing on servers where the global channel isn't spelled exactly `World` (e.g. Turtle WoW uses `World`, Kronos V uses `world`). `GetChannelName()` only matches the channel name it's given exactly, case included, against the client's local list of joined channels - a hardcoded `"World"` never matched Kronos's lowercase channel, so the addon thought it wasn't joined, tried (and effectively failed) to join a channel already joined, and silently dropped every broadcast to it. Channel lookups now fall back to a case-insensitive scan of `GetChannelList()` whenever the exact-case match misses, so whichever casing the server actually uses is found automatically.
+
 ## [v4.5.3] 2026/07/17
 - Fix the addon list Title not following the "Teron's `<Thing>`" branding used by every other addon in the portfolio: was `TeronAutoLFM` (with the LFM lettering colored), now `Teron's Auto LFM` with the same coloring kept on the LFM letters.
 

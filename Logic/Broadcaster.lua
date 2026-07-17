@@ -142,7 +142,7 @@ sendToChannel = function(channelName, message, retries)
     retries = TeronAutoLFM.Core.Constants.MAX_BROADCAST_RETRIES or 2
   end
 
-  local channelID = GetChannelName(channelName)
+  local channelID = TeronAutoLFM.Core.Utils.FindChannelID(channelName)
 
   if channelID > 0 then
     local success, err = pcall(SendChatMessage, message, "CHANNEL", nil, channelID)
