@@ -172,7 +172,7 @@ TeronAutoLFM.Core.Constants.DUNGEONS = {
   {name = "Blackfathom Deeps", tag = "BFD", levelMin = 22, levelMax = 31},
   {name = "The Stockade", tag = "Stockade", levelMin = 23, levelMax = 32},
   {name = "Windhorn Canyon", tag = "WHC", levelMin = 26, levelMax = 30},
-  {name = "Dragonmaw Retreat", tag = "DR", levelMin = 26, levelMax = 35},
+  {name = "Dragonmaw Retreat", tag = "DMR", levelMin = 26, levelMax = 35},
   {name = "Gnomeregan", tag = "Gnomer", levelMin = 28, levelMax = 37},
   {name = "Razorfen Kraul", tag = "RFK", levelMin = 29, levelMax = 36},
   {name = "Scarlet Monastery Graveyard", tag = "SM GY", levelMin = 30, levelMax = 37},
