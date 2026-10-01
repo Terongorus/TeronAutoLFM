@@ -178,7 +178,7 @@ TeronAutoLFM.Core.Constants.DUNGEONS = {
   {name = "Scarlet Monastery Graveyard", tag = "SM GY", levelMin = 30, levelMax = 37},
   {name = "Scarlet Monastery Library", tag = "SM Lib", levelMin = 32, levelMax = 40},
   {name = "Stormwrought Castle", tag = "SC", levelMin = 32, levelMax = 40},
-  {name = "The Crescent Grove", tag = "Crescent", levelMin = 33, levelMax = 39},
+  {name = "The Crescent Grove", tag = "CG", levelMin = 33, levelMax = 39},
   {name = "Scarlet Monastery Armory", tag = "SM Arm", levelMin = 34, levelMax = 42},
   {name = "Razorfen Downs", tag = "RFD", levelMin = 35, levelMax = 44},
   {name = "Stormwrought Descent", tag = "SD", levelMin = 35, levelMax = 44},
