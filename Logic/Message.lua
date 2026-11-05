@@ -207,9 +207,11 @@ local function buildRaidMessage()
   -- Format message: "LF5M for MC - need Tank2 & Heal3 35/40" or "LF5M for MC 35/40"
   local message
   if rolesText ~= "" then
-    message = string.format("LF%dM for %s - need %s %d/%d", missing, raid.tag, rolesText, currentSize, targetSize)
+    -- message = string.format("LF%dM for %s - need %s %d/%d", missing, raid.tag, rolesText, currentSize, targetSize)
+    message = string.format("LFM for %s - need %s - %d/%d", raid.tag, rolesText, currentSize, targetSize)
   else
-    message = string.format("LF%dM for %s %d/%d", missing, raid.tag, currentSize, targetSize)
+    -- message = string.format("LF%dM for %s %d/%d", missing, raid.tag, currentSize, targetSize)
+    message = string.format("LFM for %s - %d/%d", raid.tag, currentSize, targetSize)
   end
 
   -- Append details text if present
